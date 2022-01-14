@@ -93,7 +93,7 @@ public class FabriqueEvenement {
       return null;
     }
     
-    if(unEvenement.setLieu(unLieu); == -1) {
+    if(unEvenement.setLieu(unLieu) == -1) {
       return null;
     }
     
