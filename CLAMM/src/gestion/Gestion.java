@@ -8,6 +8,8 @@ import gestionMembres.Membre;
 
 public class Gestion {
 
+  private ArrayList<CodeErreur> codesErreurs;
+
   /**
    * Liste des événements
    */
@@ -29,6 +31,7 @@ public class Gestion {
   public Gestion() {
     this.setListeMembres(new ArrayList<Membre>());
     this.setListeEvenements(new ArrayList<>());
+    this.codesErreurs = new ArrayList<>();
     this.nextId = 1;
   }
 
@@ -229,7 +232,7 @@ public class Gestion {
    * @param uneVille ville du membre à créer
    * @param unMail adresse mail du membre à créer
    * @param unMotDePasse mot de passe du membre à créer
-   * @return une instance de la classe {@code Membre} la création est un siccès, {@code null} sinon
+   * @return une instance de la classe {@code Membre} la création est un succès, {@code null} sinon
    */
   private Membre creerMembre(String unPseudo, String unNom, String unPrenom, String unLieuNaissance,
       Date uneDateNaissance, String uneVille, String unMail, String unMotDePasse) {
@@ -245,6 +248,8 @@ public class Gestion {
     res += membre.setVille(uneVille);
     res += membre.setMail(unMail);
     res += membre.setMotDePasse(unMotDePasse);
+
+    // recup membre.getErreurs();
 
     // Si une des définitions est un échec, retourne un membre null
     if (res != 0) {
