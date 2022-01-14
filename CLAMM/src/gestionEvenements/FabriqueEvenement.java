@@ -178,7 +178,7 @@ public class FabriqueEvenement {
    * @param unType Type de l'évenement
    * @return {@code 0} si la modification est un succès, {@code -1} si l'événement correspondant à l'identifiant n'est pas présent dans la liste, {@code 1} si erreur de modification de l'événement
    */
-  public int ajouterEvenement(int unId, String unNom, String unDescriptif, String uneImage, Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
+  public int modifierEvenement(int unId, String unNom, String unDescriptif, String uneImage, Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
     int res=-1;
     
     if(unId>0 || unId<nextId) {
