@@ -61,8 +61,14 @@ public class Evenement {
   /**
    * @param id tl'identifiant de l'évènement
    */
-  public void setId(int id) {
-    this.id = id;
+  public int setId(int unId) {
+    int res = -1;
+    if (this.id > 0) {
+      this.id = unId;
+      res = 0;
+    }
+
+    return res;
   }
 
   /**
@@ -75,8 +81,14 @@ public class Evenement {
   /**
    * @param nom le nom de l'évènement
    */
-  public void setNom(String nom) {
-    this.nom = nom;
+  public int setNom(String unNom) {
+    int res=-1;
+    if(unNom==null || unNom=="") {
+      this.nom = unNom;
+      res=0;
+    }
+    
+    return res;
   }
 
   /**
@@ -89,8 +101,9 @@ public class Evenement {
   /**
    * @param descriptif le descriptif de l'évènement
    */
-  public void setDescriptif(String descriptif) {
-    this.descriptif = descriptif;
+  public int setDescriptif(String unDescriptif) {
+    this.descriptif = unDescriptif;
+    return 0;
   }
 
   /**
@@ -103,8 +116,9 @@ public class Evenement {
   /**
    * @param image l'image de l'évènement
    */
-  public void setImage(String image) {
-    this.image = image;
+  public int setImage(String uneImage) {
+    this.image = uneImage;
+    return 0;
   }
 
   /**
@@ -117,8 +131,8 @@ public class Evenement {
   /**
    * @param date la date de l'évènement
    */
-  public void setDate(Date date) {
-    this.date = date;
+  public void setDate(Date uneDate) {
+    this.date = uneDate;
   }
 
   /**
@@ -131,8 +145,9 @@ public class Evenement {
   /**
    * @param lieu le lieu de l'évènement
    */
-  public void setLieu(String lieu) {
-    this.lieu = lieu;
+  public int setLieu(String unLieu) {
+    this.lieu = unLieu;
+    return 0;
   }
 
   /**
@@ -145,8 +160,9 @@ public class Evenement {
   /**
    * @param nbMaxPersonnes le nombre maximum de personnes de l'évènement
    */
-  public void setNbMaxPersonnes(int nbMaxPersonnes) {
-    NbMaxPersonnes = nbMaxPersonnes;
+  public int setNbMaxPersonnes(int unNbMaxPersonnes) {
+    NbMaxPersonnes = unNbMaxPersonnes;
+    return 0;
   }
 
   /**
@@ -159,8 +175,9 @@ public class Evenement {
   /**
    * @param type le type de l'évènement
    */
-  public void setType(TypeEvenement type) {
-    this.type = type;
+  public int setType(TypeEvenement unType) {
+    this.type = unType;
+    return 0;
   }
 
 }
