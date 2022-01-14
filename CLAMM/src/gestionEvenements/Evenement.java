@@ -47,9 +47,7 @@ public class Evenement {
   /**
    * Constructeur de la classe Evenement.
    */
-  public Evenement() {
-
-  }
+  public Evenement() {}
 
   /**
    * @return l'identifiant de l'évènement

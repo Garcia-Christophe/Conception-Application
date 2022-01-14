@@ -2,7 +2,7 @@ package gestionMembres;
 
 import java.util.Date;
 
-public class Membre {
+public class Membre implements Comparable {
 
   /**
    * Pseudo du membre
@@ -59,8 +59,9 @@ public class Membre {
   /**
    * @param pseudo le pseudo du membre
    */
-  public void setPseudo(String pseudo) {
+  public int setPseudo(String pseudo) {
     this.pseudo = pseudo;
+    return 1;
   }
 
   /**
@@ -73,8 +74,9 @@ public class Membre {
   /**
    * @param nom le nom du membre
    */
-  public void setNom(String nom) {
+  public int setNom(String nom) {
     this.nom = nom;
+    return 1;
   }
 
   /**
@@ -87,8 +89,9 @@ public class Membre {
   /**
    * @param prenom le prénom du membre
    */
-  public void setPrenom(String prenom) {
+  public int setPrenom(String prenom) {
     this.prenom = prenom;
+    return 1;
   }
 
   /**
@@ -101,8 +104,9 @@ public class Membre {
   /**
    * @param lieuNaissance le lieu de naissance du membre
    */
-  public void setLieuNaissance(String lieuNaissance) {
+  public int setLieuNaissance(String lieuNaissance) {
     this.lieuNaissance = lieuNaissance;
+    return 1;
   }
 
   /**
@@ -115,8 +119,9 @@ public class Membre {
   /**
    * @param dateNaissance la date de naissance du membre
    */
-  public void setDateNaissance(Date dateNaissance) {
+  public int setDateNaissance(Date dateNaissance) {
     this.dateNaissance = dateNaissance;
+    return 1;
   }
 
   /**
@@ -129,8 +134,9 @@ public class Membre {
   /**
    * @param ville la ville du membre
    */
-  public void setVille(String ville) {
+  public int setVille(String ville) {
     this.ville = ville;
+    return 1;
   }
 
   /**
@@ -143,8 +149,9 @@ public class Membre {
   /**
    * @param mail l'adresse mail du membre
    */
-  public void setMail(String mail) {
+  public int setMail(String mail) {
     this.mail = mail;
+    return 1;
   }
 
   /**
@@ -157,8 +164,30 @@ public class Membre {
   /**
    * @param motDePasse le mot de passe du membre
    */
-  public void setMotDePasse(String motDePasse) {
+  public int setMotDePasse(String motDePasse) {
     this.motDePasse = motDePasse;
+    return 1;
+  }
+
+  @Override
+  public int compareTo(Object o) {
+    int res = -1;
+
+    // Si le paramètre n'est pas null
+    if (o != null) {
+      // Si l'objet est une instance de Membre
+      if (o instanceof Membre) {
+        // Si le membre n'est pas le même que ce membre-ci
+        if (o != this) {
+          // Compare le pseudo des 2 membres
+          res = this.pseudo.compareTo(((Membre) o).getPseudo());
+        } else {
+          res = 0;
+        }
+      }
+    }
+
+    return res;
   }
 
 }
