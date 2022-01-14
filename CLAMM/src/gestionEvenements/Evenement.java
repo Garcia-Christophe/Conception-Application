@@ -37,12 +37,18 @@ public class Evenement {
   /**
    * Nombre maximal de personnes présentes à l'évènement
    */
-  private int NbMaxPersonnes;
+  private int nbMaxPersonnes;
 
   /**
    * Type de l'évènement
    */
   private TypeEvenement type;
+  
+  private final int tailleMaxNom = 50;
+  
+  private final int tailleMaxDescriptif = 500;
+  
+  private final int tailleMaxLieu = 100;
 
   /**
    * Constructeur de la classe Evenement.
@@ -83,11 +89,12 @@ public class Evenement {
    */
   public int setNom(String unNom) {
     int res=-1;
-    if(unNom==null || unNom=="") {
-      this.nom = unNom;
-      res=0;
+    if(unNom!=null) {
+      if(unNom!="" && unNom.charAt(0)!=' ' && unNom.charAt(unNom.length()-1)!=' '&& unNom.length()<this.tailleMaxNom) {
+        this.nom = unNom;
+        res=0;
+      }
     }
-    
     return res;
   }
 
@@ -102,8 +109,15 @@ public class Evenement {
    * @param descriptif le descriptif de l'évènement
    */
   public int setDescriptif(String unDescriptif) {
-    this.descriptif = unDescriptif;
-    return 0;
+    int res=-1;
+    if(unDescriptif!=null) {
+      if(unDescriptif!="" && unDescriptif.charAt(0)!=' ' && unDescriptif.charAt(unDescriptif.length()-1)!=' ' && unDescriptif.length()<this.tailleMaxDescriptif) {
+        this.descriptif = unDescriptif;
+        res=0;
+      }
+    }
+      
+    return res;
   }
 
   /**
@@ -131,8 +145,15 @@ public class Evenement {
   /**
    * @param date la date de l'évènement
    */
-  public void setDate(Date uneDate) {
-    this.date = uneDate;
+  public int setDate(Date uneDate) {
+    int res=-1;
+    if(uneDate!=null) {
+      if(uneDate.compareTo(new Date())>0) {
+        this.date = uneDate;
+        res=0;
+      }
+    }
+    return res;
   }
 
   /**
@@ -146,23 +167,35 @@ public class Evenement {
    * @param lieu le lieu de l'évènement
    */
   public int setLieu(String unLieu) {
-    this.lieu = unLieu;
-    return 0;
+    int res=-1;
+    if(unLieu!=null) {
+      if(unLieu!="" && unLieu.charAt(0)!=' ' && unLieu.charAt(unLieu.length()-1)!=' ' && unLieu.length()<this.tailleMaxLieu) {
+        this.lieu = unLieu;
+        res=0;
+      }
+    }
+      
+    return res;
   }
 
   /**
    * @return le nombre maximum de personnes de l'évènement
    */
   public int getNbMaxPersonnes() {
-    return NbMaxPersonnes;
+    return nbMaxPersonnes;
   }
 
   /**
    * @param nbMaxPersonnes le nombre maximum de personnes de l'évènement
    */
   public int setNbMaxPersonnes(int unNbMaxPersonnes) {
-    NbMaxPersonnes = unNbMaxPersonnes;
-    return 0;
+    int res = -1;
+    if (this.nbMaxPersonnes > 1) {
+      this.nbMaxPersonnes = unNbMaxPersonnes;
+      res = 0;
+    }
+
+    return res;
   }
 
   /**
@@ -176,8 +209,12 @@ public class Evenement {
    * @param type le type de l'évènement
    */
   public int setType(TypeEvenement unType) {
-    this.type = unType;
-    return 0;
+    int res=-1;
+    if(unType!=null) {
+      this.type = unType;
+      res=0;
+    }
+    return res;
   }
 
 }
