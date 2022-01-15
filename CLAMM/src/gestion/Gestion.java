@@ -19,9 +19,9 @@ public class Gestion {
   private ArrayList<Evenement> listeEvenements;
 
   /**
-   * Prochain identifiant
+   * Prochain identifiant d'un événement
    */
-  private int nextId;
+  private int prochainIdEvenement;
 
   /**
    * Liste des membres
@@ -35,14 +35,7 @@ public class Gestion {
     this.setListeMembres(new ArrayList<Membre>());
     this.setListeEvenements(new ArrayList<Evenement>());
     this.setCodesErreurs(new ArrayList<CodeErreur>());
-    this.nextId = 1;
-  }
-
-  /**
-   * @return la liste des évènements
-   */
-  public ArrayList<Evenement> getListeEvenements() {
-    return listeEvenements;
+    this.prochainIdEvenement = 1;
   }
 
   /**
@@ -62,6 +55,13 @@ public class Gestion {
   }
 
   /**
+   * @return la liste des événements
+   */
+  public ArrayList<Evenement> getListeEvenements() {
+    return listeEvenements;
+  }
+  
+  /**
    * @param liste La liste des évènements
    */
   private void setListeEvenements(ArrayList<Evenement> liste) {
@@ -69,9 +69,23 @@ public class Gestion {
       this.listeEvenements = liste;
     }
   }
-
+  
   /**
-   * Créer un événement.
+   * Créer un {@code Evenement}.
+   * 
+   * <p>
+   * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code
+   * erreur est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
+   * 
+   * <p>
+   * Les codes erreurs sont les suivants :
+   * <ul>
+   * <li>- ID_NEGATIF : lorsque la taille du nom est trop grandre</li>
+   * <li>- NOM_TROP_LONG : lorsque la taille du nom est trop grandre</li>
+   * <li>- NOM_VIDE : lorsque le nom est vide</li>
+   * <li>- NOM_NULL : lorsque le nom est null</li>
+   * <li>- NOM_ESPACE : lorsque le nom commence ou fini par des espaces</li>
+   * <li>- ...</li>
    * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
@@ -81,31 +95,68 @@ public class Gestion {
    * @param unlieu Lieu de l'événement
    * @param unNbMaxPersonnes Nombre maximum de personnes autorisées à l'événement
    * @param unType Type de l'évenement
-   * @return l'object l'événement si création réussie, null si erreur de création
+   * @return une nouvelle instance de la classe {@code Evenement} si la création est un succès,
+   *         {@code null} sinon
    */
   private Evenement creerEvenement(int unId, String unNom, String unDescriptif, String uneImage,
       Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
+    
     Evenement unEvenement = new Evenement();
+    
+    this.codesErreurs.clear();
+    
+    CodeErreur codeErreur = null;
 
-    int resultats_set = 0;
+    // Identifiant de l'événement
+    codeErreur = unEvenement.setId(unId);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
+    
+    // Nom de l'événement
+    codeErreur = unEvenement.setNom(unNom);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
+    
+    // Descriptif de l'événement
+    codeErreur = unEvenement.setDescriptif(unDescriptif);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
+    
+    // Image de l'événement
+    codeErreur = unEvenement.setImage(uneImage);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
+    
+    // Date de l'événement
+    codeErreur = unEvenement.setDate(uneDate);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
 
-    resultats_set += unEvenement.setId(unId);
+    // Lieu de l'événement
+    codeErreur = unEvenement.setLieu(unLieu);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
 
-    resultats_set += unEvenement.setNom(unNom);
+    // NbMaxPersonnes de l'événement
+    codeErreur = unEvenement.setNbMaxPersonnes(unNbMaxPersonnes);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
 
-    resultats_set += unEvenement.setDescriptif(unDescriptif);
-
-    resultats_set += unEvenement.setImage(uneImage);
-
-    resultats_set += unEvenement.setDate(uneDate);
-
-    resultats_set += unEvenement.setLieu(unLieu);
-
-    resultats_set += unEvenement.setNbMaxPersonnes(unNbMaxPersonnes);
-
-    resultats_set += unEvenement.setType(unType);
-
-    if (resultats_set < 0) {
+    // Type de l'événement
+    codeErreur = unEvenement.setType(unType);
+    if (codeErreur != null) {
+      this.codesErreurs.add(codeErreur);
+    }
+    
+    // Si une des définitions est un échec, retourne un evenement null
+    if (!this.codesErreurs.isEmpty()) {
       unEvenement = null;
     }
 
@@ -113,7 +164,7 @@ public class Gestion {
   }
 
   /**
-   * Ajoute un événement à la liste des événements.
+   * Ajoute un {@code Evenement} à la liste des événements.
    * 
    * @param unNom Nom de l'événement
    * @param unDescriptif Description de l'événement
@@ -122,36 +173,38 @@ public class Gestion {
    * @param unlieu Lieu de l'événement
    * @param unNbMaxPersonnes Nombre maximum de personnes autorisées à l'événement
    * @param unType Type de l'évenement
-   * @return {@code 0} si l'ajout est un succès, {@code -1} si erreur de création de l'événement
+   * @return {@code null} si l'ajout du nouveau membre est un succès, une liste de
+   *         {@code CodeErreur} sinon
    */
-  public int ajouterEvenement(String unNom, String unDescriptif, String uneImage, Date uneDate,
+  public  ArrayList<CodeErreur> ajouterEvenement(String unNom, String unDescriptif, String uneImage, Date uneDate,
       String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
-    Evenement unEvenement = creerEvenement(nextId, unNom, unDescriptif, uneImage, uneDate, unLieu,
+    
+    Evenement unEvenement = creerEvenement(prochainIdEvenement, unNom, unDescriptif, uneImage, uneDate, unLieu,
         unNbMaxPersonnes, unType);
 
-    int res = -1;
+    ArrayList<CodeErreur> res = null;
 
     if (unEvenement != null) {
       listeEvenements.add(unEvenement);
 
-      nextId++;
-
-      res = 0;
+      prochainIdEvenement++;
+    }else {
+      res=getCodesErreurs();
     }
 
     return res;
   }
 
   /**
-   * Retourne l'événement de la liste des événements avec son identifiant.
+   * Permet de retrouver un {@code Evenement} grâce à son identifiant {@code unId}.
    * 
-   * @param unId Identifiant de l'événement
-   * @return l'object Evenement si présent dans la liste, si non présent dans la liste
+   * @param unId Identifiant de l'événement à retrouver
+   * @return l'instance de {@code Evenement} correspondant à l'identifiant, {@code null} sinon
    */
   public Evenement getEvenement(int unId) {
     Evenement unEvenement = null;
 
-    if (unId > 0 || unId < nextId) {
+    if (unId > 0 || unId < prochainIdEvenement) {
       for (Evenement e : listeEvenements) {
         if (e.getId() == unId) {
           unEvenement = e;
@@ -163,27 +216,30 @@ public class Gestion {
   }
 
   /**
-   * Supprime événement de la liste des événements avec son identifiant.
+   * Supprime un {@code Evenement} de la liste des événements.
    * 
    * @param unId Identifiant de l'événement à supprimer
-   * @return {@code 0} si la suppression est un succès, {@code -1} si l'événement correspondant à
-   *         l'identifiant n'est pas présent dans la liste
+   * @return {@code null} si la suppression de l'événement est un succès, une liste de {@code CodeErreur}
+   *         sinon
    */
-  public int supprimerEvenement(int unId) {
-    Evenement unEvenement = getEvenement(unId);
+  public ArrayList<CodeErreur> supprimerEvenement(int unId) {
+    ArrayList<CodeErreur> res = null;
+    Evenement evenementASupprimer = this.getEvenement(unId);
 
-    int res = -1;
-
-    if (unEvenement != null) {
-      listeEvenements.remove(unEvenement);
-      res = 0;
+    // Si l'evenement est dans la liste des événements
+    if (evenementASupprimer != null) {
+      this.listeEvenements.remove(evenementASupprimer); // supprime le membre de la liste
+    } else {
+      this.codesErreurs.clear();
+      this.codesErreurs.add(CodeErreur.EVENEMENT_INTROUVABLE);
+      res=getCodesErreurs(); 
     }
 
     return res;
   }
 
   /**
-   * Modifie un événement de la liste des événements.
+   * Modifie un événement de la liste des événements si toutes les modifications sont possibles.
    * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
@@ -193,15 +249,18 @@ public class Gestion {
    * @param unlieu Lieu de l'événement
    * @param unNbMaxPersonnes Nombre maximum de personnes autorisées à l'événement
    * @param unType Type de l'évenement
-   * @return {@code 0} si la modification est un succès, {@code -1} si l'événement correspondant à
-   *         l'identifiant n'est pas présent dans la liste, {@code 1} si erreur de modification de
-   *         l'événement
+   * @return {@code null} si la modification de l'événement est un succès, une liste de
+   *         {@code CodeErreur} sinon
    */
-  public int modifierEvenement(int unId, String unNom, String unDescriptif, String uneImage,
+  public ArrayList<CodeErreur> modifierEvenement(int unId, String unNom, String unDescriptif, String uneImage,
       Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
-    int res = -1;
+    ArrayList<CodeErreur> res = null;
+    this.codesErreurs.clear();
 
-    if (unId > 0 || unId < nextId) {
+    Evenement evenementAModifier = this.getEvenement(unId);
+
+    // Si l'evenement est dans la liste des événements
+    if (evenementAModifier != null) {
 
       for (int i = 0; i < listeEvenements.size(); i++) {
         if (listeEvenements.get(i).getId() == unId) {
@@ -209,14 +268,16 @@ public class Gestion {
               unLieu, unNbMaxPersonnes, unType);
 
           if (unEvenement == null) {
-            res = 1;
+            res = getCodesErreurs(); //modifications pas possibles
           } else {
             listeEvenements.set(i, unEvenement);
-
-            res = 0;
           }
+          
         }
       }
+    }else {
+      this.codesErreurs.add(CodeErreur.EVENEMENT_INTROUVABLE);
+      res=getCodesErreurs(); 
     }
 
     return res;
