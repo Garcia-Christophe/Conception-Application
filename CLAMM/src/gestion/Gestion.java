@@ -6,6 +6,18 @@ import gestionEvenements.Evenement;
 import gestionEvenements.TypeEvenement;
 import gestionMembres.Membre;
 
+/**
+ * La classe Gestion permet de gérer tous les membres et tous les évènements.
+ * 
+ * <p>
+ * La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. Elle contient
+ * la liste de tous les membres, la liste de tous les évènements, ainsi que la liste de tous les
+ * {@code CodeErreur} survenus lors d'un appel d'une des méthodes.
+ * 
+ * @author Manon, Christophe
+ * @version 1.00
+ * @see {@link Membre}, {@link Evenement}
+ */
 public class Gestion {
 
   /**
@@ -60,7 +72,7 @@ public class Gestion {
   public ArrayList<Evenement> getListeEvenements() {
     return listeEvenements;
   }
-  
+
   /**
    * @param liste La liste des évènements
    */
@@ -69,13 +81,13 @@ public class Gestion {
       this.listeEvenements = liste;
     }
   }
-  
+
   /**
    * Créer un {@code Evenement}.
    * 
    * <p>
-   * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code
-   * erreur est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
+   * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code erreur
+   * est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
    * <p>
    * Les codes erreurs sont les suivants :
@@ -100,11 +112,11 @@ public class Gestion {
    */
   private Evenement creerEvenement(int unId, String unNom, String unDescriptif, String uneImage,
       Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
-    
+
     Evenement unEvenement = new Evenement();
-    
+
     this.codesErreurs.clear();
-    
+
     CodeErreur codeErreur = null;
 
     // Identifiant de l'événement
@@ -112,25 +124,25 @@ public class Gestion {
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     }
-    
+
     // Nom de l'événement
     codeErreur = unEvenement.setNom(unNom);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     }
-    
+
     // Descriptif de l'événement
     codeErreur = unEvenement.setDescriptif(unDescriptif);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     }
-    
+
     // Image de l'événement
     codeErreur = unEvenement.setImage(uneImage);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     }
-    
+
     // Date de l'événement
     codeErreur = unEvenement.setDate(uneDate);
     if (codeErreur != null) {
@@ -154,7 +166,7 @@ public class Gestion {
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     }
-    
+
     // Si une des définitions est un échec, retourne un evenement null
     if (!this.codesErreurs.isEmpty()) {
       unEvenement = null;
@@ -176,11 +188,11 @@ public class Gestion {
    * @return {@code null} si l'ajout du nouveau membre est un succès, une liste de
    *         {@code CodeErreur} sinon
    */
-  public  ArrayList<CodeErreur> ajouterEvenement(String unNom, String unDescriptif, String uneImage, Date uneDate,
-      String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
-    
-    Evenement unEvenement = creerEvenement(prochainIdEvenement, unNom, unDescriptif, uneImage, uneDate, unLieu,
-        unNbMaxPersonnes, unType);
+  public ArrayList<CodeErreur> ajouterEvenement(String unNom, String unDescriptif, String uneImage,
+      Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
+
+    Evenement unEvenement = creerEvenement(prochainIdEvenement, unNom, unDescriptif, uneImage,
+        uneDate, unLieu, unNbMaxPersonnes, unType);
 
     ArrayList<CodeErreur> res = null;
 
@@ -188,8 +200,8 @@ public class Gestion {
       listeEvenements.add(unEvenement);
 
       prochainIdEvenement++;
-    }else {
-      res=getCodesErreurs();
+    } else {
+      res = getCodesErreurs();
     }
 
     return res;
@@ -219,8 +231,8 @@ public class Gestion {
    * Supprime un {@code Evenement} de la liste des événements.
    * 
    * @param unId Identifiant de l'événement à supprimer
-   * @return {@code null} si la suppression de l'événement est un succès, une liste de {@code CodeErreur}
-   *         sinon
+   * @return {@code null} si la suppression de l'événement est un succès, une liste de
+   *         {@code CodeErreur} sinon
    */
   public ArrayList<CodeErreur> supprimerEvenement(int unId) {
     ArrayList<CodeErreur> res = null;
@@ -232,7 +244,7 @@ public class Gestion {
     } else {
       this.codesErreurs.clear();
       this.codesErreurs.add(CodeErreur.EVENEMENT_INTROUVABLE);
-      res=getCodesErreurs(); 
+      res = getCodesErreurs();
     }
 
     return res;
@@ -252,8 +264,8 @@ public class Gestion {
    * @return {@code null} si la modification de l'événement est un succès, une liste de
    *         {@code CodeErreur} sinon
    */
-  public ArrayList<CodeErreur> modifierEvenement(int unId, String unNom, String unDescriptif, String uneImage,
-      Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
+  public ArrayList<CodeErreur> modifierEvenement(int unId, String unNom, String unDescriptif,
+      String uneImage, Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
     ArrayList<CodeErreur> res = null;
     this.codesErreurs.clear();
 
@@ -268,16 +280,16 @@ public class Gestion {
               unLieu, unNbMaxPersonnes, unType);
 
           if (unEvenement == null) {
-            res = getCodesErreurs(); //modifications pas possibles
+            res = getCodesErreurs(); // modifications pas possibles
           } else {
             listeEvenements.set(i, unEvenement);
           }
-          
+
         }
       }
-    }else {
+    } else {
       this.codesErreurs.add(CodeErreur.EVENEMENT_INTROUVABLE);
-      res=getCodesErreurs(); 
+      res = getCodesErreurs();
     }
 
     return res;
