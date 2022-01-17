@@ -92,8 +92,9 @@ public class Membre {
    * contient pas: espace,<,>,|,:,",*,?,/,\
    *
    * @param pseudo le nouveau pseudo du membre
-   * @return null en cas de succès, CodeErreur.PSEUDO_NULL si le pseudo est null, Code_Erreur ou
-   *         vide, et -2 si le pseudo contient: espace,<,>,|,:,",*,?,/,\
+   * @return null en cas de succès, CodeErreur.PSEUDO_NULL si le pseudo est null,
+   *         CodeErreur.PSEUDO_VIDE si le pseudo est vide et CodeErreur.PSEUDO_INVALIDE si le pseudo
+   *         contient : espace,<,>,|,:,",*,?,/,\
    */
   public CodeErreur setPseudo(String unPseudo) {
     CodeErreur res = null;
