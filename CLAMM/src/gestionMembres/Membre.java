@@ -58,6 +58,7 @@ public class Membre implements Comparable {
 
   /**
    * @param pseudo le pseudo du membre
+   * @return 1, 2, 3, 4,
    */
   public int setPseudo(String pseudo) {
     this.pseudo = pseudo;
