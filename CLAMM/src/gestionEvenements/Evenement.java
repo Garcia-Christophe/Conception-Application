@@ -146,17 +146,15 @@ public class Evenement {
    * 
    * @param unDescriptif le descriptif de l'évènement que l'on veut lui attribuer
    * @return null si la modification du descriptif est réussie, sinon CodeErreur.DESCRIPTIF_NULL si
-   *         unDescriptif est null, CodeErreur.DESCRIPTIF_VIDE si la taille est égale à 0,
-   *         CodeErreur.DESCRIPTIF_ESPACE_EN_TROP si unDescriptif a un espace au début ou à la fin,
-   *         CodeErreur.DESCRIPTIF_TROP_LONG si unDescriptif dépasse la taille maximum
+   *         unDescriptif est null, CodeErreur.DESCRIPTIF_ESPACE_EN_TROP si unDescriptif a un espace
+   *         au début ou à la fin, CodeErreur.DESCRIPTIF_TROP_LONG si unDescriptif dépasse la taille
+   *         maximum
    */
   public CodeErreur setDescriptif(String unDescriptif) {
     CodeErreur res = null;
 
     if (unDescriptif == null) {
       res = CodeErreur.DESCRIPTIF_NULL;
-    } else if (unDescriptif.length() == 0) {
-      res = CodeErreur.DESCRIPTIF_VIDE;
     } else if (unDescriptif.charAt(0) == ' '
         || unDescriptif.charAt(unDescriptif.length() - 1) == ' ') {
       res = CodeErreur.DESCRIPTIF_ESPACE_EN_TROP;
