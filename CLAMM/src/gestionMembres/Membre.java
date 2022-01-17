@@ -146,6 +146,8 @@ public class Membre {
     // Si le paramètre n'est pas null et le nom n'est pas vide
     if (unNom == null) {
       res = CodeErreur.NOM_NULL;
+    } else if (unNom.length() == 0) {
+      res = CodeErreur.NOM_VIDE;
     } else if (unNom.length() <= TAILLE_MAX_NOM) {
       int i = 0;
 
@@ -187,6 +189,8 @@ public class Membre {
     // Si le paramètre n'est pas null et le prenom n'est pas vide
     if (unPrenom == null) {
       res = CodeErreur.PRENOM_NULL;
+    } else if (unPrenom.length() == 0) {
+      res = CodeErreur.PRENOM_VIDE;
     } else if (unPrenom.length() <= TAILLE_MAX_PRENOM) {
       int i = 0;
 
