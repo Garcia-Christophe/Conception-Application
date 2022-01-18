@@ -109,10 +109,9 @@ public class Membre {
 
       // Vérifie tous les cas interdits
       while (i < unPseudo.length()) {
-        if (Character.isDigit(unPseudo.charAt(i)) || unPseudo.charAt(i) == ' '
-            || unPseudo.charAt(i) == '<' || unPseudo.charAt(i) == '>' || unPseudo.charAt(i) == '|'
-            || unPseudo.charAt(i) == ':' || unPseudo.charAt(i) == '"' || unPseudo.charAt(i) == '*'
-            || unPseudo.charAt(i) == '?' || unPseudo.charAt(i) == '/'
+        if (unPseudo.charAt(i) == ' ' || unPseudo.charAt(i) == '<' || unPseudo.charAt(i) == '>'
+            || unPseudo.charAt(i) == '|' || unPseudo.charAt(i) == ':' || unPseudo.charAt(i) == '"'
+            || unPseudo.charAt(i) == '*' || unPseudo.charAt(i) == '?' || unPseudo.charAt(i) == '/'
             || unPseudo.charAt(i) == '\\') {
           res = CodeErreur.PSEUDO_INVALIDE;
         }
