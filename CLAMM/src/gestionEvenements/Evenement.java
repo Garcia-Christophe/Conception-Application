@@ -89,7 +89,7 @@ public class Evenement {
    */
   public CodeErreur setId(int unId) {
     CodeErreur res = null;
-    if (unId < 0) {
+    if (unId <= 0) {
       res = CodeErreur.ID_NEGATIF;
     } else {
       this.id = unId;
@@ -155,8 +155,8 @@ public class Evenement {
 
     if (unDescriptif == null) {
       res = CodeErreur.DESCRIPTIF_NULL;
-    } else if (unDescriptif.charAt(0) == ' '
-        || unDescriptif.charAt(unDescriptif.length() - 1) == ' ') {
+    } else if (unDescriptif!="" && (unDescriptif.charAt(0) == ' '
+        || unDescriptif.charAt(unDescriptif.length() - 1) == ' ')) {
       res = CodeErreur.DESCRIPTIF_ESPACE_EN_TROP;
     } else if (unDescriptif.length() > this.TAILLE_MAX_DESCRIPTIF) {
       res = CodeErreur.DESCRIPTIF_TROP_LONG;
@@ -201,9 +201,10 @@ public class Evenement {
    *         est null ou CodeErreur.DATE_PASSEE si la date est passée
    */
   public CodeErreur setDate(Date uneDate) {
+    Date todayDate=new Date();
     CodeErreur res = null;
     if (uneDate != null) {
-      if (uneDate.compareTo(new Date()) > 0) {
+      if(todayDate.before(uneDate)){
         this.date = uneDate;
       } else {
         res = CodeErreur.DATE_PASSEE;
