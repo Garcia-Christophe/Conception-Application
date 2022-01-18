@@ -153,8 +153,9 @@ public class Membre {
 
       // Vérifie tous les cas autorisés
       while (i < unNom.length()) {
-        if (unNom.charAt(i) != '-' && ((unNom.charAt(i) >= 'a' && unNom.charAt(i) <= 'z')
-            || (unNom.charAt(i) >= 'A' && unNom.charAt(i) <= 'Z'))) {
+        if (Character.isDigit(unNom.charAt(i))
+            || (unNom.charAt(i) != '-' && ((unNom.charAt(i) <= 'a' && unNom.charAt(i) >= 'z')
+                || (unNom.charAt(i) <= 'A' && unNom.charAt(i) >= 'Z')))) {
           res = CodeErreur.NOM_HORS_ALPHABET;
         }
 
@@ -196,8 +197,9 @@ public class Membre {
 
       // Vérifie tous les cas autorisés
       while (i < unPrenom.length()) {
-        if (unPrenom.charAt(i) != '-' && ((unPrenom.charAt(i) >= 'a' && unPrenom.charAt(i) <= 'z')
-            || (unPrenom.charAt(i) >= 'A' && unPrenom.charAt(i) <= 'Z'))) {
+        if (Character.isDigit(unPrenom.charAt(i)) || (unPrenom.charAt(i) != '-'
+            && ((unPrenom.charAt(i) <= 'a' && unPrenom.charAt(i) >= 'z')
+                || (unPrenom.charAt(i) <= 'A' && unPrenom.charAt(i) >= 'Z')))) {
           res = CodeErreur.PRENOM_HORS_ALPHABET;
         }
 
