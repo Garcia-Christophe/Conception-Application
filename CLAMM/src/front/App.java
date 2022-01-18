@@ -1,6 +1,8 @@
 package front;
 
+import java.util.Date;
 import gestion.Gestion;
+import gestionEvenements.TypeEvenement;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;
@@ -11,11 +13,21 @@ import javafx.stage.Stage;
 public class App extends Application {
 
   private static Stage stage;
-  private static Gestion gestion;
+  public static Gestion gestion = new Gestion();
   private static GridPane grid = new GridPane(); //le corps de la page
+  
+  public Date d = new Date();
 
   @Override
   public void start(Stage stage) throws Exception {
+  //TODO à supprimer : ajout provisoires de membres pour tester
+    gestion.ajouterMembre("Hb", "Durand", "Habib", "Tourcoing", d, "Tourcoing", "habibDe@Tourcoing.com","TourcoingCestSympa");
+    gestion.ajouterMembre("AA", "Test", "Habab", "Tourcoing", d, "Tourcoing", "habibDe@ng.com","Pouet");
+    gestion.ajouterMembre("Ba", "Durand", "Haboub", "TourcoingAussi", d, "Tourcoing", "Haboub@Tourcoing.com","Bababa");
+    
+    gestion.ajouterEvenement("Soirée Crêpes", "On mange des crêpes chez bapt dimanche", "rien", d, "Chez bapt", 42, TypeEvenement.REPAS);
+    gestion.ajouterEvenement("Paintball", "Paintball entre collègues", "rien", d, "3 rue des billes", 15, TypeEvenement.ANIMATION);
+    
     App.stage = stage;
     
     Scene scene = new Scene(grid);
@@ -46,6 +58,7 @@ public class App extends Application {
     grid.add(n, 0, 0);
   }
 
+  
   public static Gestion getGestion() {
     return gestion;
   }
