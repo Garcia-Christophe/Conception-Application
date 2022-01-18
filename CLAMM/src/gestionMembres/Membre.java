@@ -121,6 +121,10 @@ public class Membre {
       }
     }
 
+    if (res == null) {
+      this.pseudo = unPseudo;
+    }
+
     return res;
   }
 
@@ -165,6 +169,10 @@ public class Membre {
       res = CodeErreur.NOM_TROP_GRAND;
     }
 
+    if (res == null) {
+      this.nom = unNom;
+    }
+
     return res;
   }
 
@@ -207,6 +215,10 @@ public class Membre {
       }
     } else {
       res = CodeErreur.PRENOM_TROP_GRAND;
+    }
+
+    if (res == null) {
+      this.prenom = unPrenom;
     }
 
     return res;
@@ -255,6 +267,10 @@ public class Membre {
       res = CodeErreur.LIEU_TAILLE_INCORRECTE;
     }
 
+    if (res == null) {
+      this.lieuNaissance = unLieuNaissance;
+    }
+
     return res;
   }
 
@@ -285,6 +301,10 @@ public class Membre {
       res = CodeErreur.DATE_IMPOSSIBLE;
     } else if (dateCourante.getYear() - uneDateNaissance.getYear() > this.AGE_MAXIMUM) {
       res = CodeErreur.DATE_AGE_IMPOSSIBLE;
+    }
+
+    if (res == null) {
+      this.dateNaissance = uneDateNaissance;
     }
 
     return res;
@@ -331,6 +351,11 @@ public class Membre {
     } else {
       res = CodeErreur.VILLE_TAILLE_INCORRECTE;
     }
+
+    if (res == null) {
+      this.ville = uneVille;
+    }
+
     return res;
   }
 
@@ -367,6 +392,10 @@ public class Membre {
       }
     }
 
+    if (res == null) {
+      this.mail = unMail;
+    }
+
     return res;
   }
 
@@ -393,6 +422,10 @@ public class Membre {
       res = CodeErreur.MDP_NULL;
     } else if (unMotDePasse.length() < 0) {
       res = CodeErreur.MDP_VIDE;
+    }
+
+    if (res == null) {
+      this.motDePasse = unMotDePasse;
     }
 
     return res;
