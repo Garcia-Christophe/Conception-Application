@@ -16,6 +16,11 @@ import gestion.CodeErreur;
 public class Membre {
 
   /**
+   * Taille maximale d'un pseudo
+   */
+  private final int TAILLE_MAX_PSEUDO = 30;
+
+  /**
    * Taille maximale d'une ville
    */
   private final int TAILLE_MAX_VILLE = 50;
@@ -34,6 +39,16 @@ public class Membre {
    * Âge maximum d'un être humain
    */
   private final int AGE_MAXIMUM = 130;
+
+  /**
+   * Taille maximale d'un Mot de passe
+   */
+  private final int TAILLE_MAX_MDP = 30;
+
+  /**
+   * Taille minimale d'un Mot de passe
+   */
+  private final int TAILLE_MIN_MDP = 6;
 
   /**
    * Pseudo du membre
@@ -92,9 +107,9 @@ public class Membre {
    * contient pas: espace,<,>,|,:,",*,?,/,\
    *
    * @param pseudo le nouveau pseudo du membre
-   * @return null en cas de succès, CodeErreur.PSEUDO_NULL si le pseudo est null,
-   *         CodeErreur.PSEUDO_VIDE si le pseudo est vide et CodeErreur.PSEUDO_INVALIDE si le pseudo
-   *         contient : espace,<,>,|,:,",*,?,/,\
+   * @return null en cas de succès, PSEUDO_TROP_LONG si le pseudo est trop long,
+   *         CodeErreur.PSEUDO_NULL si le pseudo est null, CodeErreur.PSEUDO_VIDE si le pseudo est
+   *         vide et CodeErreur.PSEUDO_INVALIDE si le pseudo contient : espace,<,>,|,:,",*,?,/,\
    */
   public CodeErreur setPseudo(String unPseudo) {
     CodeErreur res = null;
@@ -104,6 +119,8 @@ public class Membre {
       res = CodeErreur.PSEUDO_NULL;
     } else if (unPseudo.length() == 0) {
       res = CodeErreur.PSEUDO_VIDE;
+    } else if (unPseudo.length() > this.TAILLE_MAX_PSEUDO) {
+      res = CodeErreur.PSEUDO_TROP_LONG;
     } else {
       int i = 0;
 
@@ -156,13 +173,15 @@ public class Membre {
 
       // Vérifie tous les cas autorisés
       while (i < unNom.length()) {
-        if (Character.isDigit(unNom.charAt(i))
-            || (unNom.charAt(i) != '-' && ((unNom.charAt(i) <= 'a' && unNom.charAt(i) >= 'z')
-                || (unNom.charAt(i) <= 'A' && unNom.charAt(i) >= 'Z')))) {
+        if (Character.isDigit(unNom.charAt(i))) {
           res = CodeErreur.NOM_HORS_ALPHABET;
         }
 
         i++;
+      }
+
+      if (!unNom.matches("[a-zA-Z]+")) {
+        res = CodeErreur.NOM_HORS_ALPHABET;
       }
     } else {
       res = CodeErreur.NOM_TROP_GRAND;
@@ -204,13 +223,15 @@ public class Membre {
 
       // Vérifie tous les cas autorisés
       while (i < unPrenom.length()) {
-        if (Character.isDigit(unPrenom.charAt(i)) || (unPrenom.charAt(i) != '-'
-            && ((unPrenom.charAt(i) <= 'a' && unPrenom.charAt(i) >= 'z')
-                || (unPrenom.charAt(i) <= 'A' && unPrenom.charAt(i) >= 'Z')))) {
+        if (Character.isDigit(unPrenom.charAt(i))) {
           res = CodeErreur.PRENOM_HORS_ALPHABET;
         }
 
         i++;
+      }
+
+      if (!unPrenom.matches("[a-zA-Z]+")) {
+        res = CodeErreur.PRENOM_HORS_ALPHABET;
       }
     } else {
       res = CodeErreur.PRENOM_TROP_GRAND;
@@ -411,7 +432,8 @@ public class Membre {
    *
    * @param unMotDePasse le mot de passe du membre
    * @return null si la définition du mot de passe est un succès, CodeErreur.MDP_NULL si le mot de
-   *         passe est null, CodeErreur.MDP_VIDE si le mot de passe n'est composé d'aucun caractère
+   *         passe est null, CodeErreur.MDP_VIDE si le mot de passe n'est composé d'aucun caractère,
+   *         Code_Erreur.MDP_TAILLE_INCORRECTE si le mot de passe est trop court ou trop long
    */
   public CodeErreur setMotDePasse(String unMotDePasse) {
     CodeErreur res = null;
@@ -419,8 +441,10 @@ public class Membre {
     // Si le paramètre n'est pas null et le mot de passe n'est pas vide
     if (unMotDePasse == null) {
       res = CodeErreur.MDP_NULL;
-    } else if (unMotDePasse.length() < 0) {
+    } else if (unMotDePasse.length() == 0) {
       res = CodeErreur.MDP_VIDE;
+    } else if (unMotDePasse.length() < TAILLE_MIN_MDP || unMotDePasse.length() > TAILLE_MAX_MDP) {
+      res = CodeErreur.MDP_TAILLE_INCORRECTE;
     }
 
     if (res == null) {
