@@ -1,0 +1,17 @@
+.hover{
+	-fx-cursor: hand;
+}
+
+.headLabel{
+	-fx-font-size : 40px;
+}
+
+.font20{
+	-fx-font-size : 20px;
+}
+
+.elemHovered{
+	-fx-border-style: solid solid solid solid; 
+	-fx-border-width: 1; 
+	-fx-border-color: black;
+}
