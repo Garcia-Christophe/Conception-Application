@@ -17,7 +17,7 @@ class SetNomEvenementTest {
     }
 
     @Test                                               
-    @DisplayName("Test unNom égal à 'Repas de Noël")   
+    @DisplayName("Test unNom égal à 'Repas de Noël'")   
     void testCorrect() {
         assertEquals(null, unEvenement.setNom("Repas de Noël"), "Le retour devrait être null");  
         assertEquals("Repas de Noël", unEvenement.getNom(), "Le nom devrait être égal à 'Repas de Noël'");  
