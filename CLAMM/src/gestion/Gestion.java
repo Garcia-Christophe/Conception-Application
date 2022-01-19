@@ -92,12 +92,23 @@ public class Gestion {
    * <p>
    * Les codes erreurs sont les suivants :
    * <ul>
-   * <li>- ID_NEGATIF : lorsque la taille du nom est trop grandre</li>
-   * <li>- NOM_TROP_LONG : lorsque la taille du nom est trop grandre</li>
-   * <li>- NOM_VIDE : lorsque le nom est vide</li>
-   * <li>- NOM_NULL : lorsque le nom est null</li>
-   * <li>- NOM_ESPACE : lorsque le nom commence ou fini par des espaces</li>
-   * <li>- ...</li>
+   * <li>- ID_NEGATIF : la taille du nom est trop grandre</li>
+   * <li>- NOM_TROP_LONG : la taille du nom est trop grande</li>
+   * <li>- NOM_VIDE : le nom est vide</li>
+   * <li>- NOM_NULL : le nom est null</li>
+   * <li>- NOM_ESPACE_EN_TROP : le nom commence ou fini par des espaces</li>
+   * <li>- DESCRIPTIF_TROP_LONG : la taille du descriptif est trop grande</li>
+   * <li>- DESCRIPTIF_VIDE : le descriptif est vide</li>
+   * <li>- DESCRIPTIF_NULL : le descriptif est null</li>
+   * <li>- DESCRIPTIF_ESPACE_EN_TROP : le descriptif commence ou fini par des espaces</li>
+   * <li>- DATE_PASSEE : la date est passée </li>
+   * <li>- DATE_NULL : la date est null</li>
+   * <li>- LIEU_TROP_LONG : la taille du lieu est trop grande</li>
+   * <li>- LIEU_VIDE : le lieu est vide</li>
+   * <li>- LIEU_NULL : le lieu est null</li>
+   * <li>- LIEU_ESPACE_EN_TROP : le lieu commence ou fini par des espaces</li>
+   * <li>- NB_MAX_PERSONNES_TROP_PETIT : le nombre de personnes maximun est trop petit (inférieur à 2)<li>
+   * <li>- TYPE_NULL : le type est null</li>
    * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
