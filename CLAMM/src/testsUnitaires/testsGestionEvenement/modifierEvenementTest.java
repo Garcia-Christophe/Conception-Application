@@ -25,7 +25,7 @@ class modifierEvenementTest {
   @Test                                               
   @DisplayName("Test correct : modifier événement")   
   void testCorrect() {
-    Evenement tmp = uneGestion.getListeEvenements().get(0);
+    Evenement tmp = uneGestion.getEvenement(1);
     assertEquals(null, uneGestion.modifierEvenement(1,"nom", tmp.getDescriptif(), tmp.getImage(),tmp.getDate(),tmp.getLieu(),200, tmp.getType()), "Le retour devrait être null");  
     
     assertEquals(1, uneGestion.getListeEvenements().get(0).getId(),"L'identifiant devrait être 1");
@@ -44,8 +44,7 @@ class modifierEvenementTest {
     void testIdPositifIntrouvable() {
       ArrayList<CodeErreur> codes = new ArrayList<CodeErreur>(); 
       codes.add(CodeErreur.EVENEMENT_INTROUVABLE);
-      Evenement tmp = uneGestion.getListeEvenements().get(0);
-      assertEquals(codes, uneGestion.modifierEvenement(3,"nom", tmp.getDescriptif(), tmp.getImage(),tmp.getDate(),tmp.getLieu(),200, tmp.getType()), "Le retour devrait être CodeErreur.EVENEMENT_INTROUVABLE");  
+      assertEquals(codes, uneGestion.modifierEvenement(3,"nom", "Description de l’événement", "url",new Date(2022-1900,06,27,15,30),"adresse",200, TypeEvenement.REPAS), "Le retour devrait être CodeErreur.EVENEMENT_INTROUVABLE");  
     }
     
     @Test
@@ -53,8 +52,7 @@ class modifierEvenementTest {
     void testIdNegatifIntrouvable() {
       ArrayList<CodeErreur> codes = new ArrayList<CodeErreur>(); 
       codes.add(CodeErreur.EVENEMENT_INTROUVABLE);
-      Evenement tmp = uneGestion.getListeEvenements().get(0);
-      assertEquals(codes, uneGestion.modifierEvenement(-1,"nom", tmp.getDescriptif(), tmp.getImage(),tmp.getDate(),tmp.getLieu(),200, tmp.getType()), "Le retour devrait être CodeErreur.EVENEMENT_INTROUVABLE");  
+      assertEquals(codes, uneGestion.modifierEvenement(-1,"nom", "Description de l’événement", "url",new Date(2022-1900,06,27,15,30),"adresse",200, TypeEvenement.REPAS), "Le retour devrait être CodeErreur.EVENEMENT_INTROUVABLE");  
     }
     
     @Test
@@ -62,7 +60,7 @@ class modifierEvenementTest {
     void testNbMaxPersonneNegatif() {
       ArrayList<CodeErreur> codes = new ArrayList<CodeErreur>(); 
       codes.add(CodeErreur.NB_MAX_PERSONNES_TROP_PETIT);
-      Evenement tmp = uneGestion.getListeEvenements().get(0);
+      Evenement tmp = uneGestion.getEvenement(1);
       assertEquals(codes, uneGestion.modifierEvenement(1,tmp.getNom(), tmp.getDescriptif(), tmp.getImage(),tmp.getDate(),tmp.getLieu(),-500, tmp.getType()), "Le retour devrait être CodeErreur.NB_MAX_PERSONNES_TROP_PETIT");
       
       assertEquals(1, uneGestion.getListeEvenements().get(0).getId(),"L'identifiant devrait être 1");
