@@ -497,6 +497,7 @@ public class Gestion {
    * <li>- NOM_TROP_LONG : lorsque le nom est trop long</li>
    * <li>- ...</li>
    * 
+   * @param ancienPseudo ancien pseudo du membre modifier
    * @param unPseudo nouveau pseudo du membre
    * @param unNom nouveau nom du membre
    * @param unPrenom nouveau prénom du membre
@@ -508,68 +509,73 @@ public class Gestion {
    * @return {@code null} si la modification du membre est un succès, une liste de
    *         {@code CodeErreur} sinon
    */
-  public ArrayList<CodeErreur> modifierMembre(String unPseudo, String unNom, String unPrenom,
-      String unLieuNaissance, Date uneDateNaissance, String uneVille, String unMail,
-      String unMotDePasse) {
+  public ArrayList<CodeErreur> modifierMembre(String ancienPseudo, String unPseudo, String unNom,
+      String unPrenom, String unLieuNaissance, Date uneDateNaissance, String uneVille,
+      String unMail, String unMotDePasse) {
     ArrayList<CodeErreur> res = null;
-    Membre membreAModifier = this.getMembre(unPseudo);
     this.codesErreurs.clear();
+    Membre membreAModifier = this.getMembre(ancienPseudo);
 
     // Si le membre est dans la liste des membres
     if (membreAModifier != null) {
       CodeErreur codeErreur = null;
 
-      // Définition du nouveau pseudo du membre
-      codeErreur = membreAModifier.setPseudo(unPseudo);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+      // Définitions des nouveaux attributs si le pseudo est unique
+      if (this.getMembre(unPseudo) == null) {
+        // Définition du nouveau pseudo du membre
+        codeErreur = membreAModifier.setPseudo(unPseudo);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Définition du nouveau nom du membre
-      codeErreur = membreAModifier.setNom(unNom);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+        // Définition du nouveau nom du membre
+        codeErreur = membreAModifier.setNom(unNom);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Définition du nouveau prénom du membre
-      codeErreur = membreAModifier.setPrenom(unPrenom);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+        // Définition du nouveau prénom du membre
+        codeErreur = membreAModifier.setPrenom(unPrenom);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Définition du nouveau lieu de naissance du membre
-      codeErreur = membreAModifier.setLieuNaissance(unLieuNaissance);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+        // Définition du nouveau lieu de naissance du membre
+        codeErreur = membreAModifier.setLieuNaissance(unLieuNaissance);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Définition de la nouvelle date de naissance du membre
-      codeErreur = membreAModifier.setDateNaissance(uneDateNaissance);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+        // Définition de la nouvelle date de naissance du membre
+        codeErreur = membreAModifier.setDateNaissance(uneDateNaissance);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Définition de la nouvelle ville du membre
-      codeErreur = membreAModifier.setVille(uneVille);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+        // Définition de la nouvelle ville du membre
+        codeErreur = membreAModifier.setVille(uneVille);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Définition de la nouvelle adresse mail du membre
-      codeErreur = membreAModifier.setMail(unMail);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+        // Définition de la nouvelle adresse mail du membre
+        codeErreur = membreAModifier.setMail(unMail);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Définition du nouveau mot de passe du membre
-      codeErreur = membreAModifier.setMotDePasse(unMotDePasse);
-      if (codeErreur != null) {
-        this.codesErreurs.add(codeErreur);
-      }
+        // Définition du nouveau mot de passe du membre
+        codeErreur = membreAModifier.setMotDePasse(unMotDePasse);
+        if (codeErreur != null) {
+          this.codesErreurs.add(codeErreur);
+        }
 
-      // Si une des définitions est un échec, retourne la liste des codes erreurs
-      if (!this.codesErreurs.isEmpty()) {
-        res = this.getCodesErreurs();
+        // Si une des définitions est un échec, retourne la liste des codes erreurs
+        if (!this.codesErreurs.isEmpty()) {
+          res = this.getCodesErreurs();
+        }
+      } else {
+        this.codesErreurs.add(CodeErreur.PSEUDO_DEJA_EXISTANT);
       }
     } else {
       this.codesErreurs.add(CodeErreur.MEMBRE_INTROUVABLE);
