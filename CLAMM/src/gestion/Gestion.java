@@ -440,6 +440,7 @@ public class Gestion {
     } else {
       this.codesErreurs.clear();
       this.codesErreurs.add(CodeErreur.PSEUDO_DEJA_EXISTANT);
+      res = this.getCodesErreurs();
     }
 
     return res;
@@ -472,6 +473,7 @@ public class Gestion {
     } else {
       this.codesErreurs.clear();
       this.codesErreurs.add(CodeErreur.MEMBRE_INTROUVABLE);
+      res = this.getCodesErreurs();
     }
 
     return res;
@@ -573,9 +575,11 @@ public class Gestion {
         }
       } else {
         this.codesErreurs.add(CodeErreur.PSEUDO_DEJA_EXISTANT);
+        res = this.getCodesErreurs();
       }
     } else {
       this.codesErreurs.add(CodeErreur.MEMBRE_INTROUVABLE);
+      res = this.getCodesErreurs();
     }
 
     return res;
