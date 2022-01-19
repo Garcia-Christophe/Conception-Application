@@ -18,37 +18,37 @@ public class Membre {
   /**
    * Taille maximale d'un pseudo.
    */
-  private final int TAILLE_MAX_PSEUDO = 30;
+  private static final int TAILLE_MAX_PSEUDO = 30;
 
   /**
    * Taille maximale d'une ville.
    */
-  private final int TAILLE_MAX_VILLE = 50;
+  private static final int TAILLE_MAX_VILLE = 50;
 
   /**
    * Taille maximale d'un nom.
    */
-  private final int TAILLE_MAX_NOM = 30;
+  private static final int TAILLE_MAX_NOM = 30;
 
   /**
    * Taille maximale d'un prénom.
    */
-  private final int TAILLE_MAX_PRENOM = 30;
+  private static final int TAILLE_MAX_PRENOM = 30;
 
   /**
    * Âge maximum d'un être humain.
    */
-  private final int AGE_MAXIMUM = 130;
+  private static final int AGE_MAXIMUM = 130;
 
   /**
    * Taille maximale d'un Mot de passe.
    */
-  private final int TAILLE_MAX_MDP = 30;
+  private static final int TAILLE_MAX_MDP = 30;
 
   /**
    * Taille minimale d'un Mot de passe.
    */
-  private final int TAILLE_MIN_MDP = 6;
+  private static final int TAILLE_MIN_MDP = 6;
 
   /**
    * Pseudo du membre.
@@ -121,7 +121,7 @@ public class Membre {
       res = CodeErreur.PSEUDO_NULL;
     } else if (unPseudo.length() == 0) {
       res = CodeErreur.PSEUDO_VIDE;
-    } else if (unPseudo.length() > this.TAILLE_MAX_PSEUDO) {
+    } else if (unPseudo.length() > Membre.TAILLE_MAX_PSEUDO) {
       res = CodeErreur.PSEUDO_TROP_LONG;
     } else {
       int i = 0;
@@ -330,7 +330,7 @@ public class Membre {
       res = CodeErreur.DATE_NULL;
     } else if (uneDateNaissance.after(dateCourante)) {
       res = CodeErreur.DATE_IMPOSSIBLE;
-    } else if (dateCourante.getYear() - uneDateNaissance.getYear() > this.AGE_MAXIMUM) {
+    } else if (dateCourante.getYear() - uneDateNaissance.getYear() > Membre.AGE_MAXIMUM) {
       res = CodeErreur.DATE_AGE_IMPOSSIBLE;
     }
 

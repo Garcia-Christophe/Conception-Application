@@ -56,17 +56,17 @@ public class Evenement {
   /**
    * Taille maximum du nom.
    */
-  private final int TAILLE_MAX_NOM = 50;
+  private static final int TAILLE_MAX_NOM = 50;
 
   /**
    * Taille maximum du descriptif.
    */
-  private final int TAILLE_MAX_DESCRIPTIF = 500;
+  private static final int TAILLE_MAX_DESCRIPTIF = 500;
 
   /**
    * Taille maximum du lieu.
    */
-  private final int TAILLE_MAX_LIEU = 100;
+  private static final int TAILLE_MAX_LIEU = 100;
 
   /**
    * Constructeur de la classe Evenement.
@@ -128,7 +128,7 @@ public class Evenement {
       res = CodeErreur.NOM_VIDE;
     } else if (unNom.charAt(0) == ' ' || unNom.charAt(unNom.length() - 1) == ' ') {
       res = CodeErreur.NOM_ESPACE_EN_TROP;
-    } else if (unNom.length() > this.TAILLE_MAX_NOM) {
+    } else if (unNom.length() > Evenement.TAILLE_MAX_NOM) {
       res = CodeErreur.NOM_TROP_LONG;
     } else {
       this.nom = unNom;
@@ -164,7 +164,7 @@ public class Evenement {
     } else if (unDescriptif != "" && (unDescriptif.charAt(0) == ' '
         || unDescriptif.charAt(unDescriptif.length() - 1) == ' ')) {
       res = CodeErreur.DESCRIPTIF_ESPACE_EN_TROP;
-    } else if (unDescriptif.length() > this.TAILLE_MAX_DESCRIPTIF) {
+    } else if (unDescriptif.length() > Evenement.TAILLE_MAX_DESCRIPTIF) {
       res = CodeErreur.DESCRIPTIF_TROP_LONG;
     } else {
       this.descriptif = unDescriptif;
@@ -254,7 +254,7 @@ public class Evenement {
       res = CodeErreur.LIEU_VIDE;
     } else if (unLieu.charAt(0) == ' ' || unLieu.charAt(unLieu.length() - 1) == ' ') {
       res = CodeErreur.LIEU_ESPACE_EN_TROP;
-    } else if (unLieu.length() > this.TAILLE_MAX_LIEU) {
+    } else if (unLieu.length() > Evenement.TAILLE_MAX_LIEU) {
       res = CodeErreur.LIEU_TROP_LONG;
     } else {
       this.lieu = unLieu;
