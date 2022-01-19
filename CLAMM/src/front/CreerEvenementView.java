@@ -4,13 +4,19 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import gestion.CodeErreur;
-import gestionMembres.Membre;
+import gestionEvenements.Evenement;
+import gestionEvenements.TypeEvenement;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -20,11 +26,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class CreerMembreView {
-  
-  String oldPseudo;
+public class CreerEvenementView {
 
-  public CreerMembreView(Membre... m) {
+  public CreerEvenementView(Evenement... m) {
 
     // setup de la nouvelle fenêtre
     GridPane grid = new GridPane();
@@ -34,9 +38,9 @@ public class CreerMembreView {
     // New window (Stage)
     Stage newWindow = new Stage();
     if (m.length == 0) {
-      newWindow.setTitle("Ajouter un membre");
+      newWindow.setTitle("Ajouter un évènement");
     } else {
-      newWindow.setTitle("Modifier le membre " + m[0].getPseudo());
+      newWindow.setTitle("Modifier l'évènement " + m[0].getNom());
     }
     newWindow.setScene(secondScene);
 
@@ -54,16 +58,16 @@ public class CreerMembreView {
     row.setVgrow(Priority.ALWAYS);
     RowConstraints row10 = new RowConstraints();
     row10.setPercentHeight(10);
-    grid.getRowConstraints().addAll(row20, row, row10, row10);
+    grid.getRowConstraints().addAll(row20, row, row, row10, row10);
 
     // les éléments
     HBox header = new HBox();
     header.setStyle("-fx-background-color: #85B9DE;");
     Label labelHead;
     if (m.length == 0) {
-      labelHead = new Label("AJOUTER UN MEMBRE");
+      labelHead = new Label("AJOUTER UN EVENEMENT");
     } else {
-      labelHead = new Label("MODIFIER LE MEMBRE " + m[0].getPseudo());
+      labelHead = new Label("MODIFIER L'EVENEMENT " + m[0].getNom());
     }
     labelHead.getStyleClass().add("headLabel");
     header.getChildren().add(labelHead);
@@ -72,51 +76,60 @@ public class CreerMembreView {
     // éléments de gauche
     VBox vGauche = new VBox();
     vGauche.setPadding(new Insets(5));
-    Label lPseudo = new Label("Pseudo");
-    TextField textPseudo = new TextField();
-    Label lNom = new Label("Nom");
+    Label lNom = new Label("Nom de l'évènement");
     TextField textNom = new TextField();
-    Label lDate = new Label("Date de naissance");
-    DatePicker textDate = new DatePicker();
-    Label lMdp = new Label("Mot de passe");
-    TextField textMdp = new TextField();
+    Label lAdresse = new Label("Adresse");
+    TextField textAdresse = new TextField();
+    Label lNombre = new Label("Nombre maximum de personnes");
+    TextField textNombre = new TextField();
+    textNombre.textProperty().addListener(new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observable, String oldValue,
+          String newValue) {
+        if (!newValue.matches("\\d*")) {
+          textNombre.setText(newValue.replaceAll("[^\\d]", ""));
+        }
+      }
+    });
     vGauche.setSpacing(10);
-    vGauche.getChildren().addAll(lPseudo, textPseudo, lNom, textNom, lDate, textDate, lMdp,
-        textMdp);
+    vGauche.getChildren().addAll(lNom, textNom, lAdresse, textAdresse, lNombre, textNombre);
 
     // éléments de droite
     VBox vDroite = new VBox();
     vDroite.setPadding(new Insets(5));
-    Label lAdresse = new Label("Adresse Mail");
-    TextField textAdresse = new TextField();
-    Label lPrenom = new Label("Prénom");
-    TextField textPrenom = new TextField();
-    Label lVille = new Label("Ville");
-    TextField textVille = new TextField();
-    Label lConfirm = new Label("Confirmation de mot de passe");
-    TextField textConfirm = new TextField();
+    Label lDate = new Label("Date");
+    DatePicker textDate = new DatePicker();
+    Label lType = new Label("Type d'évènement");
+    ComboBox<TypeEvenement> textType = new ComboBox<TypeEvenement>();
+    textType.setItems(FXCollections.observableArrayList(TypeEvenement.AG, TypeEvenement.ANIMATION,
+        TypeEvenement.CHANTIER, TypeEvenement.REPAS));
+    textType.setValue(TypeEvenement.AG);
     vDroite.setSpacing(10);
-    vDroite.getChildren().addAll(lAdresse, textAdresse, lPrenom, textPrenom, lVille, textVille,
-        lConfirm, textConfirm);
+    vDroite.getChildren().addAll(lDate, textDate, lType, textType);
+
+    VBox vDescription = new VBox();
+    vDescription.setPadding(new Insets(5));
+    Label lDescription = new Label("Description");
+    TextArea textDescription = new TextArea();
+    vDescription.getChildren().addAll(lDescription, textDescription);
+
 
     if (m.length != 0) {
-      textPseudo.setText(m[0].getPseudo());
       textNom.setText(m[0].getNom());
-      textPrenom.setText(m[0].getPrenom());
-      LocalDate d = m[0].getDateNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      LocalDate d = m[0].getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
       textDate.setValue(d);
-      textAdresse.setText(m[0].getMail());
-      textVille.setText(m[0].getVille());
-      textMdp.setText(m[0].getMotDePasse());
-      textConfirm.setText(m[0].getMotDePasse());
-      oldPseudo = textPseudo.getText();
+      textAdresse.setText(m[0].getLieu());
+      textType.setValue(m[0].getType());
+      textDescription.setText(m[0].getDescriptif());
+      textNombre.setText(Integer.toString(m[0].getNbMaxPersonnes()));
     }
+
 
     // Footer
     Button BtnAjouter;
-    if(m.length==0) {
+    if (m.length == 0) {
       BtnAjouter = new Button("Ajouter");
-    }else {
+    } else {
       BtnAjouter = new Button("Modifier");
     }
     Button BtnAnnuler = new Button("Annuler");
@@ -139,19 +152,21 @@ public class CreerMembreView {
     grid.add(header, 0, 0, 2, 1);
     grid.add(vGauche, 0, 1);
     grid.add(vDroite, 1, 1);
-    grid.add(PaneButtons, 1, 3, 1, 1);
-    grid.add(hErreurs, 0, 2, 2, 1);
+    grid.add(PaneButtons, 1, 4, 1, 1);
+    grid.add(hErreurs, 0, 3, 2, 1);
+    grid.add(vDescription, 0, 2, 2, 1);
 
-    if(m.length==0) {
+    if (m.length == 0) {
       BtnAjouter.setOnAction(e -> {
-        if (textMdp.getText().equals(textConfirm.getText())) {
+
+        if (textNombre.getText() != "") {
           if (textDate.getValue() != null) {
             Date date =
                 Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            if ((App.getGestion().ajouterMembre(textPseudo.getText(), textNom.getText(),
-                textPrenom.getText(), textVille.getText(), date, textVille.getText(),
-                textAdresse.getText(), textMdp.getText())) != null) {
+            if ((App.getGestion().ajouterEvenement(textNom.getText(), textDescription.getText(),
+                "rien", date, textAdresse.getText(), Integer.parseInt(textNombre.getText()),
+                textType.getValue())) != null) {
 
               hErreurs.getChildren().clear();
               hErreurs.getChildren().add(lErreur);
@@ -164,7 +179,7 @@ public class CreerMembreView {
                 hErreurs.getChildren().add(l);
               }
             } else {
-              App.setScene(new MembresView());
+              App.setScene(new EvenementsView());
               newWindow.close();
             }
           } else {
@@ -173,23 +188,34 @@ public class CreerMembreView {
             Label lTxtErrDate = new Label("Erreur saisie de la date |");
             lTxtErrDate.setStyle("-fx-text-fill : red");
             hErreurs.getChildren().add(lTxtErrDate);
-
           }
         } else {
           hErreurs.getChildren().clear();
           hErreurs.getChildren().add(lErreur);
-          Label lTxtErrMdp = new Label("Erreur confirmation mot de passe |");
-          lTxtErrMdp.setStyle("-fx-text-fill : red");
-          hErreurs.getChildren().add(lTxtErrMdp);
+          Label lTxtErrDate = new Label("Nombre maximal de personnes manquant |");
+          lTxtErrDate.setStyle("-fx-text-fill : red");
+          hErreurs.getChildren().add(lTxtErrDate);
         }
+
       });
-    }else {
-      BtnAjouter.setOnAction(e->{
-        if(textMdp.getText().equals(textConfirm.getText())) {
-          Date date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-          App.getGestion().modifierMembre(oldPseudo, textPseudo.getText(), textNom.getText(), textPrenom.getText(), textVille.getText(), date, textVille.getText(), textAdresse.getText(), textMdp.getText());
-          App.setScene(new MembresView());
+
+    } else {
+      BtnAjouter.setOnAction(e -> {
+        if (textNombre.getText() != "") {
+          Date date =
+              Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+          App.getGestion().modifierEvenement(m[0].getId(), textNom.getText(),
+              textDescription.getText(), "rien", date, textAdresse.getText(),
+              Integer.parseInt(textNombre.getText()), textType.getValue());
+          
+          App.setScene(new EvenementsView());
           newWindow.close();
+        } else {
+          hErreurs.getChildren().clear();
+          hErreurs.getChildren().add(lErreur);
+          Label lTxtErrDate = new Label("Nombre maximal de personnes manquant |");
+          lTxtErrDate.setStyle("-fx-text-fill : red");
+          hErreurs.getChildren().add(lTxtErrDate);
         }
       });
     }
@@ -197,6 +223,7 @@ public class CreerMembreView {
     BtnAnnuler.setOnAction(e -> {
       newWindow.close();
     });
+
   }
 
 }

@@ -58,7 +58,7 @@ public class EvenementsView extends GridPane {
     // Bouton pour la nouvelle fenêtre ajouter un évènement
     Button BtnAjoutEvenement = new Button("Ajout évènement");
     BtnAjoutEvenement.setOnAction(e -> {
-      new CreerMembreView(); // Appel à la nouvelle scène
+      new CreerEvenementView(); // Appel à la nouvelle scène
     });
 
     // Partie de gauche, le scroll pane
@@ -120,12 +120,12 @@ public class EvenementsView extends GridPane {
       Button btnSuppr = new Button("Supprimer");
       btnSuppr.setOnMouseClicked(a -> {
         App.getGestion().supprimerEvenement(m.getId()); // Suppression par l'id
-        App.setScene(new MembresView()); // Recréer une nouvelle scène pour actualiser l'affichage
+        App.setScene(new EvenementsView()); // Recréer une nouvelle scène pour actualiser l'affichage
       });
 
       Button btnModifier = new Button("Modifier");
       btnModifier.setOnMouseClicked(a -> {
-        //new CreerMembreView(m);
+        new CreerEvenementView(m);
       });
 
       fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getDate().toString()),

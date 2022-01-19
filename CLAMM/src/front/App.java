@@ -1,5 +1,6 @@
 package front;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import gestion.Gestion;
 import gestionEvenements.TypeEvenement;
@@ -22,11 +23,11 @@ public class App extends Application {
   public void start(Stage stage) throws Exception {
   //TODO à supprimer : ajout provisoires de membres pour tester
     gestion.ajouterMembre("Hb", "Durand", "Habib", "Tourcoing", d, "Tourcoing", "habibDe@Tourcoing.com","TourcoingCestSympa");
-    gestion.ajouterMembre("AA", "Test", "Habab", "Tourcoing", d, "Tourcoing", "habibDe@ng.com","Pouet");
+    gestion.ajouterMembre("AA", "Test", "Habab", "Tourcoing", d, "Tourcoing", "habibDe@ng.com","PouetPouet");
     gestion.ajouterMembre("Ba", "Durand", "Haboub", "TourcoingAussi", d, "Tourcoing", "Haboub@Tourcoing.com","Bababa");
     
-    gestion.ajouterEvenement("Soirée Crêpes", "On mange des crêpes chez bapt dimanche", "rien", d, "Chez bapt", 42, TypeEvenement.REPAS);
-    gestion.ajouterEvenement("Paintball", "Paintball entre collègues", "rien", d, "3 rue des billes", 15, TypeEvenement.ANIMATION);
+    gestion.ajouterEvenement("Soirée Crêpes", "On mange des crêpes chez bapt dimanche", "rien", new Date(2022-1900,11,25,19,30), "Chez bapt", 42, TypeEvenement.REPAS);
+    gestion.ajouterEvenement("Paintball", "Paintball entre collègues", "rien", new Date(2022-1900,11,25,19,30), "3 rue des billes", 15, TypeEvenement.ANIMATION);
     
     App.stage = stage;
     
