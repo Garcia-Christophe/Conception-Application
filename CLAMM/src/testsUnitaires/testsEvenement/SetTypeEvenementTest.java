@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
-import gestionEvenements.Evenement;
-import gestionEvenements.TypeEvenement;
+import gestion.evenements.Evenement;
+import gestion.evenements.TypeEvenement;
 
 class SetTypeEvenementTest {
 

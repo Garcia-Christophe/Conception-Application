@@ -1,9 +1,9 @@
-package gestionMembres;
+package gestion.membres;
 
+import gestion.CodeErreur;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import gestion.CodeErreur;
 
 /**
  * La classe Membre représente un membre d’association, caractérisé par son nom, son prénom, un
@@ -16,77 +16,77 @@ import gestion.CodeErreur;
 public class Membre {
 
   /**
-   * Taille maximale d'un pseudo
+   * Taille maximale d'un pseudo.
    */
   private final int TAILLE_MAX_PSEUDO = 30;
 
   /**
-   * Taille maximale d'une ville
+   * Taille maximale d'une ville.
    */
   private final int TAILLE_MAX_VILLE = 50;
 
   /**
-   * Taille maximale d'un nom
+   * Taille maximale d'un nom.
    */
   private final int TAILLE_MAX_NOM = 30;
 
   /**
-   * Taille maximale d'un prénom
+   * Taille maximale d'un prénom.
    */
   private final int TAILLE_MAX_PRENOM = 30;
 
   /**
-   * Âge maximum d'un être humain
+   * Âge maximum d'un être humain.
    */
   private final int AGE_MAXIMUM = 130;
 
   /**
-   * Taille maximale d'un Mot de passe
+   * Taille maximale d'un Mot de passe.
    */
   private final int TAILLE_MAX_MDP = 30;
 
   /**
-   * Taille minimale d'un Mot de passe
+   * Taille minimale d'un Mot de passe.
    */
   private final int TAILLE_MIN_MDP = 6;
 
   /**
-   * Pseudo du membre
+   * Pseudo du membre.
    */
   private String pseudo;
 
   /**
-   * Nom de famille du membre
+   * Nom de famille du membre.
    */
   private String nom;
 
   /**
-   * Prénom du membre
+   * Prénom du membre.
    */
   private String prenom;
 
   /**
-   * Lieu de naissance du membre
+   * Lieu de naissance du membre.
    */
   private String lieuNaissance;
 
   /**
-   * Date de naissance du membre
+   * Date de naissance du membre.
    */
   private Date dateNaissance;
 
   /**
-   * Lieu de résidence du membre
+   * Lieu de résidence du membre.
    */
   private String ville;
 
   /**
-   * Adresse mail du membre
+   * Adresse mail du membre.
    */
   private String mail;
 
   /**
-   * Mot de passe du membre
+   * Mot de passe du membre.
    */
   private String motDePasse;
 
@@ -96,6 +96,8 @@ public class Membre {
   public Membre() {}
 
   /**
+   * Retourne le pseudo du membre.
+   * 
    * @return le pseudo du membre
    */
   public String getPseudo() {
@@ -104,9 +106,9 @@ public class Membre {
 
   /**
    * Change le pseudo du membre par unPseudo si celui-ci n'est pas null ou vide, et que le pseudo ne
-   * contient pas: espace,<,>,|,:,",*,?,/,\
+   * contient pas: espace,<,>,|,:,",*,?,/,\ .
    *
-   * @param pseudo le nouveau pseudo du membre
+   * @param unPseudo le nouveau pseudo du membre
    * @return null en cas de succès, PSEUDO_TROP_LONG si le pseudo est trop long,
    *         CodeErreur.PSEUDO_NULL si le pseudo est null, CodeErreur.PSEUDO_VIDE si le pseudo est
    *         vide et CodeErreur.PSEUDO_INVALIDE si le pseudo contient : espace,<,>,|,:,",*,?,/,\
@@ -145,6 +147,8 @@ public class Membre {
   }
 
   /**
+   * Retourne le nom du membre.
+   * 
    * @return le nom du membre
    */
   public String getNom() {
@@ -196,6 +200,8 @@ public class Membre {
   }
 
   /**
+   * Retourne le prénom du membre.
+   * 
    * @return le prénom du membre
    */
   public String getPrenom() {
@@ -246,6 +252,8 @@ public class Membre {
   }
 
   /**
+   * Retourne le lieu de naissance du membre.
+   * 
    * @return le lieu de naissance du membre
    */
   public String getLieuNaissance() {
@@ -296,6 +304,8 @@ public class Membre {
   }
 
   /**
+   * Retourne la date de naissance du membre.
+   * 
    * @return la date de naissance du membre
    */
   public Date getDateNaissance() {
@@ -332,6 +342,8 @@ public class Membre {
   }
 
   /**
+   * Retourne la ville du membre.
+   * 
    * @return la ville du membre
    */
   public String getVille() {
@@ -381,6 +393,8 @@ public class Membre {
   }
 
   /**
+   * Retourne l'adresse mail du membre.
+   * 
    * @return l'adresse mail du membre
    */
   public String getMail() {
@@ -388,7 +402,7 @@ public class Membre {
   }
 
   /**
-   * Change le mail du membre par unMail si celui-ci n'est pas null, sinon il est ajouté
+   * Change le mail du membre par unMail si celui-ci n'est pas null, sinon il est ajouté.
    *
    * @param unMail l'adresse mail du membre
    * @return null si la définition du mail est un succès, CodeErreur.MAIL_NULL le mail est null,
@@ -421,6 +435,8 @@ public class Membre {
   }
 
   /**
+   * Retourne le mot du membre.
+   * 
    * @return le mot de passe du membre
    */
   public String getMotDePasse() {

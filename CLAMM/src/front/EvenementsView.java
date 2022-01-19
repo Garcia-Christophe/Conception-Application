@@ -1,6 +1,6 @@
 package front;
 
-import gestionEvenements.Evenement;
+import gestion.evenements.Evenement;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
