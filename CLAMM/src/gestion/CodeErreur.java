@@ -2,7 +2,7 @@ package gestion;
 
 
 /**
- * Classe énumération des codes d'erreurs
+ * Enumération des codes d'erreurs
  * 
  * <p>
  * Les codes erreurs pour les {@code Evenement} sont les suivants :
