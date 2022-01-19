@@ -8,8 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
 import gestion.Gestion;
-import gestionEvenements.Evenement;
-import gestionEvenements.TypeEvenement;
+import gestion.evenements.Evenement;
+import gestion.evenements.TypeEvenement;
 
 class modifierEvenementTest {
 
