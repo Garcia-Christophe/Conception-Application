@@ -517,7 +517,8 @@ public class Gestion {
       CodeErreur codeErreur = null;
 
       // Définitions des nouveaux attributs si le pseudo est unique
-      if (this.getMembre(unPseudo) == null) {
+      if (this.getMembre(unPseudo) == null
+          || (ancienPseudo != null && unPseudo != null && ancienPseudo.equals(unPseudo))) {
         // Définition du nouveau pseudo du membre
         codeErreur = membreAModifier.setPseudo(unPseudo);
         if (codeErreur != null) {
