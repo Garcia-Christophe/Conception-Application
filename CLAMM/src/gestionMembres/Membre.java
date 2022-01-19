@@ -157,8 +157,9 @@ public class Membre {
    *
    * @param unNom le nom du membre
    * @return null en cas de succès, CodeErreur.NOM_TROP_GRAND si le nom est trop grand,
-   *         CodeErreur.NOM_NULL si le nom est null, et CodeErreur.NOM_HORS_ALPHABET si le nom
-   *         contient des caractères autres que les lettres de l'alphabet
+   *         CodeErreur.NOM_NULL si le nom est null, CodeErreur.NOM_VIDE si le nom est vide et
+   *         CodeErreur.NOM_HORS_ALPHABET si le nom contient des caractères autres que les lettres
+   *         de l'alphabet
    */
   public CodeErreur setNom(String unNom) {
     CodeErreur res = null;

@@ -89,27 +89,6 @@ public class Gestion {
    * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code erreur
    * est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
-   * <p>
-   * Les codes erreurs sont les suivants :
-   * <ul>
-   * <li>- ID_NEGATIF : la taille du nom est trop grandre</li>
-   * <li>- NOM_TROP_LONG : la taille du nom est trop grande</li>
-   * <li>- NOM_VIDE : le nom est vide</li>
-   * <li>- NOM_NULL : le nom est null</li>
-   * <li>- NOM_ESPACE_EN_TROP : le nom commence ou fini par des espaces</li>
-   * <li>- DESCRIPTIF_TROP_LONG : la taille du descriptif est trop grande</li>
-   * <li>- DESCRIPTIF_VIDE : le descriptif est vide</li>
-   * <li>- DESCRIPTIF_NULL : le descriptif est null</li>
-   * <li>- DESCRIPTIF_ESPACE_EN_TROP : le descriptif commence ou fini par des espaces</li>
-   * <li>- DATE_PASSEE : la date est passée </li>
-   * <li>- DATE_NULL : la date est null</li>
-   * <li>- LIEU_TROP_LONG : la taille du lieu est trop grande</li>
-   * <li>- LIEU_VIDE : le lieu est vide</li>
-   * <li>- LIEU_NULL : le lieu est null</li>
-   * <li>- LIEU_ESPACE_EN_TROP : le lieu commence ou fini par des espaces</li>
-   * <li>- NB_MAX_PERSONNES_TROP_PETIT : le nombre de personnes maximun est trop petit (inférieur à 2)<li>
-   * <li>- TYPE_NULL : le type est null</li>
-   * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
    * @param unDescriptif Description de l'événement
@@ -189,6 +168,10 @@ public class Gestion {
   /**
    * Ajoute un {@code Evenement} à la liste des événements.
    * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@code Evenement}.
+   * 
    * @param unNom Nom de l'événement
    * @param unDescriptif Description de l'événement
    * @param uneImage URL de l'image
@@ -241,6 +224,10 @@ public class Gestion {
   /**
    * Supprime un {@code Evenement} de la liste des événements.
    * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@code Evenement}.
+   * 
    * @param unId Identifiant de l'événement à supprimer
    * @return {@code null} si la suppression de l'événement est un succès, une liste de
    *         {@code CodeErreur} sinon
@@ -263,6 +250,10 @@ public class Gestion {
 
   /**
    * Modifie un événement de la liste des événements si toutes les modifications sont possibles.
+   * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@code Evenement}.
    * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
@@ -330,15 +321,6 @@ public class Gestion {
    * <p>
    * Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
    * erreur dans la liste des codes erreurs, et retourne un membre {@code null}.
-   * 
-   * <p>
-   * Les codes erreurs sont les suivants :
-   * <ul>
-   * <li>- PSEUDO_TROP_COURT : lorsque la taille du pseudo est trop petite</li>
-   * <li>- PSEUDO_TROP_LONG : lorsque la taille du pseudo est trop grande</li>
-   * <li>- PSEUDO_CARACTERE_INVALIDE : lorsqu'un caractère du pseudo n'est pas possible</li>
-   * <li>- NOM_TROP_LONG : lorsque le nom est trop long</li>
-   * <li>- ...</li>
    * 
    * @param unPseudo pseudo du membre à créer
    * @param unNom nom du membre à créer
@@ -423,6 +405,10 @@ public class Gestion {
    * {@link #creerMembre(String, String, String, String, Date, String, String, String)} est réalisé
    * pour créer le membre avant de l'ajouter dans la liste des membres.
    * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@code Membre}.
+   * 
    * @param unPseudo pseudo du nouveau membre
    * @param unNom nom du nouveau membre
    * @param unPrenom prénom du nouveau membre
@@ -468,6 +454,10 @@ public class Gestion {
    * ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé dans la liste
    * des membres, alors renvoie le code erreur {@code CodeErreur.MEMBRE_INTROUVABLE}.
    * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@code Membre}.
+   * 
    * @param unPseudo pseudo du membre à supprimer de la liste
    * @return {@code null} si la suppression du membre est un succès, une liste de {@code CodeErreur}
    *         sinon
@@ -500,13 +490,8 @@ public class Gestion {
    * correspondantes.
    * 
    * <p>
-   * Les codes erreurs dus aux définitions sont les suivants :
-   * <ul>
-   * <li>- PSEUDO_TROP_COURT : lorsque la taille du pseudo est trop petite</li>
-   * <li>- PSEUDO_TROP_LONG : lorsque la taille du pseudo est trop grande</li>
-   * <li>- PSEUDO_CARACTERE_INVALIDE : lorsqu'un caractère du pseudo n'est pas possible</li>
-   * <li>- NOM_TROP_LONG : lorsque le nom est trop long</li>
-   * <li>- ...</li>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@code Membre}.
    * 
    * @param ancienPseudo ancien pseudo du membre modifier
    * @param unPseudo nouveau pseudo du membre
