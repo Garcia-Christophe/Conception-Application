@@ -1,4 +1,4 @@
-package testsUnitaires;
+package testsUnitaires.testsEvenement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
