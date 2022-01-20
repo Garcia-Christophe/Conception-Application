@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -54,9 +56,15 @@ public class EvenementsView extends GridPane {
     paneMembre.setOnMouseClicked(e -> {
       App.setScene(new MembresView());
     });
+    
+    Image img = new Image("img/ic_action_group.png");
+    ImageView view = new ImageView(img);
+    view.setFitHeight(50);
+    view.setPreserveRatio(true);
 
     // Bouton pour la nouvelle fenêtre ajouter un évènement
-    Button BtnAjoutEvenement = new Button("Ajout évènement");
+    Button BtnAjoutEvenement = new Button();
+    BtnAjoutEvenement.setGraphic(view);
     BtnAjoutEvenement.setOnAction(e -> {
       new CreerEvenementView(); // Appel à la nouvelle scène
     });
@@ -116,20 +124,36 @@ public class EvenementsView extends GridPane {
       VBox fiche = new VBox();
       fiche.prefWidthProperty().bind(this.widthProperty().divide(3).subtract(10));
       rightPart.getChildren().add(fiche);
+      
+      Image img = new Image("img/ic_action_cancel.png");
+      ImageView view = new ImageView(img);
+      view.setFitHeight(50);
+      view.setPreserveRatio(true);
 
-      Button btnSuppr = new Button("Supprimer");
+      Button btnSuppr = new Button();
+      btnSuppr.setGraphic(view);
       btnSuppr.setOnMouseClicked(a -> {
         App.getGestion().supprimerEvenement(m.getId()); // Suppression par l'id
         App.setScene(new EvenementsView()); // Recréer une nouvelle scène pour actualiser l'affichage
       });
+      
+      img = new Image("img/ic_action_edit.png");
+      view = new ImageView(img);
+      view.setFitHeight(50);
+      view.setPreserveRatio(true);
 
-      Button btnModifier = new Button("Modifier");
+      Button btnModifier = new Button();
+      btnModifier.setGraphic(view);
       btnModifier.setOnMouseClicked(a -> {
         new CreerEvenementView(m);
       });
+      
+      HBox hBoutons = new HBox();
+      hBoutons.setAlignment(Pos.CENTER);
+      hBoutons.getChildren().addAll(btnSuppr, btnModifier);
 
       fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getDate().toString()),
-          new Label(m.getType().toString()), new Label(m.getLieu()), btnSuppr, btnModifier);
+          new Label(m.getType().toString()), new Label(m.getLieu()), hBoutons);
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });
