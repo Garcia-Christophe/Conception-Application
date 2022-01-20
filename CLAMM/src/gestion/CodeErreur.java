@@ -1,10 +1,9 @@
 package gestion;
 
 /**
- * Enumération des codes d'erreurs
+ * Enumération des codes d'erreurs.
  * 
- * <p>
- * Les codes erreurs pour les {@code Evenement} sont les suivants :
+ * <p>Les codes erreurs pour les {@code Evenement} sont les suivants :
  * </p>
  * <ul>
  * <li>- EVENEMENT_INTROUVABLE : l'évènement est introuvable</li>
@@ -23,8 +22,7 @@ package gestion;
  * <li>- TYPE_NULL : le type est null</li>
  * </ul>
  * 
- * <p>
- * Les codes erreurs pour les {@code Membre} sont les suivants :
+ * <p>Les codes erreurs pour les {@code Membre} sont les suivants :
  * </p>
  * <ul>
  * <li>- MEMBRE_INTROUVABLE : le membre est introuvable</li>
@@ -54,8 +52,7 @@ package gestion;
  * <li>- MDP_TAILLE_INCORRECTE : la taille du mot de passe est trop petite ou trop grande</li>
  * </ul>
  * 
- * <p>
- * Les codes erreurs communs aux {@code Evenement} et {@code Membre} sont les suivants :
+ * <p>Les codes erreurs communs aux {@code Evenement} et {@code Membre} sont les suivants :
  * </p>
  * <ul>
  * <li>- DATE_NULL : la date est null</li>
@@ -65,5 +62,45 @@ package gestion;
  * </ul>
  */
 public enum CodeErreur {
-  MEMBRE_INTROUVABLE, EVENEMENT_INTROUVABLE, ID_NEGATIF, DATE_PASSEE, DATE_NULL, NB_MAX_PERSONNES_TROP_PETIT, TYPE_NULL, NOM_NULL, NOM_ESPACE_EN_TROP, NOM_VIDE, NOM_TROP_LONG, DESCRIPTIF_NULL, DESCRIPTIF_ESPACE_EN_TROP, DESCRIPTIF_TROP_LONG, LIEU_NULL, LIEU_ESPACE_EN_TROP, LIEU_VIDE, LIEU_TROP_LONG, PSEUDO_NULL, PSEUDO_VIDE, PSEUDO_INVALIDE, PSEUDO_DEJA_EXISTANT, PSEUDO_TROP_LONG, NOM_HORS_ALPHABET, NOM_TROP_GRAND, PRENOM_NULL, PRENOM_VIDE, PRENOM_HORS_ALPHABET, PRENOM_TROP_GRAND, LIEU_NOM_INCORRECT, LIEU_TAILLE_INCORRECTE, DATE_IMPOSSIBLE, DATE_AGE_IMPOSSIBLE, VILLE_NULL, VILLE_NOM_INCORRECT, VILLE_TAILLE_INCORRECTE, MAIL_NULL, MAIL_VIDE, MAIL_INVALIDE, MDP_NULL, MDP_VIDE, MDP_TAILLE_INCORRECTE
+  MEMBRE_INTROUVABLE, 
+  EVENEMENT_INTROUVABLE, 
+  ID_NEGATIF, 
+  DATE_PASSEE, 
+  DATE_NULL, 
+  NB_MAX_PERSONNES_TROP_PETIT, 
+  TYPE_NULL, 
+  NOM_NULL, 
+  NOM_ESPACE_EN_TROP, 
+  NOM_VIDE, 
+  NOM_TROP_LONG, 
+  DESCRIPTIF_NULL, 
+  DESCRIPTIF_ESPACE_EN_TROP, 
+  DESCRIPTIF_TROP_LONG, 
+  LIEU_NULL, 
+  LIEU_ESPACE_EN_TROP, 
+  LIEU_VIDE, 
+  LIEU_TROP_LONG, 
+  PSEUDO_NULL, 
+  PSEUDO_VIDE, 
+  PSEUDO_INVALIDE, 
+  PSEUDO_DEJA_EXISTANT, 
+  PSEUDO_TROP_LONG, 
+  NOM_HORS_ALPHABET, 
+  NOM_TROP_GRAND, 
+  PRENOM_NULL, 
+  PRENOM_VIDE, 
+  PRENOM_HORS_ALPHABET, 
+  PRENOM_TROP_GRAND, 
+  LIEU_NOM_INCORRECT, 
+  LIEU_TAILLE_INCORRECTE, 
+  DATE_IMPOSSIBLE, 
+  DATE_AGE_IMPOSSIBLE, 
+  VILLE_NULL, 
+  VILLE_NOM_INCORRECT, 
+  VILLE_TAILLE_INCORRECTE, 
+  MAIL_NULL, MAIL_VIDE, 
+  MAIL_INVALIDE, 
+  MDP_NULL, 
+  MDP_VIDE, 
+  MDP_TAILLE_INCORRECTE
 }

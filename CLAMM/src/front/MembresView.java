@@ -1,6 +1,6 @@
 package front;
 
-import gestionMembres.Membre;
+import gestion.membres.Membre;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

@@ -3,7 +3,7 @@ package front;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import gestion.Gestion;
-import gestionEvenements.TypeEvenement;
+import gestion.evenements.TypeEvenement;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;

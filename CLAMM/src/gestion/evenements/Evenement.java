@@ -1,7 +1,7 @@
-package gestionEvenements;
+package gestion.evenements;
 
-import java.util.Date;
 import gestion.CodeErreur;
+import java.util.Date;
 
 /**
  * La classe Evenement réprésente un évènement qui est composé de son identifiant, son nom, son
@@ -14,59 +14,59 @@ import gestion.CodeErreur;
 public class Evenement {
 
   /**
-   * Identifiant de l'évènement
+   * Identifiant de l'évènement.
    */
   private int id;
 
   /**
-   * Nom de l'évènement
+   * Nom de l'évènement.
    */
   private String nom;
 
   /**
-   * Descriptif de l'évènement
+   * Descriptif de l'évènement.
    */
   private String descriptif;
 
   /**
-   * Lien de l'image de l'évènement
+   * Lien de l'image de l'évènement.
    */
   private String image;
 
   /**
-   * Date de l'évènement
+   * Date de l'évènement.
    */
   private Date date;
 
   /**
-   * Lieu de l'évènement
+   * Lieu de l'évènement.
    */
   private String lieu;
 
   /**
-   * Nombre maximal de personnes autorisées à l'évènement
+   * Nombre maximal de personnes autorisées à l'évènement.
    */
   private int nbMaxPersonnes;
 
   /**
-   * Type de l'évènement
+   * Type de l'évènement.
    */
   private TypeEvenement type;
 
   /**
-   * Taille maximum du nom
+   * Taille maximum du nom.
    */
-  private final int TAILLE_MAX_NOM = 50;
+  private static final int TAILLE_MAX_NOM = 50;
 
   /**
-   * Taille maximum du descriptif
+   * Taille maximum du descriptif.
    */
-  private final int TAILLE_MAX_DESCRIPTIF = 500;
+  private static final int TAILLE_MAX_DESCRIPTIF = 500;
 
   /**
-   * Taille maximum du lieu
+   * Taille maximum du lieu.
    */
-  private final int TAILLE_MAX_LIEU = 100;
+  private static final int TAILLE_MAX_LIEU = 100;
 
   /**
    * Constructeur de la classe Evenement.
@@ -74,6 +74,8 @@ public class Evenement {
   public Evenement() {}
 
   /**
+   * Retourne l'identifiant de l'évènement.
+   * 
    * @return l'identifiant de l'évènement
    */
   public int getId() {
@@ -99,6 +101,8 @@ public class Evenement {
   }
 
   /**
+   * Retourne le nom de l'événement.
+   * 
    * @return le nom de l'évènement
    */
   public String getNom() {
@@ -124,7 +128,7 @@ public class Evenement {
       res = CodeErreur.NOM_VIDE;
     } else if (unNom.charAt(0) == ' ' || unNom.charAt(unNom.length() - 1) == ' ') {
       res = CodeErreur.NOM_ESPACE_EN_TROP;
-    } else if (unNom.length() > this.TAILLE_MAX_NOM) {
+    } else if (unNom.length() > Evenement.TAILLE_MAX_NOM) {
       res = CodeErreur.NOM_TROP_LONG;
     } else {
       this.nom = unNom;
@@ -134,6 +138,8 @@ public class Evenement {
   }
 
   /**
+   * Retourne le descriptif de l'évènement.
+   * 
    * @return le descriptif de l'évènement
    */
   public String getDescriptif() {
@@ -158,7 +164,7 @@ public class Evenement {
     } else if (unDescriptif != "" && (unDescriptif.charAt(0) == ' '
         || unDescriptif.charAt(unDescriptif.length() - 1) == ' ')) {
       res = CodeErreur.DESCRIPTIF_ESPACE_EN_TROP;
-    } else if (unDescriptif.length() > this.TAILLE_MAX_DESCRIPTIF) {
+    } else if (unDescriptif.length() > Evenement.TAILLE_MAX_DESCRIPTIF) {
       res = CodeErreur.DESCRIPTIF_TROP_LONG;
     } else {
       this.descriptif = unDescriptif;
@@ -168,6 +174,8 @@ public class Evenement {
   }
 
   /**
+   * Retourne l'image de l'évènement.
+   * 
    * @return l'image de l'évènement
    */
   public String getImage() {
@@ -186,6 +194,8 @@ public class Evenement {
   }
 
   /**
+   * Retourne la date de l'évènement.
+   * 
    * @return la date de l'évènement
    */
   public Date getDate() {
@@ -204,9 +214,9 @@ public class Evenement {
     Date dateCourante = new Date();
     CodeErreur res = null;
     if (uneDate != null) {
-      if (uneDate.before(dateCourante)){
+      if (uneDate.before(dateCourante)) {
         res = CodeErreur.DATE_PASSEE;
-      }else{
+      } else {
         this.date = uneDate;
       }
     } else {
@@ -216,6 +226,8 @@ public class Evenement {
   }
 
   /**
+   * Retourne le lieu de l'évènement.
+   * 
    * @return le lieu de l'évènement
    */
   public String getLieu() {
@@ -242,7 +254,7 @@ public class Evenement {
       res = CodeErreur.LIEU_VIDE;
     } else if (unLieu.charAt(0) == ' ' || unLieu.charAt(unLieu.length() - 1) == ' ') {
       res = CodeErreur.LIEU_ESPACE_EN_TROP;
-    } else if (unLieu.length() > this.TAILLE_MAX_LIEU) {
+    } else if (unLieu.length() > Evenement.TAILLE_MAX_LIEU) {
       res = CodeErreur.LIEU_TROP_LONG;
     } else {
       this.lieu = unLieu;
@@ -252,6 +264,8 @@ public class Evenement {
   }
 
   /**
+   * Retourne le nombre maximum de personnes autorisées de l'évènement.
+   * 
    * @return le nombre maximum de personnes autorisées de l'évènement
    */
   public int getNbMaxPersonnes() {
@@ -279,6 +293,8 @@ public class Evenement {
   }
 
   /**
+   * Retourne le type de l'évènement.
+   * 
    * @return le type de l'évènement
    */
   public TypeEvenement getType() {

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
-import gestionMembres.Membre;
+import gestion.membres.Membre;
 
 class SetLieuNaissanceMembreTest {
 
