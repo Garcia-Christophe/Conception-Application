@@ -26,8 +26,19 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * La classe CreerEvenementView est l'une des pages de l'application, celle qui gère l'ajout et la modification des évènements.
+ *   
+ * @author Léo Couedor
+ * @version 1.00
+ */
 public class CreerEvenementView {
 
+  /**
+   * Constructeur de la page CreerEvenementView, avec la création et le placement de tous les éléments.
+   * 
+   * @param un nombre variable d'évènements. Si aucun évènement n'est passé en paramètre, il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre de plusieurs évènements, seul le premier est utilisé pour la modification
+   */
   public CreerEvenementView(Evenement... m) {
 
     // setup de la nouvelle fenêtre

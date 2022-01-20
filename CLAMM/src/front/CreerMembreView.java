@@ -20,10 +20,24 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * La classe CreerMembreView est l'une des pages de l'application, celle qui gère l'ajout et la modification des membres.
+ *   
+ * @author Léo Couedor
+ * @version 1.00
+ */
 public class CreerMembreView {
   
+  /**
+   * Variable contenant l'ancien pseudo du membre, utilisée dans le cas de la modification d'un membre pour pouvoir accéder au membre et faire les modifications.
+   */
   String oldPseudo;
 
+  /**
+   * Constructeur de la page CreerMembresView, avec la création et le placement de tous les éléments.
+   * 
+   * @param un nombre variable de Membres. Si aucun membre n'est passé en paramètre, il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre de plusieurs membres, seul le premier est utilisé pour la modification
+   */
   public CreerMembreView(Membre... m) {
 
     // setup de la nouvelle fenêtre

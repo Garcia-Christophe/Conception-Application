@@ -1,9 +1,6 @@
 package front;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import gestion.Gestion;
-import gestion.evenements.TypeEvenement;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;
@@ -11,29 +8,45 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+/**
+ * La class App est la classe controlleur de l'application. Elle permet l'affichage des différentes scènes, 
+ * et gère également l'instance de gestion, permettant la gestion des membres et des évènements, à savoir le lien entre 
+ * l'interface graphique et les classes métier.
+ * 
+ * @author Léo Couedor
+ * @version 1.00
+ */
+
 public class App extends Application {
 
+  /**
+   * Fenêtre principale de l'application.
+   */
   private static Stage stage;
-  public static Gestion gestion = new Gestion();
-  private static GridPane grid = new GridPane(); //le corps de la page
   
-  public Date d = new Date();
+  /**
+   * Instance de Gestion, pour la gestion des membres et évènements.
+   */
+  public static Gestion gestion = new Gestion();
+  
+  /**
+   * Element principal de la fenêtre.
+   */
+  private static GridPane grid = new GridPane(); // le corps de la page
 
+  /**
+   * Méthode d'initialisation de la fenêtre principale, avec la définition des dimensions et de la structure de la page principale.
+   * 
+   * @param le stage est la fenêtre principale.
+   */
   @Override
   public void start(Stage stage) throws Exception {
-  //TODO à supprimer : ajout provisoires de membres pour tester
-    gestion.ajouterMembre("Hb", "Durand", "Habib", "Tourcoing", d, "Tourcoing", "habibDe@Tourcoing.com","TourcoingCestSympa");
-    gestion.ajouterMembre("AA", "Test", "Habab", "Tourcoing", d, "Tourcoing", "habibDe@ng.com","PouetPouet");
-    gestion.ajouterMembre("Ba", "Durand", "Haboub", "TourcoingAussi", d, "Tourcoing", "Haboub@Tourcoing.com","Bababa");
-    
-    gestion.ajouterEvenement("Soirée Crêpes", "On mange des crêpes chez bapt dimanche", "rien", new Date(2022-1900,11,25,19,30), "Chez bapt", 42, TypeEvenement.REPAS);
-    gestion.ajouterEvenement("Paintball", "Paintball entre collègues", "rien", new Date(2022-1900,11,25,19,30), "3 rue des billes", 15, TypeEvenement.ANIMATION);
-    
+
     App.stage = stage;
-    
+
     Scene scene = new Scene(grid);
     setScene(new MembresView());
-    
+
     stage.setScene(scene);
 
     grid.getStylesheets().add("front/style.css");
@@ -49,21 +62,37 @@ public class App extends Application {
     stage.setMaximized(true);
   }
 
+  /**
+   * Retourne le stage de l'application
+   * 
+   * @return le stage de l'application
+   */
   public static Stage getStage() {
     return stage;
   }
-  
-  //définir une nouvelle page, chaque page étant un gridpane
+
+  /**
+   * Méthode pour définir un nouvel élément à afficher dans la scene
+   * 
+   * @param le gridpane à mettre en avant dans la scene
+   */
   public static void setScene(GridPane n) {
     grid.getChildren().clear();
     grid.add(n, 0, 0);
   }
 
-  
+  /**
+   * Retourne l'instance de gestion
+   * 
+   * @return l'instance de gestion
+   */
   public static Gestion getGestion() {
     return gestion;
   }
-  
+
+  /**
+   * Méthode de lancement de l'application
+   */
   public static void main(String[] args) {
     launch();
   }
