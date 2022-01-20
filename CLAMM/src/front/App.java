@@ -9,9 +9,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 /**
- * La class App est la classe controlleur de l'application. Elle permet l'affichage des différentes scènes, 
- * et gère également l'instance de gestion, permettant la gestion des membres et des évènements, à savoir le lien entre 
- * l'interface graphique et les classes métier.
+ * La class App est la classe controlleur de l'application. Elle permet l'affichage des 
+ * différentes scènes, et gère également l'instance de gestion, permettant la gestion 
+ * des membres et des évènements, à savoir le lien entre l'interface graphique et les 
+ * classes métier.
  * 
  * @author Léo Couedor
  * @version 1.00
@@ -35,9 +36,10 @@ public class App extends Application {
   private static GridPane grid = new GridPane(); // le corps de la page
 
   /**
-   * Méthode d'initialisation de la fenêtre principale, avec la définition des dimensions et de la structure de la page principale.
+   * Méthode d'initialisation de la fenêtre principale, avec la définition des dimensions 
+   * et de la structure de la page principale.
    * 
-   * @param le stage est la fenêtre principale.
+   * @param stage la fenêtre principale.
    */
   @Override
   public void start(Stage stage) throws Exception {
@@ -63,7 +65,7 @@ public class App extends Application {
   }
 
   /**
-   * Retourne le stage de l'application
+   * Retourne le stage de l'application.
    * 
    * @return le stage de l'application
    */
@@ -72,9 +74,9 @@ public class App extends Application {
   }
 
   /**
-   * Méthode pour définir un nouvel élément à afficher dans la scene
+   * Méthode pour définir un nouvel élément à afficher dans la scene.
    * 
-   * @param le gridpane à mettre en avant dans la scene
+   * @param n le gridpane à mettre en avant dans la scene
    */
   public static void setScene(GridPane n) {
     grid.getChildren().clear();
@@ -82,7 +84,7 @@ public class App extends Application {
   }
 
   /**
-   * Retourne l'instance de gestion
+   * Retourne l'instance de gestion.
    * 
    * @return l'instance de gestion
    */
@@ -91,7 +93,7 @@ public class App extends Application {
   }
 
   /**
-   * Méthode de lancement de l'application
+   * Méthode de lancement de l'application.
    */
   public static void main(String[] args) {
     launch();

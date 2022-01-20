@@ -1,10 +1,10 @@
 package front;
 
+import gestion.CodeErreur;
+import gestion.membres.Membre;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import gestion.CodeErreur;
-import gestion.membres.Membre;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,7 +21,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * La classe CreerMembreView est l'une des pages de l'application, celle qui gère l'ajout et la modification des membres.
+ * La classe CreerMembreView est l'une des pages de l'application, 
+ * elle gère l'ajout et la modification des membres.
  *   
  * @author Léo Couedor
  * @version 1.00
@@ -29,14 +30,18 @@ import javafx.stage.Stage;
 public class CreerMembreView {
   
   /**
-   * Variable contenant l'ancien pseudo du membre, utilisée dans le cas de la modification d'un membre pour pouvoir accéder au membre et faire les modifications.
+   * Variable contenant l'ancien pseudo du membre, utilisée dans le cas de 
+   * la modification d'un membre pour pouvoir accéder au membre et faire les modifications.
    */
   String oldPseudo;
 
   /**
-   * Constructeur de la page CreerMembresView, avec la création et le placement de tous les éléments.
+   * Constructeur de la page CreerMembresView, avec la création et le 
+   * placement de tous les éléments.
    * 
-   * @param un nombre variable de Membres. Si aucun membre n'est passé en paramètre, il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre de plusieurs membres, seul le premier est utilisé pour la modification
+   * @param m un nombre variable de Membres. Si aucun membre n'est passé en paramètre, 
+   *     il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre 
+   *     de plusieurs membres, seul le premier est utilisé pour la modification.
    */
   public CreerMembreView(Membre... m) {
 
@@ -128,9 +133,9 @@ public class CreerMembreView {
 
     // Footer
     Button BtnAjouter;
-    if(m.length==0) {
+    if (m.length == 0) {
       BtnAjouter = new Button("Ajouter");
-    }else {
+    } else {
       BtnAjouter = new Button("Modifier");
     }
     Button BtnAnnuler = new Button("Annuler");

@@ -1,11 +1,11 @@
 package front;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import gestion.CodeErreur;
 import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,7 +27,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * La classe CreerEvenementView est l'une des pages de l'application, celle qui gère l'ajout et la modification des évènements.
+ * La classe CreerEvenementView est l'une des pages de l'application, 
+ * elle gère l'ajout et la modification des évènements.
  *   
  * @author Léo Couedor
  * @version 1.00
@@ -35,9 +36,12 @@ import javafx.stage.Stage;
 public class CreerEvenementView {
 
   /**
-   * Constructeur de la page CreerEvenementView, avec la création et le placement de tous les éléments.
+   * Constructeur de la page CreerEvenementView, 
+   * avec la création et le placement de tous les éléments.
    * 
-   * @param un nombre variable d'évènements. Si aucun évènement n'est passé en paramètre, il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre de plusieurs évènements, seul le premier est utilisé pour la modification
+   * @param m un nombre variable d'évènements. Si aucun évènement n'est passé en paramètre, 
+   *     il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre 
+   *     de plusieurs évènements, seul le premier est utilisé pour la modification
    */
   public CreerEvenementView(Evenement... m) {
 

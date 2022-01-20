@@ -17,8 +17,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 /**
- * La classe EvenementView est l'une des pages de l'application, celle qui fait l'affichage des évènements.
- * Elle est de type GridPane pour pouvoir l'intégrer au stage de l'application par l'intermédiaire du controlleur App.
+ * La classe EvenementView est l'une des pages de l'application, 
+ * elle gère l'affichage des évènements.
+ * Elle est de type GridPane pour pouvoir l'intégrer au stage de 
+ * l'application par l'intermédiaire du controlleur App.
  *   
  * @author Léo Couedor
  * @version 1.00
@@ -26,7 +28,8 @@ import javafx.scene.layout.VBox;
 public class EvenementsView extends GridPane {
 
   /**
-   * Element de la partie de droite de l'application, qui permet l'affichage des informations complémentaires du membre sélectionné.
+   * Element de la partie de droite de l'application, qui permet 
+   * l'affichage des informations complémentaires du membre sélectionné.
    */
   HBox rightPart = new HBox();
 
@@ -107,10 +110,12 @@ public class EvenementsView extends GridPane {
   }
 
   /**
-   * Méthode pour créer un bloc HBox à ajouter à la création d'un évènement pour l'affichage. Cela créé également sa fiche d'informations complémentaire
+   * Méthode pour créer un bloc HBox, à ajouter à la création d'un évènement pour l'affichage. 
+   * Cela créé également sa fiche d'informations complémentaire
    * ainsi que les boutons permettant de supprimer et modifier cet évènement.
    * 
-   * @param un évènement pour lequel créer son bloc dans la liste d'affichage et sa fiche d'informations
+   * @param m un évènement pour lequel créer son bloc dans la liste d'affichage 
+   *     et sa fiche d'informations
    * @return un élément de type HBox
    */
   public HBox ajEvenement(Evenement m) {
