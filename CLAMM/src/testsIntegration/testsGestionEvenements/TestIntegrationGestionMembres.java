@@ -1,4 +1,4 @@
-package testsUnitaires.testsGestionMembre;
+package testsIntegration.testsGestionEvenements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
 import gestion.Gestion;
 
-class GestionMembreTestIntegration {
+public class TestIntegrationGestionMembres {
 
   Gestion uneGestion;
 

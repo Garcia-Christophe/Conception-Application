@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
 import gestion.Gestion;
 
-class AjouterMembreTest {
+public class AjouterMembreTest {
 
   Gestion uneGestion;
 

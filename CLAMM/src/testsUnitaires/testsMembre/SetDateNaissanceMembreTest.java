@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
 import gestion.membres.Membre;
 
-class SetDateNaissanceMembreTest {
+public class SetDateNaissanceMembreTest {
 
   Membre membre;
 

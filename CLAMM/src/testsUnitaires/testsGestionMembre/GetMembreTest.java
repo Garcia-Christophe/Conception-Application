@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import gestion.Gestion;
 
-class GetMembreTest {
+public class GetMembreTest {
 
   Gestion uneGestion;
 

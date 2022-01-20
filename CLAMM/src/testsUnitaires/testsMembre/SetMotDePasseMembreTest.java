@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
 import gestion.membres.Membre;
 
-class SetMotDePasseMembreTest {
+public class SetMotDePasseMembreTest {
 
   Membre membre;
 

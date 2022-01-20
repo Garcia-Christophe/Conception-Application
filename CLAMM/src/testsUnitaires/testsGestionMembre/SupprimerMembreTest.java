@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import gestion.CodeErreur;
 import gestion.Gestion;
 
-class SupprimerMembreTest {
+public class SupprimerMembreTest {
 
   Gestion uneGestion;
 
