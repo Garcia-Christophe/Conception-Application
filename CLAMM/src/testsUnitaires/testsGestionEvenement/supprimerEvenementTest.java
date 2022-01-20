@@ -26,8 +26,8 @@ class supprimerEvenementTest {
   @DisplayName("Test correct : supprimer événement id 2")   
   void testCorrect() {
     assertEquals(null, uneGestion.supprimerEvenement(2), "Le retour devrait être null");
-    assertTrue(uneGestion.getEvenement(1)!=null);
-    assertTrue(uneGestion.getEvenement(2)==null);
+    assertTrue(uneGestion.getEvenement(1)!=null,"l'événement id 1 devrait etre trouvé");
+    assertTrue(uneGestion.getEvenement(2)==null,"l'événement id 2 ne devrait pas etre trouvé");
   }
    
     @Test
@@ -36,8 +36,8 @@ class supprimerEvenementTest {
       ArrayList<CodeErreur> codes = new ArrayList<CodeErreur>(); 
       codes.add(CodeErreur.EVENEMENT_INTROUVABLE);
       assertEquals(codes, uneGestion.supprimerEvenement(0), "Le retour devrait être null");
-      assertTrue(uneGestion.getEvenement(1)!=null);
-      assertTrue(uneGestion.getEvenement(2)!=null);
+      assertTrue(uneGestion.getEvenement(1)!=null,"l'événement id 1 devrait etre trouvé");
+      assertTrue(uneGestion.getEvenement(2)!=null,"l'événement id 2 devrait etre trouvé");
     }  
     
     @Test
@@ -46,8 +46,8 @@ class supprimerEvenementTest {
       ArrayList<CodeErreur> codes = new ArrayList<CodeErreur>(); 
       codes.add(CodeErreur.EVENEMENT_INTROUVABLE);
       assertEquals(codes, uneGestion.supprimerEvenement(-1), "Le retour devrait être null");
-      assertTrue(uneGestion.getEvenement(1)!=null);
-      assertTrue(uneGestion.getEvenement(2)!=null);
+      assertTrue(uneGestion.getEvenement(1)!=null,"l'événement id 1 devrait etre trouvé");
+      assertTrue(uneGestion.getEvenement(2)!=null,"l'événement id 1 devrait etre trouvé");
     }  
     
     
@@ -57,8 +57,8 @@ class supprimerEvenementTest {
       ArrayList<CodeErreur> codes = new ArrayList<CodeErreur>(); 
       codes.add(CodeErreur.EVENEMENT_INTROUVABLE);
       assertEquals(codes, uneGestion.supprimerEvenement(3), "Le retour devrait être null");
-      assertTrue(uneGestion.getEvenement(1)!=null);
-      assertTrue(uneGestion.getEvenement(2)!=null);
+      assertTrue(uneGestion.getEvenement(1)!=null,"l'événement id 1 devrait etre trouvé");
+      assertTrue(uneGestion.getEvenement(2)!=null,"l'événement id 1 devrait etre trouvé");
     } 
 
 }
