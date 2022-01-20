@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -14,10 +16,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
+/**
+ * La classe MembresView est l'une des pages de l'application, 
+ * elle gère l'affichage des membres.
+ * Elle est de type GridPane pour pouvoir l'intégrer au stage de 
+ * l'application par l'intermédiaire du controlleur App.
+ *   
+ * @author Léo Couedor
+ * @version 1.00
+ */
 public class MembresView extends GridPane {
   
+  /**
+   * Element de la partie de droite de l'application, qui permet 
+   * l'affichage des informations complémentaires du membre sélectionné.
+   */
   HBox rightPart = new HBox();
 
+  /**
+   * Constructeur de la page MembresView, avec la création et le placement de tous les éléments.
+   */
   public MembresView() {
 
     // création des colonnes
@@ -56,15 +74,22 @@ public class MembresView extends GridPane {
       App.setScene(new EvenementsView());
     });
     
+    //Créer image
+    Image img = new Image("img/ic_action_add_person.png");
+    ImageView view = new ImageView(img);
+    view.setFitHeight(50);
+    view.setPreserveRatio(true);
+    
     //Bouton pour la nouvelle fenêtre ajouter un membre
-    Button BtnAjoutMembre = new Button("Ajout membre");
+    Button BtnAjoutMembre = new Button();
+    BtnAjoutMembre.setGraphic(view);
     BtnAjoutMembre.setOnAction(e->{
       new CreerMembreView(); //Appel à la nouvelle scène
     });
 
     //Partie de gauche, le scroll pane
     ScrollPane leftScroll = new ScrollPane();
-    leftScroll.setStyle("-fx-border-style: hidden solid hidden hidden; -fx-border-width: 2.5; -fx-border-color: black;"); //La moitié de la séparation du milieu
+    leftScroll.setStyle("-fx-background-color:transparent; -fx-border-style: hidden solid hidden hidden; -fx-border-width: 2.5; -fx-border-color: black;"); //La moitié de la séparation du milieu
     VBox vScroll = new VBox(); //Le contenu unique du scrollPane
     leftScroll.setContent(vScroll);
     for (Membre m : App.getGestion().getListeMembres()) { //Ajout de tous les membres de l'arrayList des membres
@@ -84,7 +109,15 @@ public class MembresView extends GridPane {
     add(rightPart, 1, 2, 1, 1);
   }
   
-  //Fonction pour créer un bloc à ajouter à l acréation d'un membre pour l'affichage
+  /**
+   * Méthode pour créer un bloc HBox, à ajouter à la création d'un membre pour l'affichage. 
+   * Cela créé également sa fiche d'informations complémentaire
+   * ainsi que les boutons permettant de supprimer et modifier ce membre.
+   * 
+   * @param m un membre pour lequel créer son bloc dans la liste d'affichage 
+   *     et sa fiche d'informations
+   * @return un élément de type HBox
+   */
   public HBox ajMembre(Membre m) {
     HBox elem = new HBox();
     elem.getChildren().addAll(new Label(m.getPseudo())); //Le pseudo comme texte
@@ -116,18 +149,34 @@ public class MembresView extends GridPane {
       fiche.prefWidthProperty().bind(this.widthProperty().divide(3).subtract(10));
       rightPart.getChildren().add(fiche);
       
-      Button btnSuppr = new Button("Supprimer");
+      Image img = new Image("img/ic_action_cancel.png");
+      ImageView view = new ImageView(img);
+      view.setFitHeight(50);
+      view.setPreserveRatio(true);
+      
+      Button btnSuppr = new Button();
+      btnSuppr.setGraphic(view);
       btnSuppr.setOnMouseClicked(a->{
         App.getGestion().supprimerMembre(m.getPseudo()); //Suppression par le pseudo
         App.setScene(new MembresView()); //Recréer une nouvelle scène pour actualiser l'affichage
       });
       
-      Button btnModifier = new Button("Modifier");
+      img = new Image("img/ic_action_edit.png");
+      view = new ImageView(img);
+      view.setFitHeight(50);
+      view.setPreserveRatio(true);
+      
+      Button btnModifier = new Button();
+      btnModifier.setGraphic(view);
       btnModifier.setOnMouseClicked(a->{
         new CreerMembreView(m);
       });
       
-      fiche.getChildren().addAll(new Label(m.getPseudo()), new Label(m.getPrenom()), new Label(m.getNom()), new Label(m.getMail()), btnSuppr, btnModifier);
+      HBox hBoutons = new HBox();
+      hBoutons.setAlignment(Pos.CENTER);
+      hBoutons.getChildren().addAll(btnSuppr, btnModifier);
+      
+      fiche.getChildren().addAll(new Label(m.getPseudo()), new Label(m.getPrenom()), new Label(m.getNom()), new Label(m.getMail()), hBoutons);
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });

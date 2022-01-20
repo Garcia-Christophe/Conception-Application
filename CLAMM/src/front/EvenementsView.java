@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -14,10 +16,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
+/**
+ * La classe EvenementView est l'une des pages de l'application, 
+ * elle gère l'affichage des évènements.
+ * Elle est de type GridPane pour pouvoir l'intégrer au stage de 
+ * l'application par l'intermédiaire du controlleur App.
+ *   
+ * @author Léo Couedor
+ * @version 1.00
+ */
 public class EvenementsView extends GridPane {
 
+  /**
+   * Element de la partie de droite de l'application, qui permet 
+   * l'affichage des informations complémentaires du membre sélectionné.
+   */
   HBox rightPart = new HBox();
 
+  /**
+   * Constructeur de la page EvenementsView, avec la création et le placement de tous les éléments.
+   */
   public EvenementsView() {
 
     // création des colonnes
@@ -54,11 +72,17 @@ public class EvenementsView extends GridPane {
     paneMembre.setOnMouseClicked(e -> {
       App.setScene(new MembresView());
     });
+    
+    Image img = new Image("img/ic_action_group.png");
+    ImageView view = new ImageView(img);
+    view.setFitHeight(50);
+    view.setPreserveRatio(true);
 
     // Bouton pour la nouvelle fenêtre ajouter un évènement
-    Button BtnAjoutEvenement = new Button("Ajout évènement");
+    Button BtnAjoutEvenement = new Button();
+    BtnAjoutEvenement.setGraphic(view);
     BtnAjoutEvenement.setOnAction(e -> {
-      new CreerMembreView(); // Appel à la nouvelle scène
+      new CreerEvenementView(); // Appel à la nouvelle scène
     });
 
     // Partie de gauche, le scroll pane
@@ -85,7 +109,15 @@ public class EvenementsView extends GridPane {
     add(rightPart, 1, 2, 1, 1);
   }
 
-  // Fonction pour créer un bloc à ajouter à la création d'un évènement pour l'affichage
+  /**
+   * Méthode pour créer un bloc HBox, à ajouter à la création d'un évènement pour l'affichage. 
+   * Cela créé également sa fiche d'informations complémentaire
+   * ainsi que les boutons permettant de supprimer et modifier cet évènement.
+   * 
+   * @param m un évènement pour lequel créer son bloc dans la liste d'affichage 
+   *     et sa fiche d'informations
+   * @return un élément de type HBox
+   */
   public HBox ajEvenement(Evenement m) {
     HBox elem = new HBox();
     elem.getChildren().addAll(new Label(m.getNom()));
@@ -116,20 +148,36 @@ public class EvenementsView extends GridPane {
       VBox fiche = new VBox();
       fiche.prefWidthProperty().bind(this.widthProperty().divide(3).subtract(10));
       rightPart.getChildren().add(fiche);
+      
+      Image img = new Image("img/ic_action_cancel.png");
+      ImageView view = new ImageView(img);
+      view.setFitHeight(50);
+      view.setPreserveRatio(true);
 
-      Button btnSuppr = new Button("Supprimer");
+      Button btnSuppr = new Button();
+      btnSuppr.setGraphic(view);
       btnSuppr.setOnMouseClicked(a -> {
         App.getGestion().supprimerEvenement(m.getId()); // Suppression par l'id
-        App.setScene(new MembresView()); // Recréer une nouvelle scène pour actualiser l'affichage
+        App.setScene(new EvenementsView()); // Recréer une nouvelle scène pour actualiser l'affichage
       });
+      
+      img = new Image("img/ic_action_edit.png");
+      view = new ImageView(img);
+      view.setFitHeight(50);
+      view.setPreserveRatio(true);
 
-      Button btnModifier = new Button("Modifier");
+      Button btnModifier = new Button();
+      btnModifier.setGraphic(view);
       btnModifier.setOnMouseClicked(a -> {
-        //new CreerMembreView(m);
+        new CreerEvenementView(m);
       });
+      
+      HBox hBoutons = new HBox();
+      hBoutons.setAlignment(Pos.CENTER);
+      hBoutons.getChildren().addAll(btnSuppr, btnModifier);
 
       fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getDate().toString()),
-          new Label(m.getType().toString()), new Label(m.getLieu()), btnSuppr, btnModifier);
+          new Label(m.getType().toString()), new Label(m.getLieu()), hBoutons);
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });
