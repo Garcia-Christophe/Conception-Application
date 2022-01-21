@@ -18,6 +18,9 @@ class testIntegrationGestionEvenements {
   @Test
   void tests() {
     uneGestion=new Gestion();
+    
+    // liste vide
+    assertEquals(0, uneGestion.getListeEvenements().size(), "La liste devrait être vide");
 
     //Test correct : ajout d'un événement
     assertEquals(null, uneGestion.ajouterEvenement("Un événement", "Description de l’événement", "url",new Date(2022-1900,06,27,15,30),"adresse",500, TypeEvenement.REPAS), "Le retour devrait être null");  
@@ -34,7 +37,8 @@ class testIntegrationGestionEvenements {
     ArrayList<CodeErreur> codes = new ArrayList<CodeErreur>();
     codes.add(CodeErreur.NOM_VIDE);
     codes.add(CodeErreur.DATE_NULL);
-    assertEquals(codes, uneGestion.ajouterEvenement("", "Description de l’événement", "url",null,"adresse",500, TypeEvenement.REPAS), "Le retour devrait être une ligne de codes erreurs : [NOM_VIDE, DATE_NULL]");  
+    assertEquals(codes, uneGestion.ajouterEvenement("", "Description de l’événement", "url",null,"adresse",500, TypeEvenement.REPAS), "Le retour devrait être une ligne de codes erreurs : [NOM_VIDE, DATE_NULL]");
+    assertTrue(uneGestion.getEvenement(2)==null,"l'événement id 2 ne devrait pas etre trouvé");
   
     //Test correct : ajout d'un second événement
     assertEquals(null, uneGestion.ajouterEvenement("ag", "assemblée générale", "url",new Date(2022-1900,06,8,12,45),"bureau",20, TypeEvenement.AG), "Le retour devrait être null");  
@@ -88,7 +92,7 @@ class testIntegrationGestionEvenements {
     assertEquals(tmp.getNbMaxPersonnes(), uneGestion.getListeEvenements().get(0).getNbMaxPersonnes(),"Le nombre de personnes maximun devrait être 500");
     assertEquals(tmp.getType(), uneGestion.getListeEvenements().get(0).getType(),"Le type devrait être REPAS");
   
-    //Test correct : supprimer événement id 2assertEquals(null, uneGestion.supprimerEvenement(2), "Le retour devrait être null");
+    //Test correct : supprimer événement id 2 
     assertEquals(null, uneGestion.supprimerEvenement(2), "Le retour devrait être null");
     assertTrue(uneGestion.getEvenement(1)!=null,"l'événement id 1 devrait etre trouvé");
     assertTrue(uneGestion.getEvenement(2)==null,"l'événement id 2 ne devrait pas etre trouvé");
