@@ -1,4 +1,4 @@
-package testsIntegration.testsGestionEvenements;
+package testsIntegration.testsGestion;
 
 import gestion.CodeErreur;
 import gestion.Gestion;
