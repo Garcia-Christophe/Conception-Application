@@ -1,26 +1,30 @@
 package gestion;
 
-import java.util.ArrayList;
-import java.util.Date;
 import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import gestion.membres.Membre;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * La classe Gestion permet de gérer tous les membres et tous les évènements.
  * 
- * <p>
- * La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. Elle contient
- * la liste de tous les membres, la liste de tous les évènements, ainsi que la liste de tous les
- * {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
+ * <p>La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. 
+ * Elle contient la liste de tous les membres, la liste de tous les évènements, ainsi que 
+ * la liste de tous les {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
  * 
  * @author Manon, Christophe
- * @version 1.00
+ * @version 2.00
  * @see gestion.membres.Membre
  * @see gestion.evenements.Evenement
  */
 public class Gestion {
 
+  /**
+   * Instance de la classe Verif, pour la vérification des éléments des Membre et Evenement.
+   */
+  private Verif uneVerif;
+  
   /**
    * Liste des codes erreurs.
    */
@@ -94,9 +98,9 @@ public class Gestion {
   /**
    * Créer un {@link gestion.evenements.Evenement}.
    * 
-   * <p>
-   * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code erreur
-   * est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
+   * <p>Si une ou plus définition(s) des attributs du nouveau evenement est un échec, 
+   * le code erreur est ajouté dans la liste des codes erreurs, et retourne un membre 
+   * {@code null}.
    * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
@@ -119,51 +123,62 @@ public class Gestion {
     CodeErreur codeErreur = null;
 
     // Identifiant de l'événement
-    codeErreur = unEvenement.setId(unId);
+    codeErreur = this.uneVerif.verifId(unId);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      unEvenement.setId(unId);
     }
 
     // Nom de l'événement
-    codeErreur = unEvenement.setNom(unNom);
+    codeErreur = this.uneVerif.verifNomEvenement(unNom);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      unEvenement.setNom(unNom);
     }
 
     // Descriptif de l'événement
-    codeErreur = unEvenement.setDescriptif(unDescriptif);
+    codeErreur = this.uneVerif.verifDescriptifEvenement(unDescriptif);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      unEvenement.setDescriptif(unDescriptif);
     }
 
     // Image de l'événement
-    codeErreur = unEvenement.setImage(uneImage);
-    if (codeErreur != null) {
-      this.codesErreurs.add(codeErreur);
-    }
+    unEvenement.setImage(uneImage);
 
     // Date de l'événement
-    codeErreur = unEvenement.setDate(uneDate);
+    codeErreur = this.uneVerif.verifDateEvenement(uneDate);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      unEvenement.setDate(uneDate);
     }
 
     // Lieu de l'événement
-    codeErreur = unEvenement.setLieu(unLieu);
+    codeErreur = this.uneVerif.verifLieuEvenement(unLieu);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      unEvenement.setLieu(unLieu);
     }
 
     // NbMaxPersonnes de l'événement
-    codeErreur = unEvenement.setNbMaxPersonnes(unNbMaxPersonnes);
+    codeErreur = this.uneVerif.verifNbMaxPersonnesEvenement(unNbMaxPersonnes);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      unEvenement.setNbMaxPersonnes(unNbMaxPersonnes);
     }
 
     // Type de l'événement
-    codeErreur = unEvenement.setType(unType);
+    codeErreur = this.uneVerif.verifTypeEvenement(unType);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      unEvenement.setType(unType);
     }
 
     // Si une des définitions est un échec, retourne un evenement null
@@ -177,8 +192,7 @@ public class Gestion {
   /**
    * Ajoute un {@link gestion.evenements.Evenement} à la liste des événements.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unNom Nom de l'événement
@@ -235,8 +249,7 @@ public class Gestion {
   /**
    * Supprime un {@link gestion.evenements.Evenement} de la liste des événements.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement à supprimer
@@ -262,8 +275,7 @@ public class Gestion {
   /**
    * Modifie un événement de la liste des événements si toutes les modifications sont possibles.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement
@@ -333,8 +345,7 @@ public class Gestion {
   /**
    * Crée un {@link gestion.membres.Membre}.
    * 
-   * <p>
-   * Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
+   * <p>Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
    * erreur dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
    * @param unPseudo pseudo du membre à créer
@@ -355,51 +366,67 @@ public class Gestion {
     CodeErreur codeErreur = null;
 
     // Définition du nouveau pseudo du membre
-    codeErreur = membre.setPseudo(unPseudo);
+    codeErreur = this.uneVerif.verifPseudo(unPseudo);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setPseudo(unPseudo);
     }
 
     // Définition du nouveau nom du membre
-    codeErreur = membre.setNom(unNom);
+    codeErreur = this.uneVerif.verifIdentiteMembre(unNom,0);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setNom(unNom);
     }
 
     // Définition du nouveau prénom du membre
-    codeErreur = membre.setPrenom(unPrenom);
+    codeErreur = this.uneVerif.verifIdentiteMembre(unPrenom,1);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setPrenom(unPrenom);
     }
 
     // Définition du nouveau lieu de naissance du membre
-    codeErreur = membre.setLieuNaissance(unLieuNaissance);
+    codeErreur = this.uneVerif.verifLieuxMembre(unLieuNaissance,0);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setLieuNaissance(unLieuNaissance);
     }
 
     // Définition de la nouvelle date de naissance du membre
-    codeErreur = membre.setDateNaissance(uneDateNaissance);
+    codeErreur = this.uneVerif.verifDateMembre(uneDateNaissance);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setDateNaissance(uneDateNaissance);
     }
 
     // Définition de la nouvelle ville du membre
-    codeErreur = membre.setVille(uneVille);
+    codeErreur = this.uneVerif.verifLieuxMembre(uneVille,1);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setVille(uneVille);
     }
 
     // Définition de la nouvelle adresse mail du membre
-    codeErreur = membre.setMail(unMail);
+    codeErreur = this.uneVerif.verifMailMembre(unMail);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setMail(unMail);
     }
 
     // Définition du nouveau mot de passe du membre
-    codeErreur = membre.setMotDePasse(unMotDePasse);
+    codeErreur = this.uneVerif.verifMdpMembre(unMotDePasse);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
+    } else {
+      membre.setMotDePasse(unMotDePasse);
     }
 
     // Si une des définitions est un échec, retourne un membre null
@@ -414,15 +441,13 @@ public class Gestion {
    * Ajoute un {@link gestion.membres.Membre} à la liste des membres, seulement s'il n'existe pas
    * déjà.
    * 
-   * <p>
-   * Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la liste
-   * des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, alors le
-   * code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
+   * <p>Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la 
+   * liste des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, 
+   * alors le code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
    * {@link #creerMembre(String, String, String, String, Date, String, String, String)} est réalisé
    * pour créer le membre avant de l'ajouter dans la liste des membres.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du nouveau membre
@@ -465,15 +490,14 @@ public class Gestion {
   /**
    * Supprime un {@link gestion.membres.Membre} de la liste des membres.
    * 
-   * <p>
-   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
-   * {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la liste des membres et
-   * ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé dans la liste
-   * des membres, alors renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
+   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la 
+   * méthode {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la liste des 
+   * membres et ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé 
+   * dans la liste des membres, alors renvoie le code erreur 
+   * {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
-   * à un {@link gestion.membres.Membre}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à un {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du membre à supprimer de la liste
    * @return {@code null} si la suppression du membre est un succès, une liste de {@link CodeErreur}
@@ -499,17 +523,15 @@ public class Gestion {
    * Modifie les données d'un {@link gestion.membres.Membre} de la liste des membres, si et
    * seulement si toutes les modifications sont des succès.
    * 
-   * <p>
-   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
-   * {@link #getMembre(String)}. Si aucun membre n'est trouvé dans la liste des membres, alors
-   * renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est trouvé,
-   * alors tente de modifier ses attributs. Si tous les attributs du membre ont été modifiés avec
-   * succès, ne renvoie aucun code erreur, renvoie {@code null}, sinon renvoie la liste des codes
-   * erreurs correspondantes.
+   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la 
+   * méthode {@link #getMembre(String)}. Si aucun membre n'est trouvé dans la liste des membres, 
+   * alors renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est 
+   * trouvé, alors tente de modifier ses attributs. Si tous les attributs du membre ont été 
+   * modifiés avec succès, ne renvoie aucun code erreur, renvoie {@code null}, sinon renvoie 
+   * la liste des codes erreurs correspondantes.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
-   * à un {@link gestion.membres.Membre}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à un {@link gestion.membres.Membre}.
    * 
    * @param ancienPseudo ancien pseudo du membre modifier
    * @param unPseudo nouveau pseudo du membre
@@ -529,60 +551,77 @@ public class Gestion {
     ArrayList<CodeErreur> res = null;
     this.codesErreurs.clear();
     Membre membreAModifier = this.getMembre(ancienPseudo);
-
+    
     // Si le membre est dans la liste des membres
     if (membreAModifier != null) {
       CodeErreur codeErreur = null;
-
+      
       // Définitions des nouveaux attributs si le pseudo est unique
       if (this.getMembre(unPseudo) == null
           || (ancienPseudo != null && unPseudo != null && ancienPseudo.equals(unPseudo))) {
-        // Définition du nouveau pseudo du membre
-        codeErreur = membreAModifier.setPseudo(unPseudo);
+        
+     // Définition du nouveau pseudo du membre
+        codeErreur = this.uneVerif.verifPseudo(unPseudo);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setPseudo(unPseudo);
         }
 
         // Définition du nouveau nom du membre
-        codeErreur = membreAModifier.setNom(unNom);
+        codeErreur = this.uneVerif.verifIdentiteMembre(unNom,0);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setNom(unNom);
         }
 
         // Définition du nouveau prénom du membre
-        codeErreur = membreAModifier.setPrenom(unPrenom);
+        codeErreur = this.uneVerif.verifIdentiteMembre(unPrenom,1);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setPrenom(unPrenom);
         }
 
         // Définition du nouveau lieu de naissance du membre
-        codeErreur = membreAModifier.setLieuNaissance(unLieuNaissance);
+        codeErreur = this.uneVerif.verifLieuxMembre(unLieuNaissance,0);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setLieuNaissance(unLieuNaissance);
         }
 
         // Définition de la nouvelle date de naissance du membre
-        codeErreur = membreAModifier.setDateNaissance(uneDateNaissance);
+        codeErreur = this.uneVerif.verifDateMembre(uneDateNaissance);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setDateNaissance(uneDateNaissance);
         }
 
         // Définition de la nouvelle ville du membre
-        codeErreur = membreAModifier.setVille(uneVille);
+        codeErreur = this.uneVerif.verifLieuxMembre(uneVille,1);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setVille(uneVille);
         }
 
         // Définition de la nouvelle adresse mail du membre
-        codeErreur = membreAModifier.setMail(unMail);
+        codeErreur = this.uneVerif.verifMailMembre(unMail);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setMail(unMail);
         }
 
         // Définition du nouveau mot de passe du membre
-        codeErreur = membreAModifier.setMotDePasse(unMotDePasse);
+        codeErreur = this.uneVerif.verifMdpMembre(unMotDePasse);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
+        } else {
+          membreAModifier.setMotDePasse(unMotDePasse);
         }
 
         // Si une des définitions est un échec, retourne la liste des codes erreurs
@@ -604,8 +643,7 @@ public class Gestion {
   /**
    * Permet de retrouver un {@link gestion.membres.Membre} grâce à son pseudo {@code unPseudo}.
    * 
-   * <p>
-   * Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
+   * <p>Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
    * chacun des membres de la liste des membres avec celui passé en paramètre. Le parcours de la
    * liste s'arrête lorsque le membre ayant le même pseudo à été trouvé et renvoie le
    * {@link gestion.membres.Membre}, ou que la liste a été entièrement parcourue et renvoie
