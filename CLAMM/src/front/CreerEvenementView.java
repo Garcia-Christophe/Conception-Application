@@ -27,21 +27,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * La classe CreerEvenementView est l'une des pages de l'application, 
- * elle gère l'ajout et la modification des évènements.
- *   
+ * La classe CreerEvenementView est l'une des pages de l'application, elle gère l'ajout et la
+ * modification des évènements.
+ * 
  * @author Léo Couedor
  * @version 1.00
  */
 public class CreerEvenementView {
 
   /**
-   * Constructeur de la page CreerEvenementView, 
-   * avec la création et le placement de tous les éléments.
+   * Constructeur de la page CreerEvenementView, avec la création et le placement de tous les
+   * éléments.
    * 
-   * @param m un nombre variable d'évènements. Si aucun évènement n'est passé en paramètre, 
-   *     il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre 
-   *     de plusieurs évènements, seul le premier est utilisé pour la modification
+   * @param m un nombre variable d'évènements. Si aucun évènement n'est passé en paramètre, il
+   *        s'agit d'une création, sinon d'une modification. Lors du passage en paramètre de
+   *        plusieurs évènements, seul le premier est utilisé pour la modification
    */
   public CreerEvenementView(Evenement... m) {
 
@@ -73,20 +73,9 @@ public class CreerEvenementView {
     row.setVgrow(Priority.ALWAYS);
     RowConstraints row10 = new RowConstraints();
     row10.setPercentHeight(10);
-    grid.getRowConstraints().addAll(row20, row, row, row10, row10);
+    grid.getRowConstraints().addAll(row, row, row10, row10);
 
     // les éléments
-    HBox header = new HBox();
-    header.setStyle("-fx-background-color: #85B9DE;");
-    Label labelHead;
-    if (m.length == 0) {
-      labelHead = new Label("AJOUTER UN EVENEMENT");
-    } else {
-      labelHead = new Label("MODIFIER L'EVENEMENT " + m[0].getNom());
-    }
-    labelHead.getStyleClass().add("headLabel");
-    header.getChildren().add(labelHead);
-    header.setAlignment(Pos.CENTER);
 
     // éléments de gauche
     VBox vGauche = new VBox();
@@ -164,78 +153,68 @@ public class CreerEvenementView {
     PaneButtons.getChildren().addAll(BtnAnnuler, BtnAjouter);
     PaneButtons.setAlignment(Pos.CENTER);
 
-    grid.add(header, 0, 0, 2, 1);
-    grid.add(vGauche, 0, 1);
-    grid.add(vDroite, 1, 1);
-    grid.add(PaneButtons, 1, 4, 1, 1);
-    grid.add(hErreurs, 0, 3, 2, 1);
-    grid.add(vDescription, 0, 2, 2, 1);
+    grid.add(vGauche, 0, 0);
+    grid.add(vDroite, 1, 0);
+    grid.add(PaneButtons, 1, 3, 1, 1);
+    grid.add(hErreurs, 0, 2, 2, 1);
+    grid.add(vDescription, 0, 1, 2, 1);
+
 
     if (m.length == 0) {
       BtnAjouter.setOnAction(e -> {
 
-        if (textNombre.getText() != "") {
-          if (textDate.getValue() != null) {
-            Date date =
-                Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        int nbPers = 0;
+        Date date = null;
 
-            if ((App.getGestion().ajouterEvenement(textNom.getText(), textDescription.getText(),
-                "rien", date, textAdresse.getText(), Integer.parseInt(textNombre.getText()),
-                textType.getValue())) != null) {
+        if (textNombre.getText() != "") { // si pas de valeur saisie, mise à 0 pour le parsing en
+                                          // int
+          nbPers = Integer.parseInt(textNombre.getText());
+        }
+        if (textDate.getValue() != null) { // si une date, parse en type date, sinon null par défaut
+          date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
 
-              hErreurs.getChildren().clear();
-              hErreurs.getChildren().add(lErreur);
-              for (CodeErreur err : App.getGestion().getCodesErreurs()) {
-                String s = err.toString();
-                String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-                s = newS.replace("_", " ");
-                Label l = new Label(s + " | ");
-                l.setStyle("-fx-text-fill : red");
-                hErreurs.getChildren().add(l);
-              }
-            } else {
-              App.setScene(new EvenementsView());
-              newWindow.close();
-            }
-          } else {
-            hErreurs.getChildren().clear();
-            hErreurs.getChildren().add(lErreur);
-            Label lTxtErrDate = new Label("Erreur saisie de la date |");
-            lTxtErrDate.setStyle("-fx-text-fill : red");
-            hErreurs.getChildren().add(lTxtErrDate);
-          }
-        } else {
+        if ((App.getGestion().ajouterEvenement(textNom.getText(), textDescription.getText(), "rien",
+            date, textAdresse.getText(), nbPers, textType.getValue())) != null) {
+
           hErreurs.getChildren().clear();
           hErreurs.getChildren().add(lErreur);
-          Label lTxtErrDate = new Label("Nombre maximal de personnes manquant |");
-          lTxtErrDate.setStyle("-fx-text-fill : red");
-          hErreurs.getChildren().add(lTxtErrDate);
+          for (CodeErreur err : App.getGestion().getCodesErreurs()) {
+            String s = err.toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
+          }
+        } else {
+          App.setScene(new EvenementsView());
+          newWindow.close();
         }
 
       });
 
     } else {
       BtnAjouter.setOnAction(e -> {
-        if (textNombre.getText() != "") {
-          Date date =
-              Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-          App.getGestion().modifierEvenement(m[0].getId(), textNom.getText(),
-              textDescription.getText(), "rien", date, textAdresse.getText(),
-              Integer.parseInt(textNombre.getText()), textType.getValue());
-          
+        if (textNombre.getText() == "") {
+          textNombre.setText("0");
+        }
+
+        Date date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        if (App.getGestion().modifierEvenement(m[0].getId(), textNom.getText(),
+            textDescription.getText(), "rien", date, textAdresse.getText(),
+            Integer.parseInt(textNombre.getText()), textType.getValue()) != null) {
+          //TODO afficher les erreurs
+        } else {
           App.setScene(new EvenementsView());
           newWindow.close();
-        } else {
-          hErreurs.getChildren().clear();
-          hErreurs.getChildren().add(lErreur);
-          Label lTxtErrDate = new Label("Nombre maximal de personnes manquant |");
-          lTxtErrDate.setStyle("-fx-text-fill : red");
-          hErreurs.getChildren().add(lTxtErrDate);
         }
       });
     }
 
-    BtnAnnuler.setOnAction(e -> {
+    BtnAnnuler.setOnAction(e ->
+
+    {
       newWindow.close();
     });
 

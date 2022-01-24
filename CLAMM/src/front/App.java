@@ -1,5 +1,6 @@
 package front;
 
+import java.util.Date;
 import gestion.Gestion;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -30,6 +31,7 @@ public class App extends Application {
    */
   public static Gestion gestion = new Gestion();
   
+  
   /**
    * Element principal de la fenêtre.
    */
@@ -43,6 +45,8 @@ public class App extends Application {
    */
   @Override
   public void start(Stage stage) throws Exception {
+    
+    gestion.ajouterMembre("pseudo", "nom", "prenom", "nullepart", new Date(2001 - 1900, 1, 1, 1, 1), "nullepart", "mail@mail.mail", "motdep4asse");
 
     App.stage = stage;
 

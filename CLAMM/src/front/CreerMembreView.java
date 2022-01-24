@@ -4,6 +4,7 @@ import gestion.CodeErreur;
 import gestion.membres.Membre;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,27 +22,27 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * La classe CreerMembreView est l'une des pages de l'application, 
- * elle gère l'ajout et la modification des membres.
- *   
+ * La classe CreerMembreView est l'une des pages de l'application, elle gère l'ajout et la
+ * modification des membres.
+ * 
  * @author Léo Couedor
  * @version 1.00
  */
 public class CreerMembreView {
-  
+
   /**
-   * Variable contenant l'ancien pseudo du membre, utilisée dans le cas de 
-   * la modification d'un membre pour pouvoir accéder au membre et faire les modifications.
+   * Variable contenant l'ancien pseudo du membre, utilisée dans le cas de la modification d'un
+   * membre pour pouvoir accéder au membre et faire les modifications.
    */
   String oldPseudo;
 
   /**
-   * Constructeur de la page CreerMembresView, avec la création et le 
-   * placement de tous les éléments.
+   * Constructeur de la page CreerMembresView, avec la création et le placement de tous les
+   * éléments.
    * 
-   * @param m un nombre variable de Membres. Si aucun membre n'est passé en paramètre, 
-   *     il s'agit d'une création, sinon d'une modification. Lors du passage en paramètre 
-   *     de plusieurs membres, seul le premier est utilisé pour la modification.
+   * @param m un nombre variable de Membres. Si aucun membre n'est passé en paramètre, il s'agit
+   *        d'une création, sinon d'une modification. Lors du passage en paramètre de plusieurs
+   *        membres, seul le premier est utilisé pour la modification.
    */
   public CreerMembreView(Membre... m) {
 
@@ -73,21 +74,9 @@ public class CreerMembreView {
     row.setVgrow(Priority.ALWAYS);
     RowConstraints row10 = new RowConstraints();
     row10.setPercentHeight(10);
-    grid.getRowConstraints().addAll(row20, row, row10, row10);
+    grid.getRowConstraints().addAll(row, row10, row10);
 
     // les éléments
-    HBox header = new HBox();
-    header.setStyle("-fx-background-color: #85B9DE;");
-    Label labelHead;
-    if (m.length == 0) {
-      labelHead = new Label("AJOUTER UN MEMBRE");
-    } else {
-      labelHead = new Label("MODIFIER LE MEMBRE " + m[0].getPseudo());
-    }
-    labelHead.getStyleClass().add("headLabel");
-    header.getChildren().add(labelHead);
-    header.setAlignment(Pos.CENTER);
-
     // éléments de gauche
     VBox vGauche = new VBox();
     vGauche.setPadding(new Insets(5));
@@ -122,7 +111,8 @@ public class CreerMembreView {
       textPseudo.setText(m[0].getPseudo());
       textNom.setText(m[0].getNom());
       textPrenom.setText(m[0].getPrenom());
-      LocalDate d = m[0].getDateNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      LocalDate d =
+          m[0].getDateNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
       textDate.setValue(d);
       textAdresse.setText(m[0].getMail());
       textVille.setText(m[0].getVille());
@@ -155,45 +145,46 @@ public class CreerMembreView {
     PaneButtons.getChildren().addAll(BtnAnnuler, BtnAjouter);
     PaneButtons.setAlignment(Pos.CENTER);
 
-    grid.add(header, 0, 0, 2, 1);
-    grid.add(vGauche, 0, 1);
-    grid.add(vDroite, 1, 1);
-    grid.add(PaneButtons, 1, 3, 1, 1);
-    grid.add(hErreurs, 0, 2, 2, 1);
+    grid.add(vGauche, 0, 0);
+    grid.add(vDroite, 1, 0);
+    grid.add(PaneButtons, 1, 2, 1, 1);
+    grid.add(hErreurs, 0, 1, 2, 1);
 
-    if(m.length==0) {
+    if (m.length == 0) {
       BtnAjouter.setOnAction(e -> {
         if (textMdp.getText().equals(textConfirm.getText())) {
-          if (textDate.getValue() != null) {
-            Date date =
-                Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            if ((App.getGestion().ajouterMembre(textPseudo.getText(), textNom.getText(),
-                textPrenom.getText(), textVille.getText(), date, textVille.getText(),
-                textAdresse.getText(), textMdp.getText())) != null) {
+          Date date = null;
+          if (textDate.getValue() != null) { // si une date, parse en type date, sinon null par
+                                             // défaut
+            date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+          }
 
-              hErreurs.getChildren().clear();
-              hErreurs.getChildren().add(lErreur);
-              for (CodeErreur err : App.getGestion().getCodesErreurs()) {
-                String s = err.toString();
-                String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-                s = newS.replace("_", " ");
-                Label l = new Label(s + " | ");
-                l.setStyle("-fx-text-fill : red");
-                hErreurs.getChildren().add(l);
-              }
-            } else {
-              App.setScene(new MembresView());
-              newWindow.close();
-            }
-          } else {
+          if ((App.getGestion().ajouterMembre(textPseudo.getText(), textNom.getText(),
+              textPrenom.getText(), textVille.getText(), date, textVille.getText(),
+              textAdresse.getText(), textMdp.getText())) != null) {
+
             hErreurs.getChildren().clear();
             hErreurs.getChildren().add(lErreur);
-            Label lTxtErrDate = new Label("Erreur saisie de la date |");
-            lTxtErrDate.setStyle("-fx-text-fill : red");
-            hErreurs.getChildren().add(lTxtErrDate);
-
+            
+            ArrayList<String> erreurs = new ArrayList<String>();
+            
+            for (CodeErreur err : App.getGestion().getCodesErreurs()) {
+              erreurs.add(err.toString());
+              
+              String s = err.toString();
+              String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+              s = newS.replace("_", " ");
+              Label l = new Label(s + " | ");
+              l.setStyle("-fx-text-fill : red");
+              hErreurs.getChildren().add(l);
+            }
+            
+          } else {
+            App.setScene(new MembresView());
+            newWindow.close();
           }
+
         } else {
           hErreurs.getChildren().clear();
           hErreurs.getChildren().add(lErreur);
@@ -202,13 +193,20 @@ public class CreerMembreView {
           hErreurs.getChildren().add(lTxtErrMdp);
         }
       });
-    }else {
-      BtnAjouter.setOnAction(e->{
-        if(textMdp.getText().equals(textConfirm.getText())) {
-          Date date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-          App.getGestion().modifierMembre(oldPseudo, textPseudo.getText(), textNom.getText(), textPrenom.getText(), textVille.getText(), date, textVille.getText(), textAdresse.getText(), textMdp.getText());
-          App.setScene(new MembresView());
-          newWindow.close();
+    } else {
+      BtnAjouter.setOnAction(e -> {
+        if (textMdp.getText().equals(textConfirm.getText())) {
+          Date date =
+              Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+          if (App.getGestion().modifierMembre(oldPseudo, textPseudo.getText(), textNom.getText(),
+              textPrenom.getText(), textVille.getText(), date, textVille.getText(),
+              textAdresse.getText(), textMdp.getText()) != null) {
+            // TODO afficher les erreurs
+          } else {
+            App.setScene(new MembresView());
+            newWindow.close();
+          }
         }
       });
     }

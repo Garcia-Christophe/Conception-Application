@@ -1,5 +1,6 @@
 package front;
 
+import java.text.SimpleDateFormat;
 import gestion.evenements.Evenement;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -78,17 +79,33 @@ public class EvenementsView extends GridPane {
     view.setFitHeight(50);
     view.setPreserveRatio(true);
 
-    // Bouton pour la nouvelle fenêtre ajouter un évènement
-    Button BtnAjoutEvenement = new Button();
-    BtnAjoutEvenement.setGraphic(view);
-    BtnAjoutEvenement.setOnAction(e -> {
-      new CreerEvenementView(); // Appel à la nouvelle scène
+    HBox btnAjoutEvenement= new HBox();
+    btnAjoutEvenement.getChildren().add(view);
+    btnAjoutEvenement.setAlignment(Pos.CENTER);
+    btnAjoutEvenement.getStyleClass().add("hover");
+    btnAjoutEvenement.setOnMouseClicked(e->{
+      new CreerEvenementView(); //Appel à la nouvelle scène
     });
+    
+    btnAjoutEvenement.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnAjoutEvenement.getStyleClass().add("btnAjoutMembreHovered");
+          }
+        });
+
+    btnAjoutEvenement.addEventHandler(MouseEvent.MOUSE_EXITED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnAjoutEvenement.getStyleClass().remove("btnAjoutMembreHovered");
+          }
+        });
 
     // Partie de gauche, le scroll pane
     ScrollPane leftScroll = new ScrollPane();
-    leftScroll.setStyle(
-        "-fx-border-style: hidden solid hidden hidden; -fx-border-width: 2.5; -fx-border-color: black;");
+    leftScroll.setStyle("-fx-background-color:transparent; -fx-border-style: hidden solid hidden hidden; -fx-border-width: 2.5; -fx-border-color: black;");
     VBox vScroll = new VBox(); // Le contenu unique du scrollPane
     leftScroll.setContent(vScroll);
     for (Evenement e : App.getGestion().getListeEvenements()) {
@@ -104,7 +121,7 @@ public class EvenementsView extends GridPane {
     // Ajout des éléments au corps principal
     add(paneMembre, 0, 0, 1, 1);
     add(paneEvenements, 1, 0, 1, 1);
-    add(BtnAjoutEvenement, 0, 1, 1, 1);
+    add(btnAjoutEvenement, 0, 1, 1, 1);
     add(leftScroll, 0, 2, 1, 1);
     add(rightPart, 1, 2, 1, 1);
   }
@@ -176,8 +193,12 @@ public class EvenementsView extends GridPane {
       hBoutons.setAlignment(Pos.CENTER);
       hBoutons.getChildren().addAll(btnSuppr, btnModifier);
 
-      fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getDate().toString()),
-          new Label(m.getType().toString()), new Label(m.getLieu()), hBoutons);
+      SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+      String date = simpleDateFormat.format(m.getDate()); 
+      
+      String nbPers = m.getNbMaxPersonnes()+ " personnes au maximum";
+      
+      fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getType().toString()), new Label(date), new Label(m.getLieu()), new Label(nbPers), new Label(m.getDescriptif()), hBoutons);
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });

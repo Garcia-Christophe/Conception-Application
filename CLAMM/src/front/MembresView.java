@@ -1,5 +1,8 @@
 package front;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import gestion.membres.Membre;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -80,12 +83,29 @@ public class MembresView extends GridPane {
     view.setFitHeight(50);
     view.setPreserveRatio(true);
     
-    //Bouton pour la nouvelle fenêtre ajouter un membre
-    Button BtnAjoutMembre = new Button();
-    BtnAjoutMembre.setGraphic(view);
-    BtnAjoutMembre.setOnAction(e->{
+    HBox btnAjoutMembre = new HBox();
+    btnAjoutMembre.getChildren().add(view);
+    btnAjoutMembre.setAlignment(Pos.CENTER);
+    btnAjoutMembre.getStyleClass().add("hover");
+    btnAjoutMembre.setOnMouseClicked(e->{
       new CreerMembreView(); //Appel à la nouvelle scène
     });
+    
+    btnAjoutMembre.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnAjoutMembre.getStyleClass().add("btnAjoutMembreHovered");
+          }
+        });
+
+    btnAjoutMembre.addEventHandler(MouseEvent.MOUSE_EXITED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnAjoutMembre.getStyleClass().remove("btnAjoutMembreHovered");
+          }
+        });
 
     //Partie de gauche, le scroll pane
     ScrollPane leftScroll = new ScrollPane();
@@ -104,7 +124,7 @@ public class MembresView extends GridPane {
     // Ajout des éléments au corps principal
     add(paneMembre,0,0,1,1);
     add(paneEvenements, 1, 0, 1, 1);
-    add(BtnAjoutMembre, 0, 1, 1, 1);
+    add(btnAjoutMembre, 0, 1, 1, 1);
     add(leftScroll, 0, 2, 1, 1);
     add(rightPart, 1, 2, 1, 1);
   }
@@ -120,8 +140,8 @@ public class MembresView extends GridPane {
    */
   public HBox ajMembre(Membre m) {
     HBox elem = new HBox();
-    elem.getChildren().addAll(new Label(m.getPseudo())); //Le pseudo comme texte
-    
+    elem.getChildren().addAll(new Label(m.getPseudo()), new Label(m.getPrenom()), new Label(m.getNom())); //Le pseudo, nom et prénom comme texte
+    elem.setSpacing(100);    
     //Les event pour ajouter ou retirer la classe elemHovered pour l'animation au survol d'un membre dans la liste
     elem.addEventHandler(MouseEvent.MOUSE_ENTERED,
         new EventHandler<MouseEvent>() {
@@ -176,7 +196,10 @@ public class MembresView extends GridPane {
       hBoutons.setAlignment(Pos.CENTER);
       hBoutons.getChildren().addAll(btnSuppr, btnModifier);
       
-      fiche.getChildren().addAll(new Label(m.getPseudo()), new Label(m.getPrenom()), new Label(m.getNom()), new Label(m.getMail()), hBoutons);
+      String nomPrenom = m.getPrenom()+ " "+ m.getNom();
+      LocalDate dateNaissance = m.getDateNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      String age = Period.between(dateNaissance, LocalDate.now()).getYears()+ " ans";
+      fiche.getChildren().addAll(new Label(m.getPseudo()), new Label(nomPrenom), new Label(age),new Label(m.getMail()), hBoutons);
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });
