@@ -1,9 +1,9 @@
 package gestion.membres;
 
-import gestion.CodeErreur;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import gestion.CodeErreur;
 
 /**
  * La classe Membre représente un membre d’association, caractérisé par son nom, son prénom, un
@@ -106,12 +106,12 @@ public class Membre {
 
   /**
    * Change le pseudo du membre par unPseudo si celui-ci n'est pas null ou vide, et que le pseudo ne
-   * contient pas: espace,<,>,|,:,",*,?,/,\ .
+   * contient pas : espace<>|:/\"*?.
    *
    * @param unPseudo le nouveau pseudo du membre
    * @return null en cas de succès, PSEUDO_TROP_LONG si le pseudo est trop long,
    *         CodeErreur.PSEUDO_NULL si le pseudo est null, CodeErreur.PSEUDO_VIDE si le pseudo est
-   *         vide et CodeErreur.PSEUDO_INVALIDE si le pseudo contient : espace,<,>,|,:,",*,?,/,\
+   *         vide et CodeErreur.PSEUDO_INVALIDE si le pseudo contient : espace<>|:/\"*?
    */
   public CodeErreur setPseudo(String unPseudo) {
     CodeErreur res = null;
