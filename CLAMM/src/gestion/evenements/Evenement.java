@@ -1,6 +1,5 @@
 package gestion.evenements;
 
-import gestion.CodeErreur;
 import java.util.Date;
 
 /**
@@ -9,7 +8,7 @@ import java.util.Date;
  * également être composé d'une image facultative.
  * 
  * @author Alexia
- * @version 1.00
+ * @version 2.00
  */
 public class Evenement {
 
@@ -54,21 +53,6 @@ public class Evenement {
   private TypeEvenement type;
 
   /**
-   * Taille maximum du nom.
-   */
-  private static final int TAILLE_MAX_NOM = 50;
-
-  /**
-   * Taille maximum du descriptif.
-   */
-  private static final int TAILLE_MAX_DESCRIPTIF = 500;
-
-  /**
-   * Taille maximum du lieu.
-   */
-  private static final int TAILLE_MAX_LIEU = 100;
-
-  /**
    * Constructeur de la classe Evenement.
    */
   public Evenement() {}
@@ -83,21 +67,12 @@ public class Evenement {
   }
 
   /**
-   * Change l'id d'un évènement par unId si celui-ci est supérieur ou égal à 0.
+   * Change l'id d'un évènement.
    * 
    * @param unId l'identifiant de l'évènement que l'on veut lui attribuer
-   * @return null si la modification de l'id est réussie, sinon CodeErreur.ID_NEGATIF si unId est
-   *         strictement inférieur à 0
    */
-  public CodeErreur setId(int unId) {
-    CodeErreur res = null;
-    if (unId <= 0) {
-      res = CodeErreur.ID_NEGATIF;
-    } else {
-      this.id = unId;
-    }
-
-    return res;
+  public void setId(int unId) {
+    this.id = unId;
   }
 
   /**
@@ -110,31 +85,12 @@ public class Evenement {
   }
 
   /**
-   * Change le nom d'un évènement par unNom si celui-ci n'est pas null, ne commence pas et ne
-   * termine pas par un espace, ne dépasse pas TAILLE_MAX_NOM.
+   * Change le nom d'un évènement.
    * 
    * @param unNom le nom de l'évènement que l'on veut lui attribuer
-   * @return null si la modification du nom est réussie, sinon CodeErreur.NOM_NULL si unNom est
-   *         null, CodeErreur.NOM_VIDE si la taille est égal à 0, CodeErreur.NOM_ESPACE_EN_TROP si
-   *         unNom a un espace au début ou à la fin, CodeErreur.NOM_TROP_LONG si unNom dépasse la
-   *         taille maximum
    */
-  public CodeErreur setNom(String unNom) {
-    CodeErreur res = null;
-
-    if (unNom == null) {
-      res = CodeErreur.NOM_NULL;
-    } else if (unNom.length() == 0) {
-      res = CodeErreur.NOM_VIDE;
-    } else if (unNom.charAt(0) == ' ' || unNom.charAt(unNom.length() - 1) == ' ') {
-      res = CodeErreur.NOM_ESPACE_EN_TROP;
-    } else if (unNom.length() > Evenement.TAILLE_MAX_NOM) {
-      res = CodeErreur.NOM_TROP_LONG;
-    } else {
-      this.nom = unNom;
-    }
-
-    return res;
+  public void setNom(String unNom) {
+    this.nom = unNom;
   }
 
   /**
@@ -147,30 +103,12 @@ public class Evenement {
   }
 
   /**
-   * Change le descriptif d'un évènement par unDescriptif si celui-ci n'est pas null, ne commence
-   * pas et ne termine pas par un espace, ne dépasse pas TAILLE_MAX_DESCRIPTIF.
+   * Change le descriptif d'un évènement.
    * 
    * @param unDescriptif le descriptif de l'évènement que l'on veut lui attribuer
-   * @return null si la modification du descriptif est réussie, sinon CodeErreur.DESCRIPTIF_NULL si
-   *         unDescriptif est null, CodeErreur.DESCRIPTIF_ESPACE_EN_TROP si unDescriptif a un espace
-   *         au début ou à la fin, CodeErreur.DESCRIPTIF_TROP_LONG si unDescriptif dépasse la taille
-   *         maximum
    */
-  public CodeErreur setDescriptif(String unDescriptif) {
-    CodeErreur res = null;
-
-    if (unDescriptif == null) {
-      res = CodeErreur.DESCRIPTIF_NULL;
-    } else if (unDescriptif != "" && (unDescriptif.charAt(0) == ' '
-        || unDescriptif.charAt(unDescriptif.length() - 1) == ' ')) {
-      res = CodeErreur.DESCRIPTIF_ESPACE_EN_TROP;
-    } else if (unDescriptif.length() > Evenement.TAILLE_MAX_DESCRIPTIF) {
-      res = CodeErreur.DESCRIPTIF_TROP_LONG;
-    } else {
-      this.descriptif = unDescriptif;
-    }
-
-    return res;
+  public void setDescriptif(String unDescriptif) {
+    this.descriptif = unDescriptif;
   }
 
   /**
@@ -183,14 +121,12 @@ public class Evenement {
   }
 
   /**
-   * Change l'image d'un évènement par uneImage.
+   * Change l'image d'un évènement.
    * 
    * @param uneImage l'image de l'évènement que l'on veut lui attribuer
-   * @return null si la modification de l'image est réussie
    */
-  public CodeErreur setImage(String uneImage) {
+  public void setImage(String uneImage) {
     this.image = uneImage;
-    return null;
   }
 
   /**
@@ -203,26 +139,12 @@ public class Evenement {
   }
 
   /**
-   * Change la date d'un évènement par uneDate si celle-ci n'est pas null et n'est pas une date
-   * antérieure à la date actuelle.
+   * Change la date d'un évènement.
    * 
    * @param uneDate la date de l'évènement que l'on veut lui attribuer
-   * @return null si la modification de la date est réussie, sinon CodeErreur.DATE_NULL si uneDate
-   *         est null ou CodeErreur.DATE_PASSEE si la date est passée
    */
-  public CodeErreur setDate(Date uneDate) {
-    Date dateCourante = new Date();
-    CodeErreur res = null;
-    if (uneDate != null) {
-      if (uneDate.before(dateCourante)) {
-        res = CodeErreur.DATE_PASSEE;
-      } else {
-        this.date = uneDate;
-      }
-    } else {
-      res = CodeErreur.DATE_NULL;
-    }
-    return res;
+  public void setDate(Date uneDate) {
+    this.date = uneDate;
   }
 
   /**
@@ -235,32 +157,12 @@ public class Evenement {
   }
 
   /**
-   * Change le lieu d'un évènement par unLieu si celui-ci n'est pas null, ne commence pas ou ne
-   * termine pas par un espace, ne dépasse pas TAILLE_MAX_LIEU.
+   * Change le lieu d'un évènement.
    * 
    * @param unLieu le lieu de l'évenement que l'on veut lui attribuer
-   * @return null si la modification du lieu est réussie, sinon CodeErreur.LIEU_NULL si unLieu est
-   *         null, CodeErreur.LIEU_VIDE si la taille est égale à 0, CodeErreur.LIEU_ESPACE_EN_TROP
-   *         si unLieu a un espace au début ou à la fin, CodeErreur.LIEU_TROP_LONG si unLieu dépasse
-   *         la taille maximum
-   * 
    */
-  public CodeErreur setLieu(String unLieu) {
-    CodeErreur res = null;
-
-    if (unLieu == null) {
-      res = CodeErreur.LIEU_NULL;
-    } else if (unLieu.length() == 0) {
-      res = CodeErreur.LIEU_VIDE;
-    } else if (unLieu.charAt(0) == ' ' || unLieu.charAt(unLieu.length() - 1) == ' ') {
-      res = CodeErreur.LIEU_ESPACE_EN_TROP;
-    } else if (unLieu.length() > Evenement.TAILLE_MAX_LIEU) {
-      res = CodeErreur.LIEU_TROP_LONG;
-    } else {
-      this.lieu = unLieu;
-    }
-
-    return res;
+  public void setLieu(String unLieu) {
+    this.lieu = unLieu;
   }
 
   /**
@@ -273,23 +175,13 @@ public class Evenement {
   }
 
   /**
-   * Change le nombre maximum de personnes autorisées d'un évènement par unNbMaxPersonnes si
-   * celui-ci est strictement supérieur à 1.
+   * Change le nombre maximum de personnes autorisées d'un évènement..
    * 
    * @param unNbMaxPersonnes le nombre maximum de personnes autorisées de l'évènement que l'on veut
    *        lui attribuer
-   * @return null si la modification du nbMaxPersonnes est réussie, sinon
-   *         CodeErreur.NB_MAX_PERSONNES_TROP_PETIT si unNbMaxPersonnes est inférieur ou égal à 1
    */
-  public CodeErreur setNbMaxPersonnes(int unNbMaxPersonnes) {
-    CodeErreur res = null;
-    if (unNbMaxPersonnes > 1) {
-      this.nbMaxPersonnes = unNbMaxPersonnes;
-    } else {
-      res = CodeErreur.NB_MAX_PERSONNES_TROP_PETIT;
-    }
-
-    return res;
+  public void setNbMaxPersonnes(int unNbMaxPersonnes) {
+    this.nbMaxPersonnes = unNbMaxPersonnes;
   }
 
   /**
@@ -302,21 +194,12 @@ public class Evenement {
   }
 
   /**
-   * Change le type d'un évènement par unType si celui-ci n'est pas null.
+   * Change le type d'un évènement.
    * 
    * @param unType le type de l'évènement que l'on veut lui attribuer
-   * @return null si la modification du type est réussie, sinon CodeErreur.TYPE_NULL si unType est
-   *         null
-   * 
    */
-  public CodeErreur setType(TypeEvenement unType) {
-    CodeErreur res = null;
-    if (unType != null) {
-      this.type = unType;
-    } else {
-      res = CodeErreur.TYPE_NULL;
-    }
-    return res;
+  public void setType(TypeEvenement unType) {
+    this.type = unType;
   }
 
 }
