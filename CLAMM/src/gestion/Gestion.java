@@ -3,15 +3,18 @@ package gestion;
 import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import gestion.membres.Membre;
+import gestion.participation.Participation;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * La classe Gestion permet de gérer tous les membres et tous les évènements.
  * 
- * <p>La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. 
- * Elle contient la liste de tous les membres, la liste de tous les évènements, ainsi que 
- * la liste de tous les {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
+ * <p>
+ * La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. Elle contient
+ * la liste de tous les membres, la liste de tous les évènements, ainsi que la liste de tous les
+ * {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
  * 
  * @author Manon, Christophe
  * @version 2.00
@@ -24,7 +27,7 @@ public class Gestion {
    * Instance de la classe Verif, pour la vérification des éléments des Membre et Evenement.
    */
   private Verif uneVerif;
-  
+
   /**
    * Liste des codes erreurs.
    */
@@ -46,11 +49,25 @@ public class Gestion {
   private ArrayList<Membre> listeMembres;
 
   /**
-   * Constructeur de la classe {@code Gestion}.
+   * Liste des Participation.
    */
-  public Gestion() {
+  private ArrayList<Participation> listeParticipations;
+
+  /**
+   * Base de données.
+   */
+  private BaseDeDonnees bdd;
+
+  /**
+   * Constructeur de la classe {@code Gestion}.
+   * @throws SQLException 
+   */
+  public Gestion() throws SQLException {
+    this.bdd=new BaseDeDonnees();
     this.setListeMembres(new ArrayList<Membre>());
+    this.bdd.initMembre(this);
     this.setListeEvenements(new ArrayList<Evenement>());
+    this.setListeParticipations(new ArrayList<Participation>());
     this.setCodesErreurs(new ArrayList<CodeErreur>());
     this.prochainIdEvenement = 1;
   }
@@ -98,9 +115,9 @@ public class Gestion {
   /**
    * Créer un {@link gestion.evenements.Evenement}.
    * 
-   * <p>Si une ou plus définition(s) des attributs du nouveau evenement est un échec, 
-   * le code erreur est ajouté dans la liste des codes erreurs, et retourne un membre 
-   * {@code null}.
+   * <p>
+   * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code erreur
+   * est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
@@ -192,7 +209,8 @@ public class Gestion {
   /**
    * Ajoute un {@link gestion.evenements.Evenement} à la liste des événements.
    * 
-   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unNom Nom de l'événement
@@ -214,6 +232,7 @@ public class Gestion {
     ArrayList<CodeErreur> res = null;
 
     if (unEvenement != null) {
+      // ajouter à la bdd
       listeEvenements.add(unEvenement);
 
       prochainIdEvenement++;
@@ -249,7 +268,8 @@ public class Gestion {
   /**
    * Supprime un {@link gestion.evenements.Evenement} de la liste des événements.
    * 
-   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement à supprimer
@@ -262,6 +282,8 @@ public class Gestion {
 
     // Si l'evenement est dans la liste des événements
     if (evenementASupprimer != null) {
+      // supprimer à la bdd
+      // supprimer de participation
       this.listeEvenements.remove(evenementASupprimer); // supprime le membre de la liste
     } else {
       this.codesErreurs.clear();
@@ -275,7 +297,8 @@ public class Gestion {
   /**
    * Modifie un événement de la liste des événements si toutes les modifications sont possibles.
    * 
-   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement
@@ -307,6 +330,7 @@ public class Gestion {
           if (unEvenement == null) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
+            // modifier dans la BDD
             listeEvenements.set(i, unEvenement);
           }
 
@@ -345,7 +369,8 @@ public class Gestion {
   /**
    * Crée un {@link gestion.membres.Membre}.
    * 
-   * <p>Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
+   * <p>
+   * Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
    * erreur dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
    * @param unPseudo pseudo du membre à créer
@@ -374,7 +399,7 @@ public class Gestion {
     }
 
     // Définition du nouveau nom du membre
-    codeErreur = this.uneVerif.verifIdentiteMembre(unNom,0);
+    codeErreur = this.uneVerif.verifIdentiteMembre(unNom, 0);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     } else {
@@ -382,7 +407,7 @@ public class Gestion {
     }
 
     // Définition du nouveau prénom du membre
-    codeErreur = this.uneVerif.verifIdentiteMembre(unPrenom,1);
+    codeErreur = this.uneVerif.verifIdentiteMembre(unPrenom, 1);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     } else {
@@ -390,7 +415,7 @@ public class Gestion {
     }
 
     // Définition du nouveau lieu de naissance du membre
-    codeErreur = this.uneVerif.verifLieuxMembre(unLieuNaissance,0);
+    codeErreur = this.uneVerif.verifLieuxMembre(unLieuNaissance, 0);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     } else {
@@ -406,7 +431,7 @@ public class Gestion {
     }
 
     // Définition de la nouvelle ville du membre
-    codeErreur = this.uneVerif.verifLieuxMembre(uneVille,1);
+    codeErreur = this.uneVerif.verifLieuxMembre(uneVille, 1);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     } else {
@@ -441,13 +466,15 @@ public class Gestion {
    * Ajoute un {@link gestion.membres.Membre} à la liste des membres, seulement s'il n'existe pas
    * déjà.
    * 
-   * <p>Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la 
-   * liste des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, 
-   * alors le code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
+   * <p>
+   * Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la liste
+   * des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, alors le
+   * code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
    * {@link #creerMembre(String, String, String, String, Date, String, String, String)} est réalisé
    * pour créer le membre avant de l'ajouter dans la liste des membres.
    * 
-   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du nouveau membre
@@ -474,6 +501,7 @@ public class Gestion {
 
       // Si la création du membre est un succès
       if (membre != null) {
+        // ajout à la bdd
         this.listeMembres.add(membre); // ajoute le membre à la liste des membres
       } else {
         res = this.getCodesErreurs(); // renvoie la liste des codes erreurs
@@ -490,14 +518,15 @@ public class Gestion {
   /**
    * Supprime un {@link gestion.membres.Membre} de la liste des membres.
    * 
-   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la 
-   * méthode {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la liste des 
-   * membres et ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé 
-   * dans la liste des membres, alors renvoie le code erreur 
-   * {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
+   * <p>
+   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
+   * {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la liste des membres et
+   * ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé dans la liste
+   * des membres, alors renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
    * 
-   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
-   * correspondants à un {@link gestion.membres.Membre}.
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
+   * à un {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du membre à supprimer de la liste
    * @return {@code null} si la suppression du membre est un succès, une liste de {@link CodeErreur}
@@ -509,6 +538,8 @@ public class Gestion {
 
     // Si le membre est dans la liste des membres
     if (membreASupprimer != null) {
+      // supprimer de la bdd
+      // supprimer de participation
       this.listeMembres.remove(membreASupprimer); // supprime le membre de la liste
     } else {
       this.codesErreurs.clear();
@@ -523,15 +554,17 @@ public class Gestion {
    * Modifie les données d'un {@link gestion.membres.Membre} de la liste des membres, si et
    * seulement si toutes les modifications sont des succès.
    * 
-   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la 
-   * méthode {@link #getMembre(String)}. Si aucun membre n'est trouvé dans la liste des membres, 
-   * alors renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est 
-   * trouvé, alors tente de modifier ses attributs. Si tous les attributs du membre ont été 
-   * modifiés avec succès, ne renvoie aucun code erreur, renvoie {@code null}, sinon renvoie 
-   * la liste des codes erreurs correspondantes.
+   * <p>
+   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
+   * {@link #getMembre(String)}. Si aucun membre n'est trouvé dans la liste des membres, alors
+   * renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est trouvé,
+   * alors tente de modifier ses attributs. Si tous les attributs du membre ont été modifiés avec
+   * succès, ne renvoie aucun code erreur, renvoie {@code null}, sinon renvoie la liste des codes
+   * erreurs correspondantes.
    * 
-   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
-   * correspondants à un {@link gestion.membres.Membre}.
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
+   * à un {@link gestion.membres.Membre}.
    * 
    * @param ancienPseudo ancien pseudo du membre modifier
    * @param unPseudo nouveau pseudo du membre
@@ -551,44 +584,48 @@ public class Gestion {
     ArrayList<CodeErreur> res = null;
     this.codesErreurs.clear();
     Membre membreAModifier = this.getMembre(ancienPseudo);
-    
+
     // Si le membre est dans la liste des membres
     if (membreAModifier != null) {
       CodeErreur codeErreur = null;
-      
+
       // Définitions des nouveaux attributs si le pseudo est unique
       if (this.getMembre(unPseudo) == null
           || (ancienPseudo != null && unPseudo != null && ancienPseudo.equals(unPseudo))) {
-        
-     // Définition du nouveau pseudo du membre
+
+        // Définition du nouveau pseudo du membre
         codeErreur = this.uneVerif.verifPseudo(unPseudo);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setPseudo(unPseudo);
         }
 
         // Définition du nouveau nom du membre
-        codeErreur = this.uneVerif.verifIdentiteMembre(unNom,0);
+        codeErreur = this.uneVerif.verifIdentiteMembre(unNom, 0);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setNom(unNom);
         }
 
         // Définition du nouveau prénom du membre
-        codeErreur = this.uneVerif.verifIdentiteMembre(unPrenom,1);
+        codeErreur = this.uneVerif.verifIdentiteMembre(unPrenom, 1);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setPrenom(unPrenom);
         }
 
         // Définition du nouveau lieu de naissance du membre
-        codeErreur = this.uneVerif.verifLieuxMembre(unLieuNaissance,0);
+        codeErreur = this.uneVerif.verifLieuxMembre(unLieuNaissance, 0);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setLieuNaissance(unLieuNaissance);
         }
 
@@ -597,14 +634,16 @@ public class Gestion {
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setDateNaissance(uneDateNaissance);
         }
 
         // Définition de la nouvelle ville du membre
-        codeErreur = this.uneVerif.verifLieuxMembre(uneVille,1);
+        codeErreur = this.uneVerif.verifLieuxMembre(uneVille, 1);
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setVille(uneVille);
         }
 
@@ -613,6 +652,7 @@ public class Gestion {
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setMail(unMail);
         }
 
@@ -621,6 +661,7 @@ public class Gestion {
         if (codeErreur != null) {
           this.codesErreurs.add(codeErreur);
         } else {
+          // modification dans la bdd
           membreAModifier.setMotDePasse(unMotDePasse);
         }
 
@@ -643,7 +684,8 @@ public class Gestion {
   /**
    * Permet de retrouver un {@link gestion.membres.Membre} grâce à son pseudo {@code unPseudo}.
    * 
-   * <p>Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
+   * <p>
+   * Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
    * chacun des membres de la liste des membres avec celui passé en paramètre. Le parcours de la
    * liste s'arrête lorsque le membre ayant le même pseudo à été trouvé et renvoie le
    * {@link gestion.membres.Membre}, ou que la liste a été entièrement parcourue et renvoie
@@ -673,5 +715,41 @@ public class Gestion {
 
     return membre;
   }
+
+  /**
+   * Retourne la liste des participations.
+   * 
+   * @return la liste des participations
+   */
+  public ArrayList<Participation> getListeParticipations() {
+    return listeParticipations;
+  }
+
+  /**
+   * Instancie la liste des participations avec une liste passée en paramètre.
+   * 
+   * @param uneListeParticipations La liste des participations
+   */
+  public void setListeParticipations(ArrayList<Participation> uneListeParticipations) {
+    this.listeParticipations = uneListeParticipations;
+  }
+
+  /**
+   * Retourne la liste des participations qui à un événement avec id égale l'id passée paramètre.
+   * 
+   * @param unId identifiant d'un événement
+   * @return la liste des participations qui à un événement avec id égale l'id passée paramètre
+   */
+  public ArrayList<Participation> getListeMembresParticipation(int unId) {
+    ArrayList<Participation> res = new ArrayList<Participation>();
+    for (Participation p : this.listeParticipations) {
+      if (p.getEvenement().getId() == unId) {
+        res.add(p);
+      }
+    }
+    return res;
+  }
+
+
 
 }

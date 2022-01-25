@@ -11,16 +11,26 @@ import gestion.membres.Membre;
  * @version 2.00
  */
 public class Participation {
-  
+
   /**
    * Evenement auquel est inscrit this.membre
    */
   private Evenement evenement;
-  
+
   /**
    * Membre qui est inscrit à this.evenement
    */
   private Membre membre;
+
+  /**
+   * Nombre de personnes vennant avec le membre inscrit à this.evenement
+   */
+  private int nbInscrit;
+
+  /**
+   * Information supplémentaire concernant la participation
+   */
+  private String information;
 
 
   /**
@@ -31,7 +41,7 @@ public class Participation {
   public Evenement getEvenement() {
     return evenement;
   }
-  
+
   /**
    * Change l'événement d'une participation par unEvenement.
    * 
@@ -59,6 +69,31 @@ public class Participation {
     this.membre = unMembre;
   }
 
+  public int getNbInscrit() {
+    return nbInscrit;
+  }
+
+  /**
+   * Change le nombre de participant d'une participation par unNbInscrit.
+   * 
+   * @param unNbInscrit le nombre de participant de la participation que l'on veut lui attribuer
+   */
+  public void setNbInscrit(int unNbInscrit) {
+    this.nbInscrit = unNbInscrit;
+  }
+
+  public String getInformation() {
+    return information;
+  }
+
+  /**
+   * Change l'information supplémentaire d'une participation par uneInformation.
+   * 
+   * @param uneInformation l'information supplémentaire de la participation que l'on veut lui attribuer
+   */
+  public void setInformation(String uneInformation) {
+    this.information = uneInformation;
+  }
 
 
 }
