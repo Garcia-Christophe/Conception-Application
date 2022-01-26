@@ -9,16 +9,17 @@
     if (isset($_POST["email"]) && isset($_POST["mdp"])) {
 
         // On établit un prefixe pour le salage
-        $prefixe = $_POST["email"];
+        // $prefixe = $_POST["email"];
 
         // On établit un suffixe pour le salage (email à l'envers)
-        $suffixe = "";
-        for ($i = strlen($_POST["email"]) - 1; $i >= 0; $i--) {
-            $suffixe = $suffixe . $_POST["email"][$i];
-        }
+        // $suffixe = "";
+        // for ($i = strlen($_POST["email"]) - 1; $i >= 0; $i--) {
+        //     $suffixe = $suffixe . $_POST["email"][$i];
+        // }
 
         // Hachage du mot de passe salé
-        $mdp = hash("sha256", $prefixe . $_POST["mdp"] . $suffixe);
+        // $mdp = hash("sha256", $prefixe . $_POST["mdp"] . $suffixe);
+        $mdp = $_POST["mdp"]; // sans sécurité (temporaire)
 
         // On récupère le mdp de la bdd dont l'email est le hash de l'email saisi
         // (le mot de passe n'existe pas si la saisie n'est pas le bon email)
