@@ -7,46 +7,27 @@
     $status = 'ECHOUEE';
     
     if (isset($_POST["idEvenement"]) && isset($_POST["pseudo"]) && isset($_POST["nbPersonnes"]) && isset($_POST["informations"])) {
+        $idEvenement = $_POST["idEvenement"];
+        $pseudoMembre = $_POST["pseudo"];
+        
         // Mise par defaut du status a REUSSIE
         $status = 'REUSSIE';
 
         // Connexion a la base de donnees
         $dbc = BDD_Connexion::getInstance()->getConnexion();
 
-        // Verification de l'existence de l'identifiant de l'evenement
-        $idEvenement = $_POST["idEvenement"];
-        $query = "SELECT * FROM EVENEMENT WHERE id = '" . $idEvenement . "'";
+        // Verification de l'existence de la participation evenement/membre
+        // Et recuperation du nombre de personnes inscrites enregistre
+        $query = "SELECT nbInscrit FROM PARTICIPATION WHERE idEvenement = " . $idEvenement . " AND pseudoMembre = '" . $pseudoMembre . "'";
         $stmt = $dbc->query($query);
         $results = $stmt->fetchAll();
+        $ancienNbInscrits = 0;
 
         if (count($results) == 0) {
             $status = 'ECHOUEE';
-            echo "Evenement introuvable\n";
-        }
-
-        // Verification de l'existence du pseudo du membre
-        $pseudoMembre = $_POST["pseudo"];
-        if ($status == 'REUSSIE') {
-            $query = "SELECT * FROM MEMBRE WHERE pseudo = '" . $pseudoMembre . "'";
-            $stmt = $dbc->query($query);
-            $results = $stmt->fetchAll();
-
-            if (count($results) == 0) {
-                $status = 'ECHOUEE';
-                echo "Membre introuvable\n";
-            }
-        }
-
-        // Verification de la non existence de la participation evenement/membre
-        if ($status == 'REUSSIE') {
-            $query = "SELECT * FROM PARTICIPATION WHERE idEvenement = " . $idEvenement . " AND pseudoMembre = '" . $pseudoMembre . "'";
-            $stmt = $dbc->query($query);
-            $results = $stmt->fetchAll();
-
-            if (count($results) != 0) {
-                $status = 'ECHOUEE';
-                echo "Participation Evenement/Membre deja existante\n";
-            }
+            echo "Participation Evenement/Membre inexistante\n";
+        } else {
+            $ancienNbInscrits = intval($results[0]["nbInscrit"]);
         }
 
         // Verification du nombre de personnes possible
@@ -68,7 +49,7 @@
             $stmt = $dbc->query($query);
             $nbPersonnesParticipantes = $stmt->fetchAll();
             if (count($nbPersonnesParticipantes) > 0) {
-                $nbPersonnesParticipantes = intval($nbPersonnesParticipantes[0]["SUM(nbInscrit)"]);
+                $nbPersonnesParticipantes = intval($nbPersonnesParticipantes[0]["SUM(nbInscrit)"]) - $ancienNbInscrits;
             } else {
                 $nbPersonnesParticipantes = 0;
             }
@@ -88,21 +69,21 @@
             }
         }
         
-        // Creation de l'inscription du membre a l'evenement
+        // Modification de la participation du membre a l'evenement
         if ($status == 'REUSSIE') {
-            $query = "INSERT INTO PARTICIPATION (idEvenement, pseudoMembre, nbInscrit, informations) VALUES ("
-            . $idEvenement . ", '" . $pseudoMembre . "', " . $nbInscrits . ", '" . $informations . "')";
+            $query = "UPDATE PARTICIPATION SET nbInscrit = " . $nbInscrits . ", informations = '" . $informations
+             . "' WHERE idEvenement = " . $idEvenement . " AND pseudoMembre = '" . $pseudoMembre . "'";
             $stmt = $dbc->query($query);
             if ($stmt != false) {
                 $results = $stmt->fetchAll();
 
                 if (count($results) != 0) {
                     $status = 'ECHOUEE';
-                    echo "Insertion de la participation echouee\n";
+                    echo "Modification de la participation echouee\n";
                 }
             }
         }
     }
 
-    echo json_encode(array("inscription"=>$status));
+    echo json_encode(array("modification"=>$status));
 ?>

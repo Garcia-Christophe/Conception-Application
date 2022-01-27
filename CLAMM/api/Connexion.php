@@ -8,10 +8,10 @@
     
     if (isset($_POST["email"]) && isset($_POST["mdp"])) {
 
-        // On etablit un prefixe pour le salage
+        // Definition d'un prefixe pour le salage
         // $prefixe = $_POST["email"];
 
-        // On etablit un suffixe pour le salage (email a l'envers)
+        // Definition d'un suffixe pour le salage (email a l'envers)
         // $suffixe = "";
         // for ($i = strlen($_POST["email"]) - 1; $i >= 0; $i--) {
         //     $suffixe = $suffixe . $_POST["email"][$i];
@@ -21,7 +21,7 @@
         // $mdp = hash("sha256", $prefixe . $_POST["mdp"] . $suffixe);
         $mdp = $_POST["mdp"]; // sans securite (temporaire)
 
-        // On recupere le mdp de la bdd grace a l'email
+        // Recuperation du mot de passe de la bdd grace a l'email
         // (le mot de passe n'existe pas si la saisie ne correspond a aucun email)
         $dbc = BDD_Connexion::getInstance()->getConnexion();
         $query = "SELECT motDePasse FROM MEMBRE WHERE mail = '" . $_POST["email"] . "'";
