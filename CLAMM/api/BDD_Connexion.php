@@ -4,10 +4,10 @@ ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
 /** 
- * BDD_Connexion est une classe d'accès à la base de données.
+ * BDD_Connexion est une classe d'acces a la base de donnees.
  * 
- * BDD_Connexion est une classe permettant de se connecter à
- * la base de données externe, afin de pouvoir réaliser des 
+ * BDD_Connexion est une classe permettant de se connecter a
+ * la base de donnees externe, afin de pouvoir realiser des 
  * insertions, modifications, suppressions.
  * 
  * @author Garcia Christophe
@@ -24,16 +24,16 @@ class BDD_Connexion {
 	private static $instance;
 
 	/**
-     * La connexion à la base de données
+     * La connexion a la base de donnees
      * 
      * @access private
      */
 	private $connexion;
 
 	/**
-     * Méthode magique __construct()
+     * Methode magique __construct()
      * 
-     * Permet de créer la BDD_Connexion
+     * Permet de creer la BDD_Connexion
      */
 	public function __construct() {
 		try {
@@ -49,9 +49,9 @@ class BDD_Connexion {
 	}
 
 	/**
-     * Méthode d'accès à l'unique instance getInstance()
+     * Methode d'acces a l'unique instance getInstance()
      * 
-     * Crée une instance si elle n'existe déjà pas, et retourne celle-ci
+     * Cree une instance si elle n'existe deja pas, et retourne celle-ci
      */
 	public static function getInstance() {
 		if (self::$instance === null) {
@@ -61,9 +61,9 @@ class BDD_Connexion {
 	}
 
 	/**
-     * Méthode d'accès à la connexion getConnexion()
+     * Methode d'acces a la connexion getConnexion()
      * 
-     * Retourne la connexion établie à la base de données
+     * Retourne la connexion etablie a la base de donnees
      */
 	public function getConnexion() {
 		return $this->connexion;
