@@ -1,5 +1,9 @@
 <?php
     /* 
+    Auteur : Manon Goasguen
+    
+    Lien : api/evenements
+
     Method : POST
 
     Http response : 
@@ -25,7 +29,9 @@
       - inscrit : booleen précisant si le membre est inscrit
 
     */
-    
+    header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
+
     //connection à la base
     include("BDD_Connexion.php");
     
