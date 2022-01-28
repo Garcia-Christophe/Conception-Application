@@ -60,16 +60,21 @@ public class Gestion {
 
   /**
    * Constructeur de la classe {@code Gestion}.
-   * @throws SQLException 
+   * 
+   * @throws SQLException
    */
   public Gestion() throws SQLException {
-    this.bdd=new BaseDeDonnees();
+    this.uneVerif = new Verif();
+    this.prochainIdEvenement = 1;
+    this.setCodesErreurs(new ArrayList<CodeErreur>());
+    this.bdd = new BaseDeDonnees();
     this.setListeMembres(new ArrayList<Membre>());
     this.bdd.initMembre(this);
     this.setListeEvenements(new ArrayList<Evenement>());
+    this.bdd.initEvenement(this);
     this.setListeParticipations(new ArrayList<Participation>());
-    this.setCodesErreurs(new ArrayList<CodeErreur>());
-    this.prochainIdEvenement = 1;
+    this.bdd.initParticipation(this);
+
   }
 
   /**
@@ -140,7 +145,7 @@ public class Gestion {
     CodeErreur codeErreur = null;
 
     // Identifiant de l'événement
-    codeErreur = this.uneVerif.verifId(unId);
+    codeErreur = this.uneVerif.verifIdEvenement(unId);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     } else {
@@ -223,19 +228,38 @@ public class Gestion {
    * @return {@code null} si l'ajout du nouveau {@link gestion.evenements.Evenement} est un succès,
    *         une liste de {@link CodeErreur} sinon
    */
-  public ArrayList<CodeErreur> ajouterEvenement(String unNom, String unDescriptif, String uneImage,
-      Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
+  public ArrayList<CodeErreur> ajouterEvenement(int unId, String unNom, String unDescriptif,
+      String uneImage, Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
 
-    Evenement unEvenement = creerEvenement(prochainIdEvenement, unNom, unDescriptif, uneImage,
-        uneDate, unLieu, unNbMaxPersonnes, unType);
+    int id;
+    if (unId == -1) {
+      id = prochainIdEvenement;
+    } else {
+      id = unId;
+    }
+    Evenement unEvenement = creerEvenement(id, unNom, unDescriptif, uneImage, uneDate, unLieu,
+        unNbMaxPersonnes, unType);
 
     ArrayList<CodeErreur> res = null;
 
     if (unEvenement != null) {
-      // ajouter à la bdd
-      listeEvenements.add(unEvenement);
-
-      prochainIdEvenement++;
+      Evenement evenement = this.getEvenement(unEvenement.getId());
+      if (evenement == null) {
+        try {
+          if (this.bdd.evenementPresent(unEvenement.getId()) == false) {
+            this.bdd.ajouterEvenement(unEvenement);
+          }
+        } catch (SQLException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        listeEvenements.add(unEvenement);
+        if (unId == -1) {
+          prochainIdEvenement++;
+        }
+      } else {
+        // TODO ajouter erreur id déjà présent
+      }
     } else {
       res = getCodesErreurs();
     }
@@ -282,9 +306,11 @@ public class Gestion {
 
     // Si l'evenement est dans la liste des événements
     if (evenementASupprimer != null) {
-      // supprimer à la bdd
-      // supprimer de participation
+      this.bdd.supprimerEvenement(unId);
       this.listeEvenements.remove(evenementASupprimer); // supprime le membre de la liste
+      for (Participation p : this.getListeMembresParticipation(unId)) {
+        this.listeParticipations.remove(p);
+      }
     } else {
       this.codesErreurs.clear();
       this.codesErreurs.add(CodeErreur.EVENEMENT_INTROUVABLE);
@@ -353,6 +379,11 @@ public class Gestion {
     return this.listeMembres;
   }
 
+
+  public void setProchainIdEvenement(int prochainIdEvenement) {
+    this.prochainIdEvenement = prochainIdEvenement;
+  }
+
   /**
    * Instancie la liste des membres avec une liste passée en paramètre.
    * 
@@ -391,7 +422,7 @@ public class Gestion {
     CodeErreur codeErreur = null;
 
     // Définition du nouveau pseudo du membre
-    codeErreur = this.uneVerif.verifPseudo(unPseudo);
+    codeErreur = this.uneVerif.verifPseudoMembre(unPseudo);
     if (codeErreur != null) {
       this.codesErreurs.add(codeErreur);
     } else {
@@ -501,8 +532,15 @@ public class Gestion {
 
       // Si la création du membre est un succès
       if (membre != null) {
-        // ajout à la bdd
-        this.listeMembres.add(membre); // ajoute le membre à la liste des membres
+        try {
+          if (this.bdd.membrePresent(unPseudo) == false) {
+            this.bdd.ajouterMembre(membre);
+          }
+          this.listeMembres.add(membre); // ajoute le membre à la liste des membres
+        } catch (SQLException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       } else {
         res = this.getCodesErreurs(); // renvoie la liste des codes erreurs
       }
@@ -538,7 +576,7 @@ public class Gestion {
 
     // Si le membre est dans la liste des membres
     if (membreASupprimer != null) {
-      // supprimer de la bdd
+      this.bdd.supprimerMembre(membreASupprimer.getPseudo());
       // supprimer de participation
       this.listeMembres.remove(membreASupprimer); // supprime le membre de la liste
     } else {
@@ -565,8 +603,7 @@ public class Gestion {
    * <p>
    * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
    * à un {@link gestion.membres.Membre}.
-   * 
-   * @param ancienPseudo ancien pseudo du membre modifier
+   *
    * @param unPseudo nouveau pseudo du membre
    * @param unNom nouveau nom du membre
    * @param unPrenom nouveau prénom du membre
@@ -578,107 +615,39 @@ public class Gestion {
    * @return {@code null} si la modification du membre est un succès, une liste de
    *         {@link CodeErreur} sinon
    */
-  public ArrayList<CodeErreur> modifierMembre(String ancienPseudo, String unPseudo, String unNom,
+  public ArrayList<CodeErreur> modifierMembre(String unPseudo, String unNom,
       String unPrenom, String unLieuNaissance, Date uneDateNaissance, String uneVille,
       String unMail, String unMotDePasse) {
+    
     ArrayList<CodeErreur> res = null;
     this.codesErreurs.clear();
-    Membre membreAModifier = this.getMembre(ancienPseudo);
 
-    // Si le membre est dans la liste des membres
+    Membre membreAModifier = this.getMembre(unPseudo);
+
+    // Si le membre est dans la liste des événements
     if (membreAModifier != null) {
-      CodeErreur codeErreur = null;
 
-      // Définitions des nouveaux attributs si le pseudo est unique
-      if (this.getMembre(unPseudo) == null
-          || (ancienPseudo != null && unPseudo != null && ancienPseudo.equals(unPseudo))) {
+      for (int i = 0; i < listeMembres.size(); i++) {
+        if (listeMembres.get(i).getPseudo().equals(unPseudo)) {
+          Membre unMembre = creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
+              uneVille, unMail, unMotDePasse);
 
-        // Définition du nouveau pseudo du membre
-        codeErreur = this.uneVerif.verifPseudo(unPseudo);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setPseudo(unPseudo);
+          if (unMembre == null) {
+            res = getCodesErreurs(); // modifications pas possibles
+          } else {
+            this.bdd.modifierMembre(unPseudo, unMembre);
+            listeMembres.set(i, unMembre);
+          }
+
         }
-
-        // Définition du nouveau nom du membre
-        codeErreur = this.uneVerif.verifIdentiteMembre(unNom, 0);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setNom(unNom);
-        }
-
-        // Définition du nouveau prénom du membre
-        codeErreur = this.uneVerif.verifIdentiteMembre(unPrenom, 1);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setPrenom(unPrenom);
-        }
-
-        // Définition du nouveau lieu de naissance du membre
-        codeErreur = this.uneVerif.verifLieuxMembre(unLieuNaissance, 0);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setLieuNaissance(unLieuNaissance);
-        }
-
-        // Définition de la nouvelle date de naissance du membre
-        codeErreur = this.uneVerif.verifDateMembre(uneDateNaissance);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setDateNaissance(uneDateNaissance);
-        }
-
-        // Définition de la nouvelle ville du membre
-        codeErreur = this.uneVerif.verifLieuxMembre(uneVille, 1);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setVille(uneVille);
-        }
-
-        // Définition de la nouvelle adresse mail du membre
-        codeErreur = this.uneVerif.verifMailMembre(unMail);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setMail(unMail);
-        }
-
-        // Définition du nouveau mot de passe du membre
-        codeErreur = this.uneVerif.verifMdpMembre(unMotDePasse);
-        if (codeErreur != null) {
-          this.codesErreurs.add(codeErreur);
-        } else {
-          // modification dans la bdd
-          membreAModifier.setMotDePasse(unMotDePasse);
-        }
-
-        // Si une des définitions est un échec, retourne la liste des codes erreurs
-        if (!this.codesErreurs.isEmpty()) {
-          res = this.getCodesErreurs();
-        }
-      } else {
-        this.codesErreurs.add(CodeErreur.PSEUDO_DEJA_EXISTANT);
-        res = this.getCodesErreurs();
       }
     } else {
       this.codesErreurs.add(CodeErreur.MEMBRE_INTROUVABLE);
-      res = this.getCodesErreurs();
+      res = getCodesErreurs();
     }
 
     return res;
+    
   }
 
   /**
@@ -750,6 +719,58 @@ public class Gestion {
     return res;
   }
 
+  public static void main(String[] args) throws SQLException {
+    Gestion test = new Gestion();
+    for (Membre m : test.listeMembres) {
+      System.out.println("Membre : " + m.getPseudo());
+    }
+    for (Evenement e : test.listeEvenements) {
+      System.out.println("Evenement : " + e.getNom() + " " + e.getId());
+    }
+    for (Participation p : test.listeParticipations) {
+      System.out
+          .println("Participation : " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
+    }
+    Date d = new Date(2001 - 1900, 10, 7);
+    test.ajouterMembre("p1", "n", "pr", "l", d, "v", "m@m.m", "mdppppppP5*");
+    System.out.println("\nTest ajouter Membre\n");
+    for (Membre m : test.listeMembres) {
+      System.out.println("Membre : " + m.getNom());
+    }
+    test.ajouterEvenement(2, "ag", "assemblée générale", "url",
+        new Date(2022 - 1900, 06, 8, 12, 45), "bureau", 20, TypeEvenement.AG);
+    System.out.println("\nTest ajouter Evenement\n");
+    for (Evenement e : test.listeEvenements) {
+      System.out.println("Evenement : " + e.getNom() + " " + e.getId());
+    }
 
+    test.supprimerEvenement(2);
+    System.out.println("\nTest supprimer Evenement\n");
+    for (Evenement e : test.listeEvenements) {
+      System.out.println("Evenement : " + e.getNom() + " " + e.getId());
+    }
+    for (Participation p : test.listeParticipations) {
+      System.out
+          .println("Evenement : " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
+    }
+    test.supprimerMembre("pseudoTest");
+    System.out.println("\nTest supprimer Membre\n");
+    for (Membre m : test.listeMembres) {
+      System.out.println("Membre : " + m.getPseudo());
+    }
+    for (Participation p : test.listeParticipations) {
+      System.out
+          .println("Partcipation : " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
+    }
+    test.modifierMembre("p4", "ToujoursPlus", "nsvjknkj", "roche", d, "brest","m@m.fr", "mdppppppP5*");
+    for (Membre m : test.listeMembres) {
+      System.out.println("Membre : " + m.getNom());
+    }
+    for (Participation p : test.listeParticipations) {
+      System.out
+          .println("Participation : " + p.getEvenement().getId() + " " + p.getMembre().getNom());
+    }
+  }
+  
 
 }

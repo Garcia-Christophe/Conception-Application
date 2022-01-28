@@ -317,7 +317,7 @@ public class Verif {
     } else if (designation.length() == 0) {
       res = numero == 0 ? CodeErreur.NOM_VIDE : CodeErreur.PRENOM_VIDE;
     } else if (designation
-        .length() <= (numero == 0 ? Verif.TAILLE_MAX_NOM_MEMBRE : Verif.TAILLE_MAX_PRENOM_MEMBRE)) {
+        .length() > (numero == 0 ? Verif.TAILLE_MAX_NOM_MEMBRE : Verif.TAILLE_MAX_PRENOM_MEMBRE)) {
       res = numero == 0 ? CodeErreur.NOM_TROP_GRAND : CodeErreur.PRENOM_TROP_GRAND;
     } else if (!designation.matches("[a-zA-Z]+")) {
       res = numero == 0 ? CodeErreur.NOM_HORS_ALPHABET : CodeErreur.PRENOM_HORS_ALPHABET;

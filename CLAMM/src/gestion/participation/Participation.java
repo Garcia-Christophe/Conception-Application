@@ -33,6 +33,15 @@ public class Participation {
   private String information;
 
 
+  
+  
+  public Participation(Evenement unEvenement, Membre unMembre, int unNbInscrit, String uneInformation) {
+    this.evenement = unEvenement;
+    this.membre = unMembre;
+    this.nbInscrit = unNbInscrit;
+    this.information = uneInformation;
+  }
+
   /**
    * Retourne l'événement de la participation.
    * 
