@@ -74,7 +74,6 @@ public class Gestion {
     this.bdd.initEvenement(this);
     this.setListeParticipations(new ArrayList<Participation>());
     this.bdd.initParticipation(this);
-
   }
 
   /**
@@ -250,7 +249,6 @@ public class Gestion {
             this.bdd.ajouterEvenement(unEvenement);
           }
         } catch (SQLException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
         listeEvenements.add(unEvenement);
@@ -356,8 +354,15 @@ public class Gestion {
           if (unEvenement == null) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
-            // modifier dans la BDD
+            this.bdd.modifierEvenement(unId, unEvenement);
             listeEvenements.set(i, unEvenement);
+
+            // Modification de l'evenement present dans la liste des participations
+            for (Participation p : this.listeParticipations) {
+              if (p.getEvenement().getId() == unId) {
+                p.setEvenement(unEvenement);
+              }
+            }
           }
 
         }
@@ -538,7 +543,6 @@ public class Gestion {
           }
           this.listeMembres.add(membre); // ajoute le membre à la liste des membres
         } catch (SQLException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
       } else {
@@ -615,10 +619,10 @@ public class Gestion {
    * @return {@code null} si la modification du membre est un succès, une liste de
    *         {@link CodeErreur} sinon
    */
-  public ArrayList<CodeErreur> modifierMembre(String unPseudo, String unNom,
-      String unPrenom, String unLieuNaissance, Date uneDateNaissance, String uneVille,
-      String unMail, String unMotDePasse) {
-    
+  public ArrayList<CodeErreur> modifierMembre(String unPseudo, String unNom, String unPrenom,
+      String unLieuNaissance, Date uneDateNaissance, String uneVille, String unMail,
+      String unMotDePasse) {
+
     ArrayList<CodeErreur> res = null;
     this.codesErreurs.clear();
 
@@ -629,16 +633,22 @@ public class Gestion {
 
       for (int i = 0; i < listeMembres.size(); i++) {
         if (listeMembres.get(i).getPseudo().equals(unPseudo)) {
-          Membre unMembre = creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
-              uneVille, unMail, unMotDePasse);
+          Membre unMembre = creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance,
+              uneDateNaissance, uneVille, unMail, unMotDePasse);
 
           if (unMembre == null) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
             this.bdd.modifierMembre(unPseudo, unMembre);
             listeMembres.set(i, unMembre);
-          }
 
+            // Modification du membre present dans la liste des participations
+            for (Participation p : this.listeParticipations) {
+              if (p.getMembre().getPseudo().equals(unPseudo)) {
+                p.setMembre(unMembre);
+              }
+            }
+          }
         }
       }
     } else {
@@ -647,7 +657,7 @@ public class Gestion {
     }
 
     return res;
-    
+
   }
 
   /**
@@ -751,7 +761,7 @@ public class Gestion {
     }
     for (Participation p : test.listeParticipations) {
       System.out
-          .println("Evenement : " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
+          .println("Participation : " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
     }
     test.supprimerMembre("pseudoTest");
     System.out.println("\nTest supprimer Membre\n");
@@ -760,17 +770,25 @@ public class Gestion {
     }
     for (Participation p : test.listeParticipations) {
       System.out
-          .println("Partcipation : " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
+          .println("Participation : " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
     }
-    test.modifierMembre("p4", "ToujoursPlus", "nsvjknkj", "roche", d, "brest","m@m.fr", "mdppppppP5*");
+    test.modifierMembre("p4", "dddd", "nsvjknkj", "roche", d, "brest", "m@m.fr", "mdppppppP5*");
     for (Membre m : test.listeMembres) {
       System.out.println("Membre : " + m.getNom());
     }
     for (Participation p : test.listeParticipations) {
-      System.out
-          .println("Participation : " + p.getEvenement().getId() + " " + p.getMembre().getNom());
+      System.out.println(
+          "Participation (Membre): " + p.getMembre().getPseudo() + " " + p.getMembre().getNom());
+    }
+    test.modifierEvenement(1, "evenement", "descriptifTest", "imageTest",
+        new Date(2022 - 1900, 02, 2, 2, 2), "lieuTest", 22, TypeEvenement.AG);
+    for (Evenement e : test.listeEvenements) {
+      System.out.println("Evenement : " + e.getNom() + " (" + e.getId() + ")");
+    }
+    for (Participation p : test.listeParticipations) {
+      System.out.println("Participation (Evenement) : " + p.getEvenement().getId() + " "
+          + p.getEvenement().getNom());
     }
   }
-  
 
 }

@@ -195,6 +195,20 @@ public class BaseDeDonnees {
     }
   }
 
+  public void modifierEvenement(int id, Evenement e) {
+    String query;
+    query = "UPDATE EVENEMENT SET id=" + e.getId() + ", nom='" + e.getNom() + "', descriptif='"
+        + e.getDescriptif() + "', image='" + e.getImage() + "', date=DATE_FORMAT('"
+        + (e.getDate().getYear() + ANNEE_SUP) + "-" + e.getDate().getMonth() + "-"
+        + e.getDate().getDate() + "','%Y-%m-%d'), lieu='" + e.getLieu() + "', nbMaxPersonnes="
+        + e.getNbMaxPersonnes() + ", type='" + e.getType() + "' WHERE id=" + id;
+    try {
+      sqlStatement.executeUpdate(query);
+    } catch (SQLException e2) {
+      System.out.println("supression impossible de evenement " + e.getId());
+      e2.printStackTrace();
+    }
+  }
 
   public static void main(String[] args) throws SQLException {
     BaseDeDonnees test = new BaseDeDonnees();
