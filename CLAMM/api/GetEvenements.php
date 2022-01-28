@@ -103,7 +103,7 @@
                     $ajout=false; 
 
                     if(count($results)>0){//s'il y a des inscrits
-                        if($nbinscrits[0]['nb']<$evenements[$i]['nbMaxPersonnes']){
+                        if($nbinscrits<$evenements[$i]['nbMaxPersonnes']){
                             $ajout=true;
                         }
                     } else {//il n'y a pas d'inscrit
