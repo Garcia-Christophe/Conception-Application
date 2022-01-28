@@ -2,11 +2,11 @@
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
 
-    include_once("BDD_Connexion.php");
+    include_once("./BDD_Connexion.php");
 
     $status = 'ECHOUEE';
     
-    if (isset($_POST["email"]) && isset($_POST["mdp"])) {
+    if (isset($_POST["email"]) && isset($_POST["motDePasse"])) {
 
         // Definition d'un prefixe pour le salage
         // $prefixe = $_POST["email"];
@@ -19,11 +19,13 @@
 
         // Hachage du mot de passe sale
         // $mdp = hash("sha256", $prefixe . $_POST["mdp"] . $suffixe);
-        $mdp = $_POST["mdp"]; // sans securite (temporaire)
+        $mdp = $_POST["motDePasse"]; // sans securite (temporaire)
 
         // Recuperation du mot de passe de la bdd grace a l'email
         // (le mot de passe n'existe pas si la saisie ne correspond a aucun email)
-        $dbc = BDD_Connexion::getInstance()->getConnexion();
+        //instance de connexion à la base
+        $bdd = new BDD_Connexion();
+        $dbc = $bdd->getConnexion();
         $query = "SELECT motDePasse FROM MEMBRE WHERE mail = '" . $_POST["email"] . "'";
         $stmt = $dbc->query($query);
         $results = $stmt->fetchAll();

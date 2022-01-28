@@ -6,15 +6,16 @@
 
     $status = 'ECHOUEE';
     
-    if (isset($_POST["idEvenement"]) && isset($_POST["pseudo"]) && isset($_POST["nbPersonnes"]) && isset($_POST["informations"])) {
+    if (isset($_POST["idEvenement"]) && isset($_POST["pseudoMembre"]) && isset($_POST["nbInscrit"]) && isset($_POST["informations"])) {
         $idEvenement = $_POST["idEvenement"];
-        $pseudoMembre = $_POST["pseudo"];
+        $pseudoMembre = $_POST["pseudoMembre"];
         
         // Mise par defaut du status a REUSSIE
         $status = 'REUSSIE';
 
-        // Connexion a la base de donnees
-        $dbc = BDD_Connexion::getInstance()->getConnexion();
+        //instance de connexion à la base
+        $bdd = new BDD_Connexion();
+        $dbc = $bdd->getConnexion();
 
         // Verification de l'existence de la participation evenement/membre
         // Et recuperation du nombre de personnes inscrites enregistre
@@ -31,7 +32,7 @@
         }
 
         // Verification du nombre de personnes possible
-        $nbInscrits = intval($_POST["nbPersonnes"]);
+        $nbInscrits = intval($_POST["nbInscrit"]);
         if ($status == 'REUSSIE') {
             // Nombre de personnes maximum autorise a participer a l'evenement
             $query = "SELECT nbMaxPersonnes FROM EVENEMENT WHERE id = " . $idEvenement;

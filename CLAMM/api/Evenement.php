@@ -10,6 +10,7 @@ class Evenement{
     public $nbMaxPersonnes;
     public $type;
     public $inscrit;
+    public $nbInscrit;
 
     public function __construct(){
       

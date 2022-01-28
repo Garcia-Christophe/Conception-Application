@@ -6,15 +6,16 @@
 
     $status = 'ECHOUEE';
     
-    if (isset($_POST["idEvenement"]) && isset($_POST["pseudo"])) {
+    if (isset($_POST["idEvenement"]) && isset($_POST["pseudoMembre"])) {
         $idEvenement = $_POST["idEvenement"];
-        $pseudoMembre = $_POST["pseudo"];
+        $pseudoMembre = $_POST["pseudoMembre"];
         
         // Mise par defaut du status a REUSSIE
         $status = 'REUSSIE';
 
-        // Connexion a la base de donnees
-        $dbc = BDD_Connexion::getInstance()->getConnexion();
+        //instance de connexion à la base
+        $bdd = new BDD_Connexion();
+        $dbc = $bdd->getConnexion();
 
         // Verification de l'existence de la participation evenement/membre
         $query = "SELECT * FROM PARTICIPATION WHERE idEvenement = " . $idEvenement . " AND pseudoMembre = '" . $pseudoMembre . "'";
