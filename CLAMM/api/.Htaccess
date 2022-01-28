@@ -1,0 +1,8 @@
+#redirection des liens
+RewriteEngine On # Activer le module Rewrite
+RewriteRule ^connexion Connexion.php [NC,L]  # -> script Connexion.php 
+RewriteRule ^evenements GetEvenements.php [NC,L] # -> script GetEvenements.php 
+RewriteRule ^participations GetParticipation.php [NC,L] # -> script GetParticipation.php 
+RewriteRule ^participations/inscription Inscription.php [NC,L] # -> script Inscription.php 
+RewriteRule ^participations/modification Modification.php [NC,L] # -> script Modification.php 
+RewriteRule ^participations/suppression Suppression.php [NC,L] # -> script Suppression.php 
