@@ -6,8 +6,8 @@ import java.util.regex.Pattern;
 import gestion.CodeErreur;
 
 /**
- * La classe Membre représente un membre d’association, caractérisé par son nom, son prénom, un
- * mail, un pseudo, un mot de passe, sa ville de résidence, sa date et son lieu de naissance. Le
+ * La classe Membre reprï¿½sente un membre dï¿½association, caractï¿½risï¿½ par son nom, son prï¿½nom, un
+ * mail, un pseudo, un mot de passe, sa ville de rï¿½sidence, sa date et son lieu de naissance. Le
  * pseudo est unique.
  * 
  * @author Mathis
@@ -26,7 +26,7 @@ public class Membre {
   private String nom;
 
   /**
-   * Prénom du membre.
+   * Prï¿½nom du membre.
    */
   private String prenom;
 
@@ -41,7 +41,7 @@ public class Membre {
   private Date dateNaissance;
 
   /**
-   * Lieu de résidence du membre.
+   * Lieu de rï¿½sidence du membre.
    */
   private String ville;
 
@@ -97,16 +97,16 @@ public class Membre {
   }
 
   /**
-   * Retourne le prénom du membre.
+   * Retourne le prï¿½nom du membre.
    * 
-   * @return le prénom du membre
+   * @return le prï¿½nom du membre
    */
   public String getPrenom() {
     return prenom;
   }
 
   /**
-   * Change le prénom du membre.
+   * Change le prï¿½nom du membre.
    *
    * @param unPrenom le prenom du membre
    */
@@ -160,7 +160,7 @@ public class Membre {
   }
 
   /**
-   * Change la ville de résidence d'un membre.
+   * Change la ville de rï¿½sidence d'un membre.
    * 
    * @param uneVille la ville du membre
    */

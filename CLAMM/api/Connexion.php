@@ -1,45 +1,77 @@
 <?php 
+    /* 
+    Auteur : Christophe Garcia
+    
+    Lien : api/connexion
+
+    Method : POST
+
+    Http response : 
+      - 200 : success
+      - 400 : erreur de parametre
+      - 405 : methode non autorisee
+      - 406 : connexion non acceptee
+
+    Param form_data : 
+        pseudoMembre : pseudo du membre a connecter
+        motDePasse : mot de passe du membre a connecter
+
+    Retourne :
+      - Le pseudo du membre si la connexion est une reussite
+
+    */
+
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/json');
 
     include_once("./BDD_Connexion.php");
-
-    $status = 'ECHOUEE';
     
-    if (isset($_POST["email"]) && isset($_POST["motDePasse"])) {
+    //récupération de la méthode de la requête (GET,POST,PUT...)
+    $request_method = $_SERVER["REQUEST_METHOD"];
+    
+    if($request_method=='POST') {
+        if (isset($_POST["pseudoMembre"]) && isset($_POST["motDePasse"])) {
 
-        // Definition d'un prefixe pour le salage
-        // $prefixe = $_POST["email"];
+            // Definition d'un prefixe pour le salage
+            // $prefixe = $_POST["pseudoMembre"];
 
-        // Definition d'un suffixe pour le salage (email a l'envers)
-        // $suffixe = "";
-        // for ($i = strlen($_POST["email"]) - 1; $i >= 0; $i--) {
-        //     $suffixe = $suffixe . $_POST["email"][$i];
-        // }
+            // Definition d'un suffixe pour le salage (pseudoMembre a l'envers)
+            // $suffixe = "";
+            // for ($i = strlen($_POST["pseudoMembre"]) - 1; $i >= 0; $i--) {
+            //     $suffixe = $suffixe . $_POST["pseudoMembre"][$i];
+            // }
 
-        // Hachage du mot de passe sale
-        // $mdp = hash("sha256", $prefixe . $_POST["mdp"] . $suffixe);
-        $mdp = $_POST["motDePasse"]; // sans securite (temporaire)
+            // Hachage du mot de passe sale
+            // $mdp = hash("sha256", $prefixe . $_POST["motDePasse"] . $suffixe);
+            $mdp = $_POST["motDePasse"]; // sans securite (temporaire)
 
-        // Recuperation du mot de passe de la bdd grace a l'email
-        // (le mot de passe n'existe pas si la saisie ne correspond a aucun email)
-        //instance de connexion à la base
-        $bdd = new BDD_Connexion();
-        $dbc = $bdd->getConnexion();
-        $query = "SELECT motDePasse FROM MEMBRE WHERE mail = '" . $_POST["email"] . "'";
-        $stmt = $dbc->query($query);
-        $results = $stmt->fetchAll();
-        if (count($results) > 0) {
-            $mdpBDD = $results[0]['motDePasse'];
+            // Recuperation du mot de passe de la bdd grace au pseudoMembre
+            // (le mot de passe n'existe pas si la saisie ne correspond a aucun pseudoMembre)
+            //instance de connexion à la base
+            $bdd = new BDD_Connexion();
+            $dbc = $bdd->getConnexion();
+            $query = "SELECT motDePasse FROM MEMBRE WHERE pseudo = '" . $_POST["pseudoMembre"] . "'";
+            $stmt = $dbc->query($query);
+            $results = $stmt->fetchAll();
+            if (count($results) > 0) {
+                $mdpBDD = $results[0]['motDePasse'];
+            } else {
+                $mdpBDD = "";
+            }
+
+            // Verification de la validite du pseudoMembre et du mot de passe
+            if ($mdp == $mdpBDD) {
+                http_response_code(200);
+                echo json_encode($_POST["pseudoMembre"]);
+            } else {
+                http_response_code(406);
+            }
         } else {
-            $mdpBDD = "";
+            // Erreur de parametre
+            http_response_code(400);
         }
-
-        // Verification de la validite de l'email et du mot de passe
-        if ($mdp == $mdpBDD) {
-            $status = 'REUSSIE';
-        }
+    } else {
+        // Requête invalide
+        header("HTTP/1.0 405 Method Not Allowed");
     }
-
-    echo json_encode(array("connexion"=>$status));
 ?>

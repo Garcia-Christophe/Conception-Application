@@ -70,6 +70,4 @@ class BDD_Connexion {
 	}
 }
 
-//BDD_Connexion::getInstance()->getConnexion();
-
 ?>
