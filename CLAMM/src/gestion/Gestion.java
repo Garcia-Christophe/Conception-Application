@@ -23,7 +23,6 @@ public class Gestion {
   /**
    * Instance de la classe Verif, pour la vérification des éléments des Membre et Evenement.
    */
-  private Verif uneVerif;
   
   /**
    * Liste des codes erreurs.
