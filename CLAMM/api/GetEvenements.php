@@ -1,4 +1,5 @@
 <?php
+//nb de place
     /* 
     Auteur : Manon Goasguen
     
@@ -33,7 +34,7 @@
     header('Content-Type: application/json');
 
     //connection à la base
-    include("BDD_Connexion.php");
+    include("./BDD_Connexion.php");
     
     //structure des évévenements
     include('./Evenement.php');
@@ -42,7 +43,7 @@
     $request_method = $_SERVER["REQUEST_METHOD"];
     
     if($request_method=='POST'){
-        if (isset($_POST["pseudo_membre"])){
+        if (isset($_POST["pseudoMembre"])){
 
             //variable avec la structure d'un événement
             $evenement = new Evenement();
@@ -51,7 +52,8 @@
             $tableEvenements = [];
 
             //instance de connexion à la base
-            $dbc = BDD_Connexion::getInstance()->getConnexion();
+            $bdd = new BDD_Connexion();
+            $dbc = $bdd->getConnexion();
             
             //requete de récupération des événements non passés
             $query = "SELECT * FROM EVENEMENT where date>=NOW()";
@@ -64,10 +66,20 @@
                 $id_evenement=$evenements[$i]['id'];
                 
                 //requete de récupération d'une participation correspondante à l'événement et au membre
-                $pseudo_membre=$_POST['pseudo_membre'];
+                $pseudo_membre=$_POST['pseudoMembre'];
                 $query2 = "SELECT * FROM PARTICIPATION where idEvenement=$id_evenement and pseudoMembre='$pseudo_membre'";
                 $stmt2 = $dbc->query($query2);
                 $participation = $stmt2->fetchAll();
+
+                //requete de récupération du nombre de participant à un événement
+                $query3 = "SELECT sum(nbInscrit) as nb FROM PARTICIPATION inner join EVENEMENT on PARTICIPATION.idEvenement=EVENEMENT.id where idEvenement=$id_evenement";
+                $stmt3 = $dbc->query($query3);
+                $results = $stmt3->fetchAll();
+                if($results[0]['nb']==null){
+                    $nbinscrits=0;
+                }else{
+                    $nbinscrits=$results[0]['nb'];
+                }
 
                 //s'il y a une participation (le membre est inscrit)
                 if(count($participation)>0){
@@ -80,22 +92,18 @@
                         "lieu" => $evenements[$i]['lieu'],
                         "nbMaxPersonnes" => $evenements[$i]['nbMaxPersonnes'],
                         "type" => $evenements[$i]['type'],
-                        "inscrit" => true //le membre est inscrit
+                        "inscrit" => true, //le membre est inscrit
+                        "nbInscrit" => $nbinscrits
                     ];
 
                     //ajout dans la table
                     $tableEvenements[]=$evenement;
 
                 } else {
-                    //requete de récupération du nombre de participant à un événement
-                    $query3 = "SELECT sum(nbInscrit) as nb FROM PARTICIPATION inner join EVENEMENT on PARTICIPATION.idEvenement=EVENEMENT.id where idEvenement=$id_evenement";
-                    $stmt3 = $dbc->query($query3);
-                    $nbinscrits = $stmt3->fetchAll();
-
                     $ajout=false; 
 
-                    if(count($nbinscrits)>0){//s'il y a des inscrits
-                        if($nbinscrits[0]['nb']<$evenements[$i]['nbMaxPersonnes']){
+                    if(count($results)>0){//s'il y a des inscrits
+                        if($nbinscrits<$evenements[$i]['nbMaxPersonnes']){
                             $ajout=true;
                         }
                     } else {//il n'y a pas d'inscrit
@@ -111,7 +119,8 @@
                             "lieu" => $evenements[$i]['lieu'],
                             "nbMaxPersonnes" => $evenements[$i]['nbMaxPersonnes'],
                             "type" => $evenements[$i]['type'],
-                            "inscrit" => false //le membre n'est pas inscrit
+                            "inscrit" => false, //le membre n'est pas inscrit
+                            "nbInscrit" => $nbinscrits
                         ];
                         
                         //ajout dans la table

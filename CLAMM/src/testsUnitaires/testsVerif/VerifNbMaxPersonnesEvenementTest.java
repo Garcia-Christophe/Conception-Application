@@ -1,10 +1,11 @@
-package testsUnitaires.testsVerif;
+package testsunitaires.testsverif;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
 import gestion.CodeErreur;
 import gestion.Verif;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 public class VerifNbMaxPersonnesEvenementTest {
 
@@ -15,13 +16,13 @@ public class VerifNbMaxPersonnesEvenementTest {
   void testPositifTrente() {
     assertEquals(null, uneVerif.verifNbMaxPersonnesEvenement(30));
   }
-  
+
   @Test
   @DisplayName("Test unEvenement égal à 2")
   void testPositifDeux() {
     assertEquals(null, uneVerif.verifNbMaxPersonnesEvenement(2));
   }
-  
+
   @Test
   @DisplayName("Test unEvenement égal à 1")
   void testPositifUn() {

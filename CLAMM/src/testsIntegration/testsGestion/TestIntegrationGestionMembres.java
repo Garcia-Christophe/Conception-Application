@@ -1,14 +1,16 @@
-package testsIntegration.testsGestion;
+package testsintegration.testsgestion;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import gestion.CodeErreur;
+import gestion.Gestion;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import gestion.CodeErreur;
-import gestion.Gestion;
 
 public class TestIntegrationGestionMembres {
 
@@ -16,20 +18,22 @@ public class TestIntegrationGestionMembres {
 
   @BeforeEach
   void setUp() {
-    uneGestion = new Gestion();
+    try {
+      uneGestion = new Gestion();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
+  @SuppressWarnings("deprecation")
   @Test
   @DisplayName("Test intégration : gestion de membres")
   void test() {
-    Date d = new Date(2001 - 1900, 10, 7);
-    Date d2 = new Date(2022 - 1900, 0, 1);
-    ArrayList<CodeErreur> codes = new ArrayList<>();
-
     // liste vide
     assertEquals(0, uneGestion.getListeMembres().size(), "La liste devrait être vide");
 
     // ajouter un membre
+    Date d = new Date(2001 - 1900, 10, 7);
     assertEquals(null, uneGestion.ajouterMembre("p1", "n", "pr", "l", d, "v", "m@m.m", "mdpppppp"),
         "Le retour devrait être null");
 
@@ -53,6 +57,7 @@ public class TestIntegrationGestionMembres {
         "Le pseudo du premier membre devrait être mdpppppp");
 
     // ajouter un membre (erreur : pseudo déjà existant)
+    ArrayList<CodeErreur> codes = new ArrayList<>();
     codes.add(CodeErreur.PSEUDO_DEJA_EXISTANT);
     assertEquals(codes,
         uneGestion.ajouterMembre("p1", "nn", "prr", "ll", d, "vv", "mm@m.m", "mmdpppppp"),
@@ -76,6 +81,7 @@ public class TestIntegrationGestionMembres {
         "Le pseudo du premier membre devrait être p2");
 
     // modifier le pseudo et la date de naissance du premier membre
+    Date d2 = new Date(2022 - 1900, 0, 1);
     assertEquals(null,
         uneGestion.modifierMembre("p1", "Rob", "n", "pr", "l", d2, "v", "m@m.m", "mdpppppp"),
         "Le retour devrait être null");

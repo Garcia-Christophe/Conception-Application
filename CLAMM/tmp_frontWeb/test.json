@@ -1,0 +1,46 @@
+[
+    {
+        "id": "1",
+        "nom": "evenement 1",
+        "descriptif": "descriptifTest",
+        "date": "2022-02-02 00:00:00",
+        "lieu": "lieuTest",
+        "nbMaxPersonnes": "22",
+        "type": "AG",
+        "inscrit": true,
+        "nbInscrit": "20"
+    },
+    {
+        "id": "3",
+        "nom": "evenement 3",
+        "descriptif": "desc",
+        "date": "2022-05-26 00:00:00",
+        "lieu": "ici",
+        "nbMaxPersonnes": "15",
+        "type": "AG",
+        "inscrit": false,
+        "nbInscrit": "4"
+    },
+    {
+        "id": "4",
+        "nom": "evenement 4",
+        "descriptif": "desc",
+        "date": "2022-12-26 00:00:00",
+        "lieu": "ici",
+        "nbMaxPersonnes": "5",
+        "type": "REPAS",
+        "inscrit": false,
+        "nbInscrit": "0"
+    },
+    {
+        "id": "5",
+        "nom": "evenement complet",
+        "descriptif": "descriptifTest",
+        "date": "2022-02-02 00:00:00",
+        "lieu": "lieuTest",
+        "nbMaxPersonnes": "20",
+        "type": "REPAS",
+        "inscrit": true,
+        "nbInscrit": "20"
+    }
+]

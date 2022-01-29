@@ -39,12 +39,13 @@
     $request_method = $_SERVER["REQUEST_METHOD"];
     
     if($request_method=='POST'){
-        if (isset($_POST["idEvenement"]) && isset($_POST["pseudo"])) {
+        if (isset($_POST["idEvenement"]) && isset($_POST["pseudoMembre"])) {
             $idEvenement = $_POST["idEvenement"];
-            $pseudoMembre = $_POST["pseudo"];
+            $pseudoMembre = $_POST["pseudoMembre"];
             
-            // Connexion a la base de donnees
-            $dbc = BDD_Connexion::getInstance()->getConnexion();
+            //instance de connexion à la base
+            $bdd = new BDD_Connexion();
+            $dbc = $bdd->getConnexion();
 
             // Verification de l'existence de la participation evenement/membre
             $query = "SELECT * FROM PARTICIPATION WHERE idEvenement = " . $idEvenement . " AND pseudoMembre = '" . $pseudoMembre . "'";
