@@ -1,12 +1,13 @@
-package testsUnitaires.testsVerif;
+package testsunitaires.testsverif;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
 import gestion.CodeErreur;
 import gestion.Verif;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-//Initialisation Verif.TAILLE_MAX_DESCRIPTIF_EVENEMENT=20;
+// Initialisation Verif.TAILLE_MAX_DESCRIPTIF_EVENEMENT=20;
 
 public class VerifDescriptifEvenementTest {
 
@@ -27,14 +28,14 @@ public class VerifDescriptifEvenementTest {
   @Test
   @DisplayName("Test unDescriptif égal à '  espaces avant'")
   void testEspaceAvant() {
-    assertEquals(CodeErreur.DESCRIPTIF_ESPACE_EN_TROP, 
+    assertEquals(CodeErreur.DESCRIPTIF_ESPACE_EN_TROP,
         uneVerif.verifDescriptifEvenement("  espaces avant"));
   }
 
   @Test
   @DisplayName("Test unDescptif égal à 'espaces après  '")
   void testEspaceApres() {
-    assertEquals(CodeErreur.DESCRIPTIF_ESPACE_EN_TROP, 
+    assertEquals(CodeErreur.DESCRIPTIF_ESPACE_EN_TROP,
         uneVerif.verifDescriptifEvenement("espaces après  "));
   }
 
@@ -43,17 +44,17 @@ public class VerifDescriptifEvenementTest {
   void testCorrect19car() {
     assertEquals(null, uneVerif.verifDescriptifEvenement("Descriptif dix-neuf"));
   }
-  
+
   @Test
   @DisplayName("Test unDescriptif égal à 'Descriptif vingt car' (20 caractères)")
   void testCorrect20car() {
     assertEquals(null, uneVerif.verifDescriptifEvenement("Descriptif vingt car"));
   }
-  
+
   @Test
   @DisplayName("Test unDescriptif égal à 'Descriptif vingt et 1' (21 caractères) trop long")
   void testTropLong() {
-    assertEquals(CodeErreur.DESCRIPTIF_TROP_LONG, 
+    assertEquals(CodeErreur.DESCRIPTIF_TROP_LONG,
         uneVerif.verifDescriptifEvenement("Descriptif vingt et 1"));
   }
 

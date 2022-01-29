@@ -1,9 +1,6 @@
 package gestion.membres;
 
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import gestion.CodeErreur;
 
 /**
  * La classe Membre repr�sente un membre d�association, caract�ris� par son nom, son pr�nom, un

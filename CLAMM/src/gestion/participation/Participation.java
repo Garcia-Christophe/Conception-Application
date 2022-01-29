@@ -8,7 +8,7 @@ import gestion.membres.Membre;
  * cet événement.
  * 
  * @author Alexia
- * @version 2.00
+ * @version 1.00
  */
 public class Participation {
 
@@ -28,14 +28,20 @@ public class Participation {
   private int nbInscrit;
 
   /**
-   * Information supplémentaire concernant la participation
+   * Information supplémentaire concernant la participation.
    */
   private String information;
 
-
-  
-  
-  public Participation(Evenement unEvenement, Membre unMembre, int unNbInscrit, String uneInformation) {
+  /**
+   * Constructeur de Participation.
+   * 
+   * @param unEvenement événement de la participation
+   * @param unMembre membre inscrit à l'événement de la participation
+   * @param unNbInscrit nombre de personnes inscrites au nom du membre
+   * @param uneInformation informations complémentaires de la participation
+   */
+  public Participation(Evenement unEvenement, Membre unMembre, int unNbInscrit,
+      String uneInformation) {
     this.evenement = unEvenement;
     this.membre = unMembre;
     this.nbInscrit = unNbInscrit;
@@ -98,7 +104,8 @@ public class Participation {
   /**
    * Change l'information supplémentaire d'une participation par uneInformation.
    * 
-   * @param uneInformation l'information supplémentaire de la participation que l'on veut lui attribuer
+   * @param uneInformation l'information supplémentaire de la participation que l'on veut lui
+   *        attribuer
    */
   public void setInformation(String uneInformation) {
     this.information = uneInformation;

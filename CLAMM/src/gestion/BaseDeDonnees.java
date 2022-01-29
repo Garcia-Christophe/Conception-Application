@@ -1,20 +1,19 @@
 package gestion;
 
+import gestion.evenements.Evenement;
+import gestion.evenements.TypeEvenement;
+import gestion.membres.Membre;
+import gestion.participation.Participation;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
-import gestion.evenements.Evenement;
-import gestion.evenements.TypeEvenement;
-import gestion.membres.Membre;
-import gestion.participation.Participation;
 
 public class BaseDeDonnees {
   Connection connection;
   Statement sqlStatement;
-  final private int ANNEE_SUP = 1900;
+  private static final int ANNEE_SUP = 1900;
 
   public BaseDeDonnees() throws SQLException {
     System.out.println("Connecting to a selected database...");
@@ -106,14 +105,15 @@ public class BaseDeDonnees {
 
   public void ajouterMembre(Membre m) {
     // TODO regarder affichage erreur membre déjà présent si possible
+    @SuppressWarnings("deprecation")
     String query =
-        "INSERT INTO MEMBRE (pseudo,nom,prenom,lieuNaissance,dateNaissance,ville,mail,motDePasse) VALUES ("
-            + '"' + m.getPseudo() + '"' + "," + '"' + m.getNom() + '"' + "," + '"' + m.getPrenom()
-            + '"' + "," + '"' + m.getLieuNaissance() + '"' + "," + "DATE_FORMAT(" + '"'
-            + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-" + m.getDateNaissance().getMonth()
-            + "-" + m.getDateNaissance().getDate() + '"' + "," + '"' + "%Y-%m-%d" + '"' + ")," + '"'
-            + m.getVille() + '"' + "," + '"' + m.getMail() + '"' + "," + '"' + m.getMotDePasse()
-            + '"' + ")";
+        "INSERT INTO MEMBRE (pseudo,nom,prenom,lieuNaissance,dateNaissance,ville,mail,motDePasse)"
+            + " VALUES (" + '"' + m.getPseudo() + '"' + "," + '"' + m.getNom() + '"' + "," + '"'
+            + m.getPrenom() + '"' + "," + '"' + m.getLieuNaissance() + '"' + "," + "DATE_FORMAT("
+            + '"' + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-"
+            + m.getDateNaissance().getMonth() + "-" + m.getDateNaissance().getDate() + '"' + ","
+            + '"' + "%Y-%m-%d" + '"' + ")," + '"' + m.getVille() + '"' + "," + '"' + m.getMail()
+            + '"' + "," + '"' + m.getMotDePasse() + '"' + ")";
     try {
       sqlStatement.executeUpdate(query);
     } catch (SQLException e) {
@@ -123,14 +123,15 @@ public class BaseDeDonnees {
   }
 
   public boolean evenementPresent(int id) throws SQLException {
-    ResultSet lEvenement =
+    ResultSet evenement =
         sqlStatement.executeQuery("SELECT * FROM EVENEMENT WHERE id=" + '"' + id + '"');
-    return lEvenement.next();
+    return evenement.next();
   }
 
 
   public void ajouterEvenement(Evenement e) {
     // TODO regarder affichage erreur evenement déjà présent si possible
+    @SuppressWarnings("deprecation")
     String query =
         "INSERT INTO EVENEMENT (id,nom,descriptif,image,date,lieu,nbMaxPersonnes,type) VALUES ("
             + '"' + e.getId() + '"' + "," + '"' + e.getNom() + '"' + "," + '"' + e.getDescriptif()
@@ -178,6 +179,7 @@ public class BaseDeDonnees {
 
 
 
+  @SuppressWarnings("deprecation")
   public void modifierMembre(String pseudo, Membre m) {
     String query;
     query = "UPDATE MEMBRE SET pseudo=" + '"' + m.getPseudo() + '"' + ", nom=" + '"' + m.getNom()
@@ -195,6 +197,7 @@ public class BaseDeDonnees {
     }
   }
 
+  @SuppressWarnings("deprecation")
   public void modifierEvenement(int id, Evenement e) {
     String query;
     query = "UPDATE EVENEMENT SET id=" + e.getId() + ", nom='" + e.getNom() + "', descriptif='"

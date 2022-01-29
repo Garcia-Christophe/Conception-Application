@@ -1,12 +1,13 @@
-package testsUnitaires.testsVerif;
+package testsunitaires.testsverif;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
 import gestion.CodeErreur;
 import gestion.Verif;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-//Initialisation Verif.TAILLE_MAX_DESCRIPTIF_EVENEMENT=20;
+// Initialisation Verif.TAILLE_MAX_DESCRIPTIF_EVENEMENT=20;
 
 public class VerifLieuEvenementTest {
 
@@ -27,9 +28,9 @@ public class VerifLieuEvenementTest {
   @Test
   @DisplayName("Test unLieu égal à 'espaces après  '")
   void testEspaceApres() {
-    assertEquals(CodeErreur.LIEU_ESPACE_EN_TROP, uneVerif.verifLieuEvenement("espaces après  ")); 
+    assertEquals(CodeErreur.LIEU_ESPACE_EN_TROP, uneVerif.verifLieuEvenement("espaces après  "));
   }
-  
+
   @Test
   @DisplayName("Test unLieu égal à 'nom du lieu 19 cara' 19 caractères")
   void testCorrect19car() {
@@ -41,7 +42,7 @@ public class VerifLieuEvenementTest {
   void testCorrect20car() {
     assertEquals(null, uneVerif.verifLieuEvenement("un nom de lieu vingt"));
   }
-  
+
   @Test
   @DisplayName("Test unLieu égal à 'nom du lieu vingtetun' 21 caractères trop long")
   void testCentCara() {

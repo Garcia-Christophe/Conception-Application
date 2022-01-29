@@ -1,12 +1,13 @@
-package testsUnitaires.testsVerif;
+package testsunitaires.testsverif;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
 import gestion.CodeErreur;
 import gestion.Verif;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-//Initialisation Verif.TAILLE_MAX_PSEUDO_MEMBRE = 10
+// Initialisation Verif.TAILLE_MAX_PSEUDO_MEMBRE = 10
 
 public class VerifPseudoMembreTest {
 
