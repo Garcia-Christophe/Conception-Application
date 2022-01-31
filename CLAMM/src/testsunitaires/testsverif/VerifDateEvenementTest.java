@@ -1,4 +1,4 @@
-package testsunitaire.testsverif;
+package testsunitaires.testsverif;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
