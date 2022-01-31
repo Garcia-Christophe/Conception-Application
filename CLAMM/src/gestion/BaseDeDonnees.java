@@ -11,10 +11,30 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BaseDeDonnees {
+
+  /**
+   * Connexion à la base de données.
+   */
   Connection connection;
+
+  /**
+   * Permet d'exécuter les requêtes SQL sur la base de données connectée.
+   */
   Statement sqlStatement;
+
+  /**
+   * Nombre d'années à ajouter pour une date.
+   */
   private static final int ANNEE_SUP = 1900;
 
+  /**
+   * Constructeur de la BaseDeDonnées.
+   * 
+   * <p>Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
+   * SQL.
+   * 
+   * @throws SQLException si la connexion échoue
+   */
   public BaseDeDonnees() throws SQLException {
     System.out.println("Connecting to a selected database...");
     try {
@@ -32,6 +52,11 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Initialise la liste des membres à partir de la base de données.
+   * 
+   * @param g l'instance de Gestion de l'application (façade)
+   */
   public void initMembre(Gestion g) {
     try {
       ResultSet lesMembres = sqlStatement.executeQuery("SELECT * FROM MEMBRE");
@@ -47,6 +72,11 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Initialise la liste des événements à partir de la base de données.
+   * 
+   * @param g l'instance de Gestion de l'application (façade)
+   */
   public void initEvenement(Gestion g) {
     try {
       ResultSet lesEvenements = sqlStatement.executeQuery("SELECT * FROM EVENEMENT");
@@ -68,6 +98,11 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Initialise la liste des participations à partir de la base de données.
+   * 
+   * @param g l'instance de Gestion de l'application (façade)
+   */
   public void initParticipation(Gestion g) {
     try {
       ResultSet lesParticipations = sqlStatement.executeQuery("SELECT * FROM PARTICIPATION");
@@ -96,6 +131,15 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Renvoie vria ou faux suivant si un membre avec le pseudo fourni en paramètre existe dans la
+   * liste.
+   * 
+   * @param unPseudo le pseudo du membre à trouver
+   * @return {@code true} si un membre de la liste a pour pseudo {@code unPseudo}, {@code false}
+   *         sinon
+   * @throws SQLException si la requête SQL provoque une erreur
+   */
   public boolean membrePresent(String unPseudo) throws SQLException {
     ResultSet leMembre =
         sqlStatement.executeQuery("SELECT * FROM MEMBRE WHERE pseudo=" + '"' + unPseudo + '"');
@@ -103,6 +147,11 @@ public class BaseDeDonnees {
   }
 
 
+  /**
+   * Ajoute un membre à la base de données, en exécutant une requête SQL "INSERT".
+   * 
+   * @param m le membre à ajouter dans la base de données
+   */
   public void ajouterMembre(Membre m) {
     // TODO regarder affichage erreur membre déjà présent si possible
     @SuppressWarnings("deprecation")
@@ -122,6 +171,15 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Renvoie vria ou faux suivant si un événement avec l'identifiant fourni en paramètre existe dans
+   * la liste.
+   * 
+   * @param id l'identifiant de l'événement à trouver
+   * @return {@code true} si un événement de la liste a pour identifiant {@code id}, {@code false}
+   *         sinon
+   * @throws SQLException si la requête SQL provoque une erreur
+   */
   public boolean evenementPresent(int id) throws SQLException {
     ResultSet evenement =
         sqlStatement.executeQuery("SELECT * FROM EVENEMENT WHERE id=" + '"' + id + '"');
@@ -129,6 +187,11 @@ public class BaseDeDonnees {
   }
 
 
+  /**
+   * Ajoute un événement à la base de données, en exécutant une requête SQL "INSERT".
+   * 
+   * @param e l'événement à ajouter dans la base de données
+   */
   public void ajouterEvenement(Evenement e) {
     // TODO regarder affichage erreur evenement déjà présent si possible
     @SuppressWarnings("deprecation")
@@ -149,6 +212,11 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Supprime un événement de la base de données, en exécutant une requête SQL "DELETE".
+   * 
+   * @param unId identifiant de l'événement à supprimer
+   */
   public void supprimerEvenement(int unId) {
     // TODO test erreur de suppression
     String query = "DELETE FROM EVENEMENT WHERE id=" + unId;
@@ -163,6 +231,11 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Supprime un membre de la base de données, en exécutant une requête SQL "DELETE".
+   * 
+   * @param unPseudo pseudo du membre à supprimer
+   */
   public void supprimerMembre(String unPseudo) {
     // TODO test erreur de suppression
     String query = "DELETE FROM MEMBRE WHERE pseudo=" + '"' + unPseudo + '"';
@@ -179,6 +252,12 @@ public class BaseDeDonnees {
 
 
 
+  /**
+   * Modifie un membre de la base de données, en exécutant une requête SQL "UPDATE".
+   * 
+   * @param pseudo pseudo du membre à modifier
+   * @param m membre contenant les données à modifier
+   */
   @SuppressWarnings("deprecation")
   public void modifierMembre(String pseudo, Membre m) {
     String query;
@@ -197,6 +276,12 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Modifie un événement de la base de données, en exécutant une requête SQL "UPDATE".
+   * 
+   * @param id identifiant de l'événement à modifier
+   * @param e événement contenant les données à modifier
+   */
   @SuppressWarnings("deprecation")
   public void modifierEvenement(int id, Evenement e) {
     String query;
@@ -213,7 +298,4 @@ public class BaseDeDonnees {
     }
   }
 
-  public static void main(String[] args) throws SQLException {
-    BaseDeDonnees test = new BaseDeDonnees();
-  }
 }
