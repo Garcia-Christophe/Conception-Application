@@ -44,6 +44,10 @@ h3{
     background: linear-gradient(240deg, rgba(18,240,218,1) 0%, rgba(156,214,255,1) 100%);
 }
 
+#bodyIndex *{
+    overflow-x: visible;
+}
+
 #bodyIndex h1{
     text-transform: uppercase;
     font-weight: lighter;
@@ -152,26 +156,61 @@ header img{
     margin-left: 1rem;
 }
 
+#colonnes{
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#colonnes div{
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    background-color: #85B9DE;
+    height: 50%;
+    width: 80%;
+}
+
+#colonnes div p{
+    width: calc(100% / 3 - 2px);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#date{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
 #evenements{
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 75vh;
+    height: 65vh;
     overflow-y: scroll;
 }
 
 .event{
-    padding-left: 20vh;
-    padding-right: 20vh;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 2vh;
-    width: calc(80% - 40vh);
+    width: 80%;
     height: 10vh;
     border: 3px solid black;
     cursor: pointer;
+}
+
+.event h2, .event h3{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% / 3);
 }
 
 .inscrit{

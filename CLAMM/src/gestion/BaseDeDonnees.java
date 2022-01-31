@@ -30,7 +30,8 @@ public class BaseDeDonnees {
   /**
    * Constructeur de la BaseDeDonnées.
    * 
-   * <p>Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
+   * <p>
+   * Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
    * SQL.
    * 
    * @throws SQLException si la connexion échoue
@@ -152,8 +153,8 @@ public class BaseDeDonnees {
    * 
    * @param m le membre à ajouter dans la base de données
    */
-  public void ajouterMembre(Membre m) {
-    // TODO regarder affichage erreur membre déjà présent si possible
+  public boolean ajouterMembre(Membre m) {
+    boolean res = true;
     @SuppressWarnings("deprecation")
     String query =
         "INSERT INTO MEMBRE (pseudo,nom,prenom,lieuNaissance,dateNaissance,ville,mail,motDePasse)"
@@ -168,7 +169,9 @@ public class BaseDeDonnees {
     } catch (SQLException e) {
       System.out.println("ajout impossible de " + m.getPseudo());
       e.printStackTrace();
+      res = false;
     }
+    return res;
   }
 
   /**
@@ -192,8 +195,8 @@ public class BaseDeDonnees {
    * 
    * @param e l'événement à ajouter dans la base de données
    */
-  public void ajouterEvenement(Evenement e) {
-    // TODO regarder affichage erreur evenement déjà présent si possible
+  public boolean ajouterEvenement(Evenement e) {
+    boolean res = true;
     @SuppressWarnings("deprecation")
     String query =
         "INSERT INTO EVENEMENT (id,nom,descriptif,image,date,lieu,nbMaxPersonnes,type) VALUES ("
@@ -209,7 +212,9 @@ public class BaseDeDonnees {
     } catch (SQLException er) {
       System.out.println("ajout impossible de " + e.getId());
       er.printStackTrace();
+      res = false;
     }
+    return res;
   }
 
   /**
@@ -217,8 +222,8 @@ public class BaseDeDonnees {
    * 
    * @param unId identifiant de l'événement à supprimer
    */
-  public void supprimerEvenement(int unId) {
-    // TODO test erreur de suppression
+  public boolean supprimerEvenement(int unId) {
+    boolean res = true;
     String query = "DELETE FROM EVENEMENT WHERE id=" + unId;
     String query2 = "DELETE FROM PARTICIPATION WHERE idEvenement=" + unId;
     try {
@@ -228,7 +233,9 @@ public class BaseDeDonnees {
     } catch (SQLException er) {
       System.out.println("supression impossible de " + unId);
       er.printStackTrace();
+      res = false;
     }
+    return res;
   }
 
   /**
@@ -236,8 +243,8 @@ public class BaseDeDonnees {
    * 
    * @param unPseudo pseudo du membre à supprimer
    */
-  public void supprimerMembre(String unPseudo) {
-    // TODO test erreur de suppression
+  public boolean supprimerMembre(String unPseudo) {
+    boolean res = true;
     String query = "DELETE FROM MEMBRE WHERE pseudo=" + '"' + unPseudo + '"';
     String query2 = "DELETE FROM PARTICIPATION WHERE pseudoMembre=" + '"' + unPseudo + '"';
     try {
@@ -247,7 +254,9 @@ public class BaseDeDonnees {
     } catch (SQLException er) {
       System.out.println("supression impossible de " + unPseudo);
       er.printStackTrace();
+      res = false;
     }
+    return res;
   }
 
 
@@ -259,7 +268,8 @@ public class BaseDeDonnees {
    * @param m membre contenant les données à modifier
    */
   @SuppressWarnings("deprecation")
-  public void modifierMembre(String pseudo, Membre m) {
+  public boolean modifierMembre(String pseudo, Membre m) {
+    boolean res = true;
     String query;
     query = "UPDATE MEMBRE SET pseudo=" + '"' + m.getPseudo() + '"' + ", nom=" + '"' + m.getNom()
         + '"' + ",prenom=" + '"' + m.getPrenom() + '"' + ",lieuNaissance=" + '"'
@@ -273,7 +283,9 @@ public class BaseDeDonnees {
     } catch (SQLException e) {
       System.out.println("supression impossible de " + m.getPseudo());
       e.printStackTrace();
+      res = false;
     }
+    return res;
   }
 
   /**
@@ -283,7 +295,8 @@ public class BaseDeDonnees {
    * @param e événement contenant les données à modifier
    */
   @SuppressWarnings("deprecation")
-  public void modifierEvenement(int id, Evenement e) {
+  public boolean modifierEvenement(int id, Evenement e) {
+    boolean res = true;
     String query;
     query = "UPDATE EVENEMENT SET id=" + e.getId() + ", nom='" + e.getNom() + "', descriptif='"
         + e.getDescriptif() + "', image='" + e.getImage() + "', date=DATE_FORMAT('"
@@ -295,7 +308,9 @@ public class BaseDeDonnees {
     } catch (SQLException e2) {
       System.out.println("supression impossible de evenement " + e.getId());
       e2.printStackTrace();
+      res = false;
     }
+    return res;
   }
 
 }
