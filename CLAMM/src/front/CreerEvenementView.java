@@ -174,7 +174,7 @@ public class CreerEvenementView {
           date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         }
 
-        if ((App.getGestion().ajouterEvenement(textNom.getText(), textDescription.getText(), "rien",
+        if ((App.getGestion().ajouterEvenement(-1,textNom.getText(), textDescription.getText(), "rien",
             date, textAdresse.getText(), nbPers, textType.getValue())) != null) {
 
           hErreurs.getChildren().clear();

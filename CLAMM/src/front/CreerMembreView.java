@@ -199,7 +199,7 @@ public class CreerMembreView {
           Date date =
               Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-          if (App.getGestion().modifierMembre(oldPseudo, textPseudo.getText(), textNom.getText(),
+          if (App.getGestion().modifierMembre(textPseudo.getText(), textNom.getText(),
               textPrenom.getText(), textVille.getText(), date, textVille.getText(),
               textAdresse.getText(), textMdp.getText()) != null) {
             // TODO afficher les erreurs

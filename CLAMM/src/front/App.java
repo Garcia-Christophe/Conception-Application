@@ -29,7 +29,7 @@ public class App extends Application {
   /**
    * Instance de Gestion, pour la gestion des membres et évènements.
    */
-  public static Gestion gestion = new Gestion();
+   public static Gestion gestion;
   
   
   /**
@@ -45,9 +45,7 @@ public class App extends Application {
    */
   @Override
   public void start(Stage stage) throws Exception {
-    
-    gestion.ajouterMembre("pseudo", "nom", "prenom", "nullepart", new Date(2001 - 1900, 1, 1, 1, 1), "nullepart", "mail@mail.mail", "motdep4asse");
-
+    gestion =  new Gestion(); 
     App.stage = stage;
 
     Scene scene = new Scene(grid);
