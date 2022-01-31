@@ -30,8 +30,7 @@ public class BaseDeDonnees {
   /**
    * Constructeur de la BaseDeDonnées.
    * 
-   * <p>
-   * Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
+   * <p>Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
    * SQL.
    * 
    * @throws SQLException si la connexion échoue

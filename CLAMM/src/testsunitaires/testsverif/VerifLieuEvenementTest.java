@@ -7,7 +7,7 @@ import gestion.Verif;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-// Initialisation Verif.TAILLE_MAX_DESCRIPTIF_EVENEMENT=20;
+// Initialisation Verif.TAILLE_MAX_LIEU_EVENEMENT=20;
 
 public class VerifLieuEvenementTest {
 
