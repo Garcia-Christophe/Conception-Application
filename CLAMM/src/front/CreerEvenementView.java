@@ -5,6 +5,7 @@ import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -120,7 +121,11 @@ public class CreerEvenementView {
 
     if (m.length != 0) {
       textNom.setText(m[0].getNom());
-      LocalDate d = m[0].getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+      java.util.Date utilDate = new java.util.Date(m[0].getDate().getTime());
+
+      LocalDate d = utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
       textDate.setValue(d);
       textAdresse.setText(m[0].getLieu());
       textType.setValue(m[0].getType());
@@ -160,57 +165,90 @@ public class CreerEvenementView {
     grid.add(vDescription, 0, 1, 2, 1);
 
 
-    if (m.length == 0) {
-      BtnAjouter.setOnAction(e -> {
+    BtnAjouter.setOnAction(e -> {
 
-        int nbPers = 0;
-        Date date = null;
+      int nbPers = 0;
+      Date date = null;
 
-        if (textNombre.getText() != "") { // si pas de valeur saisie, mise à 0 pour le parsing en
-                                          // int
-          nbPers = Integer.parseInt(textNombre.getText());
+      if (textNombre.getText() != "") { // si pas de valeur saisie, mise à 0 pour le parsing en
+                                        // int
+        nbPers = Integer.parseInt(textNombre.getText());
+      }
+      if (textDate.getValue() != null) { // si une date, parse en type date, sinon null par défaut
+        date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+      }
+
+      if(m.length==0) {
+        App.getGestion().ajouterEvenement(-1, textNom.getText(), textDescription.getText(), "rien",
+            date, textAdresse.getText(), nbPers, textType.getValue());
+      }else {
+        App.getGestion().modifierEvenement(m[0].getId(), textNom.getText(),textDescription.getText(),
+            "rien", date, textAdresse.getText(),nbPers,textType.getValue());
+      }
+
+      Boolean error = false;
+
+      ArrayList<String> erreurs = new ArrayList<String>();
+
+      for (CodeErreur err : App.getGestion().getCodesErreurs()) {
+        erreurs.add(err.toString());
+        if (err.toString() != "NO_ERROR") {
+          error = true;
         }
-        if (textDate.getValue() != null) { // si une date, parse en type date, sinon null par défaut
-          date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        }
+      }
 
-        if ((App.getGestion().ajouterEvenement(-1,textNom.getText(), textDescription.getText(), "rien",
-            date, textAdresse.getText(), nbPers, textType.getValue())) != null) {
-
-          hErreurs.getChildren().clear();
-          hErreurs.getChildren().add(lErreur);
-          for (CodeErreur err : App.getGestion().getCodesErreurs()) {
-            String s = err.toString();
-            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-            s = newS.replace("_", " ");
-            Label l = new Label(s + " | ");
-            l.setStyle("-fx-text-fill : red");
-            hErreurs.getChildren().add(l);
-          }
+      if (error) {
+        hErreurs.getChildren().clear();
+        if (erreurs.get(1) != "NO_ERROR") {
+          textNom.setStyle("-fx-border-color: red");
+          String s = erreurs.get(1).toString();
+          String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+          s = newS.replace("_", " ");
+          Label l = new Label(s + " | ");
+          l.setStyle("-fx-text-fill : red");
+          hErreurs.getChildren().add(l);
         } else {
-          App.setScene(new EvenementsView());
-          newWindow.close();
+          textNom.setStyle("-fx-border-color: black");
         }
-
-      });
-
-    } else {
-      BtnAjouter.setOnAction(e -> {
-        if (textNombre.getText() == "") {
-          textNombre.setText("0");
-        }
-
-        Date date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        if (App.getGestion().modifierEvenement(m[0].getId(), textNom.getText(),
-            textDescription.getText(), "rien", date, textAdresse.getText(),
-            Integer.parseInt(textNombre.getText()), textType.getValue()) != null) {
-          //TODO afficher les erreurs
+        if (erreurs.get(4) != "NO_ERROR") {
+          textDate.setStyle("-fx-border-color: red");
+          String s = erreurs.get(4).toString();
+          String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+          s = newS.replace("_", " ");
+          Label l = new Label(s + " | ");
+          l.setStyle("-fx-text-fill : red");
+          hErreurs.getChildren().add(l);
         } else {
-          App.setScene(new EvenementsView());
-          newWindow.close();
+          textDate.setStyle("-fx-border-color: black");
         }
-      });
-    }
+        if (erreurs.get(5) != "NO_ERROR") {
+          textAdresse.setStyle("-fx-border-color: red");
+          String s = erreurs.get(5).toString();
+          String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+          s = newS.replace("_", " ");
+          Label l = new Label(s + " | ");
+          l.setStyle("-fx-text-fill : red");
+          hErreurs.getChildren().add(l);
+        } else {
+          textAdresse.setStyle("-fx-border-color: black");
+        }
+        if (erreurs.get(6) != "NO_ERROR") {
+          textNombre.setStyle("-fx-border-color: red");
+          String s = erreurs.get(6).toString();
+          String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+          s = newS.replace("_", " ");
+          Label l = new Label(s + " | ");
+          l.setStyle("-fx-text-fill : red");
+          hErreurs.getChildren().add(l);
+        } else {
+          textNombre.setStyle("-fx-border-color: black");
+        }
+      } else {
+        App.setScene(new EvenementsView());
+        newWindow.close();
+      }
+
+    });
 
     BtnAnnuler.setOnAction(e ->
 

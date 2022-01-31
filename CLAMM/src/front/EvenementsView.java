@@ -182,6 +182,18 @@ public class EvenementsView extends GridPane {
       view = new ImageView(img);
       view.setFitHeight(50);
       view.setPreserveRatio(true);
+      
+      img = new Image("img/ic_action_group.png");
+      view = new ImageView(img);
+      view.setFitHeight(50);
+      view.setPreserveRatio(true);
+      
+      Button btnParticipants = new Button();
+      btnParticipants.setGraphic(view);
+      
+      btnParticipants.setOnMouseClicked(a -> {
+        new ParticipationsView(m);
+      });
 
       Button btnModifier = new Button();
       btnModifier.setGraphic(view);
@@ -198,7 +210,7 @@ public class EvenementsView extends GridPane {
       
       String nbPers = m.getNbMaxPersonnes()+ " personnes au maximum";
       
-      fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getType().toString()), new Label(date), new Label(m.getLieu()), new Label(nbPers), new Label(m.getDescriptif()), hBoutons);
+      fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getType().toString()), new Label(date), new Label(m.getLieu()), new Label(nbPers), new Label(m.getDescriptif()), btnParticipants, hBoutons);
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });

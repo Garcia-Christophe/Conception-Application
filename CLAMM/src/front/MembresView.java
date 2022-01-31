@@ -1,8 +1,5 @@
 package front;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import gestion.membres.Membre;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -55,7 +52,14 @@ public class MembresView extends GridPane {
     row70.setPercentHeight(70);
     getRowConstraints().addAll(row20, row10, row70);
     
-    //header
+    /*
+    GridPane head = new GridPane();
+    ColumnConstraints col33 = new ColumnConstraints();
+    col.setPercentWidth(100/3);
+    getColumnConstraints().addAll(col33, col33, col33);
+    */
+    
+    //header    
     HBox paneMembre = new HBox();
     paneMembre.setStyle("-fx-background-color: #85B9DE;");
     paneMembre.getStyleClass().add("hover");
@@ -197,9 +201,9 @@ public class MembresView extends GridPane {
       hBoutons.getChildren().addAll(btnSuppr, btnModifier);
       
       String nomPrenom = m.getPrenom()+ " "+ m.getNom();
-      LocalDate dateNaissance = m.getDateNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      String age = Period.between(dateNaissance, LocalDate.now()).getYears()+ " ans";
-      fiche.getChildren().addAll(new Label(m.getPseudo()), new Label(nomPrenom), new Label(age),new Label(m.getMail()), hBoutons);
+      //LocalDate dateNaissance = m.getDateNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+      //String age = Period.between(dateNaissance, LocalDate.now()).getYears()+ " ans";
+      fiche.getChildren().addAll(new Label(m.getPseudo()), new Label(nomPrenom),new Label(m.getMail()), hBoutons);
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });
