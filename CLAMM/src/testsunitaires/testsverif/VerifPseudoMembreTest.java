@@ -50,6 +50,12 @@ public class VerifPseudoMembreTest {
   }
 
   @Test
+  @DisplayName("Test unPseudo égal à  \"un espace\"")
+  void testAvecEspace() {
+    assertEquals(CodeErreur.PSEUDO_INVALIDE, uneVerif.verifPseudoMembre("un espace"));
+  }
+  
+  @Test
   @DisplayName("Test unPseudo égal à 'pseudo-9c'")
   void testCorrect9car() {
     assertEquals(null, uneVerif.verifPseudoMembre("pseudo-9c"));
