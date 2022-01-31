@@ -68,7 +68,11 @@ public class Gestion {
   public Gestion() throws SQLException {
     this.uneVerif = new Verif();
     this.prochainIdEvenement = 1;
-    this.setCodesErreurs(new ArrayList<CodeErreur>());
+    ArrayList<CodeErreur> err = new ArrayList<CodeErreur>();
+    for(int i=0; i<8 ;i++) {
+      err.add(CodeErreur.NO_ERROR);
+    }
+    this.setCodesErreurs(err);
     this.bdd = new BaseDeDonnees();
     this.setListeMembres(new ArrayList<Membre>());
     this.bdd.initMembre(this);
@@ -140,7 +144,6 @@ public class Gestion {
 
     Evenement unEvenement = new Evenement();
 
-    this.codesErreurs.clear();
 
     CodeErreur codeErreur = null;
 
@@ -335,7 +338,7 @@ public class Gestion {
         this.codesErreurs.set(8, CodeErreur.SUPPRESSION_EVENEMENT_IMPOSSIBLE);
       }
     } else {
-      this.codesErreurs.clear();
+      
       this.codesErreurs.set(0, CodeErreur.EVENEMENT_INTROUVABLE);
       res = getCodesErreurs();
     }
@@ -364,7 +367,7 @@ public class Gestion {
   public ArrayList<CodeErreur> modifierEvenement(int unId, String unNom, String unDescriptif,
       String uneImage, Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
     ArrayList<CodeErreur> res = null;
-    this.codesErreurs.clear();
+    
 
     Evenement evenementAModifier = this.getEvenement(unId);
 
@@ -453,7 +456,6 @@ public class Gestion {
   private Membre creerMembre(String unPseudo, String unNom, String unPrenom, String unLieuNaissance,
       Date uneDateNaissance, String uneVille, String unMail, String unMotDePasse) {
     Membre membre = new Membre();
-    this.codesErreurs.clear();
     CodeErreur codeErreur = null;
 
     // Définition du nouveau pseudo du membre
@@ -593,7 +595,6 @@ public class Gestion {
         res = this.getCodesErreurs(); // renvoie la liste des codes erreurs
       }
     } else {
-      this.codesErreurs.clear();
       this.codesErreurs.set(0, CodeErreur.PSEUDO_DEJA_EXISTANT);
       res = this.getCodesErreurs();
     }
@@ -633,7 +634,6 @@ public class Gestion {
         this.codesErreurs.set(8, CodeErreur.SUPPRESSION_MEMBRE_IMPOSSIBLE);
       }
     } else {
-      this.codesErreurs.clear();
       this.codesErreurs.set(0, CodeErreur.MEMBRE_INTROUVABLE);
       res = this.getCodesErreurs();
     }
@@ -671,7 +671,6 @@ public class Gestion {
       String unMotDePasse) {
 
     ArrayList<CodeErreur> res = null;
-    this.codesErreurs.clear();
 
     Membre membreAModifier = this.getMembre(unPseudo);
 
