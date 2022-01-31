@@ -1,4 +1,4 @@
-package testsunitaire.testsgestionmembre;
+package testsunitaires.testsgestionmembre;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package testsunitaire.testsevenement;
+package testsunitaires.testsevenement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
