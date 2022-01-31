@@ -30,7 +30,8 @@ public class BaseDeDonnees {
   /**
    * Constructeur de la BaseDeDonnées.
    * 
-   * <p>Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
+   * <p>
+   * Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
    * SQL.
    * 
    * @throws SQLException si la connexion échoue
@@ -161,9 +162,9 @@ public class BaseDeDonnees {
             + " VALUES (" + '"' + m.getPseudo() + '"' + "," + '"' + m.getNom() + '"' + "," + '"'
             + m.getPrenom() + '"' + "," + '"' + m.getLieuNaissance() + '"' + "," + "DATE_FORMAT("
             + '"' + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-"
-            + m.getDateNaissance().getMonth() + "-" + m.getDateNaissance().getDate() + '"' + ","
-            + '"' + "%Y-%m-%d" + '"' + ")," + '"' + m.getVille() + '"' + "," + '"' + m.getMail()
-            + '"' + "," + '"' + m.getMotDePasse() + '"' + ")";
+            + (m.getDateNaissance().getMonth() + 1) + "-" + m.getDateNaissance().getDate() + '"'
+            + "," + '"' + "%Y-%m-%d" + '"' + ")," + '"' + m.getVille() + '"' + "," + '"'
+            + m.getMail() + '"' + "," + '"' + m.getMotDePasse() + '"' + ")";
     try {
       sqlStatement.executeUpdate(query);
     } catch (SQLException e) {
@@ -203,7 +204,7 @@ public class BaseDeDonnees {
         "INSERT INTO EVENEMENT (id,nom,descriptif,image,date,lieu,nbMaxPersonnes,type) VALUES ("
             + '"' + e.getId() + '"' + "," + '"' + e.getNom() + '"' + "," + '"' + e.getDescriptif()
             + '"' + "," + '"' + e.getImage() + '"' + "," + "DATE_FORMAT(" + '"'
-            + (e.getDate().getYear() + ANNEE_SUP) + "-" + e.getDate().getMonth() + "-"
+            + (e.getDate().getYear() + ANNEE_SUP) + "-" + (e.getDate().getMonth() + 1) + "-"
             + e.getDate().getDate() + " " + e.getDate().getHours() + ":" + e.getDate().getMinutes()
             + ":" + e.getDate().getSeconds() + '"' + "," + '"' + "%Y-%m-%d %H:%i:%s" + '"' + "),"
             + '"' + e.getLieu() + '"' + "," + '"' + e.getNbMaxPersonnes() + '"' + "," + '"'
