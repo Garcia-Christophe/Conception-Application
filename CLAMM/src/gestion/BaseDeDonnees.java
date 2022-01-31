@@ -152,6 +152,7 @@ public class BaseDeDonnees {
    * Ajoute un membre à la base de données, en exécutant une requête SQL "INSERT".
    * 
    * @param m le membre à ajouter dans la base de données
+   * @return true si l'ajout à la base de données fonctionne sinon false.
    */
   public boolean ajouterMembre(Membre m) {
     boolean res = true;
@@ -194,6 +195,7 @@ public class BaseDeDonnees {
    * Ajoute un événement à la base de données, en exécutant une requête SQL "INSERT".
    * 
    * @param e l'événement à ajouter dans la base de données
+   * @return true si l'ajout à la base de données fonctionne sinon false.
    */
   public boolean ajouterEvenement(Evenement e) {
     boolean res = true;
@@ -221,6 +223,7 @@ public class BaseDeDonnees {
    * Supprime un événement de la base de données, en exécutant une requête SQL "DELETE".
    * 
    * @param unId identifiant de l'événement à supprimer
+   * @return true si la suppression à la base de données fonctionne sinon false.
    */
   public boolean supprimerEvenement(int unId) {
     boolean res = true;
@@ -242,6 +245,7 @@ public class BaseDeDonnees {
    * Supprime un membre de la base de données, en exécutant une requête SQL "DELETE".
    * 
    * @param unPseudo pseudo du membre à supprimer
+   * @return true si la suppression à la base de données fonctionne sinon false.
    */
   public boolean supprimerMembre(String unPseudo) {
     boolean res = true;
@@ -266,6 +270,7 @@ public class BaseDeDonnees {
    * 
    * @param pseudo pseudo du membre à modifier
    * @param m membre contenant les données à modifier
+   * @return true si la modification à la base de données fonctionne sinon false.
    */
   @SuppressWarnings("deprecation")
   public boolean modifierMembre(String pseudo, Membre m) {
@@ -293,6 +298,7 @@ public class BaseDeDonnees {
    * 
    * @param id identifiant de l'événement à modifier
    * @param e événement contenant les données à modifier
+   * @return true si la modification à la base de données fonctionne sinon false.
    */
   @SuppressWarnings("deprecation")
   public boolean modifierEvenement(int id, Evenement e) {
