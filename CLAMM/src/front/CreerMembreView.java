@@ -2,6 +2,7 @@ package front;
 
 import gestion.CodeErreur;
 import gestion.membres.Membre;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -87,7 +89,7 @@ public class CreerMembreView {
     Label lDate = new Label("Date de naissance");
     DatePicker textDate = new DatePicker();
     Label lMdp = new Label("Mot de passe");
-    TextField textMdp = new TextField();
+    PasswordField textMdp = new PasswordField();
     vGauche.setSpacing(10);
     vGauche.getChildren().addAll(lPseudo, textPseudo, lNom, textNom, lDate, textDate, lMdp,
         textMdp);
@@ -102,7 +104,7 @@ public class CreerMembreView {
     Label lVille = new Label("Ville");
     TextField textVille = new TextField();
     Label lConfirm = new Label("Confirmation de mot de passe");
-    TextField textConfirm = new TextField();
+    PasswordField textConfirm = new PasswordField();
     vDroite.setSpacing(10);
     vDroite.getChildren().addAll(lAdresse, textAdresse, lPrenom, textPrenom, lVille, textVille,
         lConfirm, textConfirm);
@@ -111,8 +113,11 @@ public class CreerMembreView {
       textPseudo.setText(m[0].getPseudo());
       textNom.setText(m[0].getNom());
       textPrenom.setText(m[0].getPrenom());
-      LocalDate d =
-          m[0].getDateNaissance().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+      java.util.Date utilDate = new java.util.Date(m[0].getDateNaissance().getTime());
+
+      LocalDate d = utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
       textDate.setValue(d);
       textAdresse.setText(m[0].getMail());
       textVille.setText(m[0].getVille());
@@ -150,66 +155,131 @@ public class CreerMembreView {
     grid.add(PaneButtons, 1, 2, 1, 1);
     grid.add(hErreurs, 0, 1, 2, 1);
 
-    if (m.length == 0) {
-      BtnAjouter.setOnAction(e -> {
-        if (textMdp.getText().equals(textConfirm.getText())) {
+    BtnAjouter.setOnAction(e -> {
+      if (textMdp.getText().equals(textConfirm.getText())) {
+        textConfirm.setStyle("-fx-border-color: black");
 
-          Date date = null;
-          if (textDate.getValue() != null) { // si une date, parse en type date, sinon null par
-                                             // défaut
-            date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-          }
+        Date date = null;
+        if (textDate.getValue() != null) { // si une date, parse en type date, sinon null par
+                                           // défaut
+          date = Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
 
-          if ((App.getGestion().ajouterMembre(textPseudo.getText(), textNom.getText(),
+        if(m.length == 0) {
+          App.getGestion().ajouterMembre(textPseudo.getText(), textNom.getText(),
               textPrenom.getText(), textVille.getText(), date, textVille.getText(),
-              textAdresse.getText(), textMdp.getText())) != null) {
+              textAdresse.getText(), textMdp.getText());
+        }else {
+          App.getGestion().modifierMembre(textPseudo.getText(), textNom.getText(),textPrenom.getText(),
+              textVille.getText(), date, textVille.getText(),textAdresse.getText(), textMdp.getText());
+        }
 
-            hErreurs.getChildren().clear();
-            hErreurs.getChildren().add(lErreur);
-            
-            ArrayList<String> erreurs = new ArrayList<String>();
-            
-            for (CodeErreur err : App.getGestion().getCodesErreurs()) {
-              erreurs.add(err.toString());
-              
-              String s = err.toString();
-              String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
-              s = newS.replace("_", " ");
-              Label l = new Label(s + " | ");
-              l.setStyle("-fx-text-fill : red");
-              hErreurs.getChildren().add(l);
-            }
-            
-          } else {
-            App.setScene(new MembresView());
-            newWindow.close();
+        Boolean error = false;
+
+        ArrayList<String> erreurs = new ArrayList<String>();
+
+        for (CodeErreur err : App.getGestion().getCodesErreurs()) {
+          erreurs.add(err.toString());
+          if (err.toString() != "NO_ERROR") {
+            error = true;
           }
+        }
 
-        } else {
+        if (error) {
           hErreurs.getChildren().clear();
-          hErreurs.getChildren().add(lErreur);
-          Label lTxtErrMdp = new Label("Erreur confirmation mot de passe |");
-          lTxtErrMdp.setStyle("-fx-text-fill : red");
-          hErreurs.getChildren().add(lTxtErrMdp);
-        }
-      });
-    } else {
-      BtnAjouter.setOnAction(e -> {
-        if (textMdp.getText().equals(textConfirm.getText())) {
-          Date date =
-              Date.from(textDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-          if (App.getGestion().modifierMembre(textPseudo.getText(), textNom.getText(),
-              textPrenom.getText(), textVille.getText(), date, textVille.getText(),
-              textAdresse.getText(), textMdp.getText()) != null) {
-            // TODO afficher les erreurs
+          if (erreurs.get(0) != "NO_ERROR") {
+            textPseudo.setStyle("-fx-border-color: red");
+            String s = erreurs.get(0).toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
           } else {
-            App.setScene(new MembresView());
-            newWindow.close();
+            textPseudo.setStyle("-fx-border-color: black");
           }
+          if (erreurs.get(1) != "NO_ERROR") {
+            String s = erreurs.get(1).toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
+            textNom.setStyle("-fx-border-color: red");
+          } else {
+            textNom.setStyle("-fx-border-color: black");
+          }
+          if (erreurs.get(2) != "NO_ERROR") {
+            String s = erreurs.get(2).toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
+            textPrenom.setStyle("-fx-border-color: red");
+          } else {
+            textPrenom.setStyle("-fx-border-color: black");
+          }
+          if (erreurs.get(3) != "NO_ERROR") {
+            String s = erreurs.get(3).toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
+            textVille.setStyle("-fx-border-color: red");
+          } else {
+            textVille.setStyle("-fx-border-color: black");
+          }
+          if (erreurs.get(4) != "NO_ERROR") {
+            String s = erreurs.get(4).toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
+            textDate.setStyle("-fx-border-color: red");
+          } else {
+            textDate.setStyle("-fx-border-color: black");
+          }
+          if (erreurs.get(6) != "NO_ERROR") {
+            String s = erreurs.get(6).toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
+            textAdresse.setStyle("-fx-border-color: red");
+          } else {
+            textAdresse.setStyle("-fx-border-color: black");
+          }
+          if (erreurs.get(7) != "NO_ERROR") {
+            String s = erreurs.get(7).toString();
+            String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+            s = newS.replace("_", " ");
+            Label l = new Label(s + " | ");
+            l.setStyle("-fx-text-fill : red");
+            hErreurs.getChildren().add(l);
+            textMdp.setStyle("-fx-border-color: red");
+            textConfirm.setStyle("-fx-border-color: red");
+          } else {
+            textMdp.setStyle("-fx-border-color: black");
+            textConfirm.setStyle("-fx-border-color: black");
+          }
+        } else {
+          App.setScene(new MembresView());
+          newWindow.close();
         }
-      });
-    }
+
+      } else {
+        textConfirm.setStyle("-fx-border-color: red");
+        hErreurs.getChildren().clear();
+        Label lTxtErrMdp = new Label("Erreur confirmation mot de passe |");
+        lTxtErrMdp.setStyle("-fx-text-fill : red");
+        hErreurs.getChildren().add(lTxtErrMdp);
+      }
+    });
+
 
     BtnAnnuler.setOnAction(e -> {
       newWindow.close();

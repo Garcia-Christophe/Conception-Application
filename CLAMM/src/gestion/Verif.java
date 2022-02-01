@@ -149,7 +149,7 @@ public class Verif {
 
     if (unDescriptif == null) {
       res = CodeErreur.DESCRIPTIF_NULL;
-    } else if (unDescriptif != "" && (unDescriptif.charAt(0) == ' '
+    } else if (unDescriptif.length() > 0 && unDescriptif != "" && (unDescriptif.charAt(0) == ' '
         || unDescriptif.charAt(unDescriptif.length() - 1) == ' ')) {
       res = CodeErreur.DESCRIPTIF_ESPACE_EN_TROP;
     } else if (unDescriptif.length() > Verif.TAILLE_MAX_DESCRIPTIF_EVENEMENT) {
