@@ -394,7 +394,7 @@ public class Gestion {
           if (unEvenement == null) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
-            boolean modification = this.bdd.modifierEvenement(unId, unEvenement);
+            boolean modification = this.bdd.modifierEvenement(unEvenement);
 
             if (modification) {
               listeEvenements.set(i, unEvenement);
@@ -706,7 +706,7 @@ public class Gestion {
           if (unMembre == null) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
-            boolean modification = this.bdd.modifierMembre(unPseudo, unMembre);
+            boolean modification = this.bdd.modifierMembre(unMembre);
 
             if (modification) {
               listeMembres.set(i, unMembre);

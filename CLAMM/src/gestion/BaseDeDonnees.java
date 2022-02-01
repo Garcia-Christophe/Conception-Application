@@ -30,7 +30,8 @@ public class BaseDeDonnees {
   /**
    * Constructeur de la BaseDeDonnées.
    * 
-   * <p>Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
+   * <p>
+   * Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
    * SQL.
    * 
    * @throws SQLException si la connexion échoue
@@ -267,25 +268,23 @@ public class BaseDeDonnees {
   /**
    * Modifie un membre de la base de données, en exécutant une requête SQL "UPDATE".
    * 
-   * @param pseudo pseudo du membre à modifier
    * @param m membre contenant les données à modifier
    * @return true si la modification à la base de données fonctionne sinon false.
    */
   @SuppressWarnings("deprecation")
-  public boolean modifierMembre(String pseudo, Membre m) {
+  public boolean modifierMembre(Membre m) {
     boolean res = true;
     String query;
-    query = "UPDATE MEMBRE SET pseudo=" + '"' + m.getPseudo() + '"' + ", nom=" + '"' + m.getNom()
-        + '"' + ",prenom=" + '"' + m.getPrenom() + '"' + ",lieuNaissance=" + '"'
-        + m.getLieuNaissance() + '"' + ",dateNaissance=DATE_FORMAT(" + '"'
-        + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-" + m.getDateNaissance().getMonth() + "-"
-        + m.getDateNaissance().getDate() + '"' + "," + '"' + "%Y-%m-%d" + '"' + "),ville=" + '"'
-        + m.getVille() + '"' + ",mail=" + '"' + m.getMail() + '"' + ",motDePasse=" + '"'
-        + m.getMotDePasse() + '"' + " WHERE pseudo=" + '"' + pseudo + '"';
+    query = "UPDATE MEMBRE SET nom=" + '"' + m.getNom() + '"' + ",prenom=" + '"' + m.getPrenom()
+        + '"' + ",lieuNaissance=" + '"' + m.getLieuNaissance() + '"' + ",dateNaissance=DATE_FORMAT("
+        + '"' + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-" + m.getDateNaissance().getMonth()
+        + "-" + m.getDateNaissance().getDate() + '"' + "," + '"' + "%Y-%m-%d" + '"' + "),ville="
+        + '"' + m.getVille() + '"' + ",mail=" + '"' + m.getMail() + '"' + ",motDePasse=" + '"'
+        + m.getMotDePasse() + '"' + " WHERE pseudo=" + '"' + m.getPseudo() + '"';
     try {
       sqlStatement.executeUpdate(query);
     } catch (SQLException e) {
-      System.out.println("supression impossible de " + m.getPseudo());
+      System.out.println("Modification impossible de " + m.getPseudo());
       e.printStackTrace();
       res = false;
     }
@@ -295,23 +294,22 @@ public class BaseDeDonnees {
   /**
    * Modifie un événement de la base de données, en exécutant une requête SQL "UPDATE".
    * 
-   * @param id identifiant de l'événement à modifier
    * @param e événement contenant les données à modifier
    * @return true si la modification à la base de données fonctionne sinon false.
    */
   @SuppressWarnings("deprecation")
-  public boolean modifierEvenement(int id, Evenement e) {
+  public boolean modifierEvenement(Evenement e) {
     boolean res = true;
     String query;
-    query = "UPDATE EVENEMENT SET id=" + e.getId() + ", nom='" + e.getNom() + "', descriptif='"
-        + e.getDescriptif() + "', image='" + e.getImage() + "', date=DATE_FORMAT('"
+    query = "UPDATE EVENEMENT SET nom='" + e.getNom() + "', descriptif='" + e.getDescriptif()
+        + "', image='" + e.getImage() + "', date=DATE_FORMAT('"
         + (e.getDate().getYear() + ANNEE_SUP) + "-" + e.getDate().getMonth() + "-"
         + e.getDate().getDate() + "','%Y-%m-%d'), lieu='" + e.getLieu() + "', nbMaxPersonnes="
-        + e.getNbMaxPersonnes() + ", type='" + e.getType() + "' WHERE id=" + id;
+        + e.getNbMaxPersonnes() + ", type='" + e.getType() + "' WHERE id=" + e.getId();
     try {
       sqlStatement.executeUpdate(query);
     } catch (SQLException e2) {
-      System.out.println("supression impossible de evenement " + e.getId());
+      System.out.println("Modification impossible de " + e.getId());
       e2.printStackTrace();
       res = false;
     }
