@@ -12,6 +12,8 @@ var commentaire;
 var right;
 var divButtons;
 
+var error = document.createElement("p");
+
 document.addEventListener('DOMContentLoaded',function(){
     init();
 });
@@ -208,6 +210,7 @@ function rechercheEvenement(id){
 }
 
 function inscription(id, nbMax){
+    
     var nb= (nbPers.value=="") ? 0 : parseInt(nbPers.value);
     var comm= (commentaire.value==null) ? "" : commentaire.value;
     nbPers.value=nb;
@@ -218,7 +221,7 @@ function inscription(id, nbMax){
                 init();
             })
             .fail(function() {
-                var error = document.createElement("p");
+                right.removeChild(error);
                 error.style.color="red"
                 error.innerHTML="Erreur d'inscription : le nombre de personnes est trop petit (minimum 1) ou trop grand (maximum "+nbMax+") , et/ou le commentaire est trop long"
                 right.insertBefore(error,divButtons);
@@ -238,10 +241,11 @@ function modification(id, nbMax){
                 init();
             })
             .fail(function() {
-                var error = document.createElement("p");
-                error.style.color="red"
-                error.innerHTML="Erreur de modification : le nombre de personnes est trop petit (minimum 1) ou trop grand (maximum "+nbMax+") , et/ou le commentaire est trop long"
-                right.insertBefore(error,divButtons);
+                if(!(right.contains(error))){
+                    error.style.color="red"
+                    error.innerHTML="Erreur de modification : le nombre de personnes est trop petit (minimum 1) ou trop grand (maximum "+nbMax+") , et/ou le commentaire est trop long"
+                    right.insertBefore(error,divButtons);
+                }
             })
         });
 }
@@ -254,10 +258,11 @@ function desinscription(id){
                 init();
             })
             .fail(function() {
-                var error = document.createElement("p");
-                error.style.color="red"
-                error.innerHTML="Erreur de désinscription"
-                right.insertBefore(error,divButtons);
+                if(!(right.contains(error))){
+                    error.style.color="red"
+                    error.innerHTML="Erreur de désinscription"
+                    right.insertBefore(error,divButtons);
+                }
             })
         });
     }
