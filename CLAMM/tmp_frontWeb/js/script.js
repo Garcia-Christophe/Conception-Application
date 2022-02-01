@@ -1,11 +1,50 @@
-var mydata = '[{"id": "1","nom": "evenement 1","descriptif": "descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1descriptifTest1","date": "2025-02-02 00:00:00","lieu": "lieuTest1","nbMaxPersonnes": "27","type": "AG","inscrit": true,"nbInscrit": "18"}, {"id": "2","nom": "evenement 2","descriptif": "descriptifTest2","date": "2022-02-02 00:00:00","lieu": "lieuTest2","nbMaxPersonnes": "22","type": "AG","inscrit": false,"nbInscrit": "20"}]';
-var data = JSON.parse(mydata);
+var user=localStorage.getItem("user");  
 
+var myData;
+var events;
 var divEvenement;
 var checkboxInscrit;
+var data;
 
-var events;
+var nbPers;
+var commentaire;
 
+var right;
+var divButtons;
+
+document.addEventListener('DOMContentLoaded',function(){
+    init();
+});
+
+function init(){
+    $(document).ready(function($) {
+        $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/GetEvenements.php", { pseudoMembre: user })
+        .done(function( result ) {
+            data=result;
+            divEvenement = document.getElementById("evenements");
+        checkboxInscrit = document.getElementById("checkboxInscrit");
+
+        fillEvents(false);
+        afficheEvent();
+
+        checkboxInscrit.addEventListener('change', function() {
+            if (this.checked) {
+                fillEvents(true);
+                afficheEvent();
+            } else {
+                fillEvents(false);
+                afficheEvent();
+            }
+        });
+        })
+        .fail(function() {
+            console.log("error");
+        }); 
+
+        });
+}
+
+//filtrer evenement inscrit
 function fillEvents(inscrit){
     events = [];
     if(!inscrit){
@@ -19,6 +58,7 @@ function fillEvents(inscrit){
     }
 }
 
+//afficher la liste des evenements
 function afficheEvent(){
 
     divEvenement.innerHTML = "";    
@@ -99,36 +139,60 @@ function rechercheEvenement(id){
     left.appendChild(adresse);
     left.appendChild(description);
 
-    var right = document.createElement("div");
+    right = document.createElement("div");
     right.classList.add("right");
 
     var labelNbPers = document.createElement("label");
     labelNbPers.innerHTML = "Combien de personnes serez vous ?"
 
-    var nbPers = document.createElement("input");
+    nbPers = document.createElement("input");
     nbPers.type = "number";
 
     var labelCommentaire = document.createElement("label");
     labelCommentaire.innerHTML = "Un commentaire ?"
 
-    var commentaire = document.createElement("textarea");
+    commentaire = document.createElement("textarea");
 
-    var divButtons = document.createElement("div");
+    divButtons = document.createElement("div");
     var btnAnnuler = document.createElement("button");
     btnAnnuler.setAttribute("onclick","fermeEvenement(event"+id+")");
     btnAnnuler.innerHTML = "Annuler";
 
-    var btnConfirm = document.createElement("button");
-    btnConfirm.setAttribute("onclick","fermeEvenement(event"+id+")");
     if(events[i]["inscrit"] == true){
-        btnConfirm.innerHTML = "Modifier";
+        var btnModification = document.createElement("button");
+        btnModification.innerHTML = "Modifier";
+
+        var btnDesinscription = document.createElement("button");
+        btnDesinscription.innerHTML = "Desinscription";
+        btnDesinscription.setAttribute("onclick","desinscription("+events[i]["id"]+")");
     }else{
-        btnConfirm.innerHTML = "Inscription";
+        var btnInscription = document.createElement("button");
+        btnInscription.innerHTML = "Inscription";
+        btnInscription.setAttribute("onclick","inscription("+events[i]["id"]+","+(events[i]["nbMaxPersonnes"]-events[i]["nbInscrit"])+")");
+    }
+
+    if(events[i]["inscrit"] == true){
+        $(document).ready(function($) {
+            $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/GetParticipation.php", { pseudoMembre: user , idEvenement : events[i]["id"]})
+            .done(function( result ) {
+                nbPers.value=result["nbInscrit"]
+                commentaire.value=result["informations"]
+                btnModification.setAttribute("onclick","modification("+events[i]["id"]+","+(events[i]["nbMaxPersonnes"]-events[i]["nbInscrit"]+parseInt(nbPers.value))+")");
+            })
+            .fail(function() {
+                console.log("error");
+            })
+        });
     }
 
     divButtons.appendChild(btnAnnuler);
-    divButtons.appendChild(btnConfirm);
-
+    if(events[i]["inscrit"] == true){
+        divButtons.appendChild(btnModification);
+        divButtons.appendChild(btnDesinscription);
+    }else{
+        divButtons.appendChild(btnInscription);
+    }
+    
     right.appendChild(labelNbPers);
     right.appendChild(nbPers);
     right.appendChild(labelCommentaire);
@@ -143,20 +207,58 @@ function rechercheEvenement(id){
     divEvenement.appendChild(parent);
 }
 
-document.addEventListener('DOMContentLoaded',function(){
-    divEvenement = document.getElementById("evenements");
-    checkboxInscrit = document.getElementById("checkboxInscrit");
+function inscription(id, nbMax){
+    var nb= (nbPers.value=="") ? 0 : parseInt(nbPers.value);
+    var comm= (commentaire.value==null) ? "" : commentaire.value;
+    nbPers.value=nb;
 
-    fillEvents(false);
-    afficheEvent();
+    $(document).ready(function($) {
+            $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/Inscription.php", { idEvenement : parseInt(id), pseudoMembre: user , nbInscrit : nb , informations : comm })
+            .done(function( result ) {
+                init();
+            })
+            .fail(function() {
+                var error = document.createElement("p");
+                error.style.color="red"
+                error.innerHTML="Erreur d'inscription : le nombre de personnes est trop petit (minimum 1) ou trop grand (maximum "+nbMax+") , et/ou le commentaire est trop long"
+                right.insertBefore(error,divButtons);
+            })
+        });
+}
 
-    checkboxInscrit.addEventListener('change', function() {
-        if (this.checked) {
-            fillEvents(true);
-            afficheEvent();
-        } else {
-            fillEvents(false);
-            afficheEvent();
-        }
-    });
-});
+function modification(id, nbMax){
+    var nb= (nbPers.value=="") ? 0 : parseInt(nbPers.value);
+    var comm= (commentaire.value==null) ? "" : commentaire.value;
+    nbPers.value=nb;
+
+    $(document).ready(function($) {
+            $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/Modification.php", { idEvenement : parseInt(id), pseudoMembre: user , nbInscrit : nb , informations : comm })
+            .done(function( result ) {
+                console.log(result);
+                init();
+            })
+            .fail(function() {
+                var error = document.createElement("p");
+                error.style.color="red"
+                error.innerHTML="Erreur de modification : le nombre de personnes est trop petit (minimum 1) ou trop grand (maximum "+nbMax+") , et/ou le commentaire est trop long"
+                right.insertBefore(error,divButtons);
+            })
+        });
+}
+
+function desinscription(id){
+    if (confirm('Etes-vous sûr de vouloir vous désinscrire ?')) {
+        $(document).ready(function($) {
+            $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/Suppression.php", { idEvenement : parseInt(id), pseudoMembre: user})
+            .done(function( result ) {
+                init();
+            })
+            .fail(function() {
+                var error = document.createElement("p");
+                error.style.color="red"
+                error.innerHTML="Erreur de désinscription"
+                right.insertBefore(error,divButtons);
+            })
+        });
+    }
+    }
