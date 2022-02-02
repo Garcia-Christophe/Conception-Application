@@ -46,10 +46,17 @@ public class App extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     gestion =  new Gestion();
+    
     App.stage = stage;
 
     Scene scene = new Scene(grid);
-    setScene(new MembresView());
+    
+    if(gestion.getConnexionReussie() == 0) {
+      setScene(new ErreurConnexionView());
+    }else {
+      setScene(new MembresView());
+    }
+    
 
     stage.setScene(scene);
 
@@ -64,6 +71,9 @@ public class App extends Application {
     stage.show();
     stage.setTitle("CLAMM");
     stage.setMaximized(true);
+    
+    stage.setMinHeight(stage.getHeight()/1.5);
+    stage.setMinWidth(stage.getWidth()/1.5);
   }
 
   /**

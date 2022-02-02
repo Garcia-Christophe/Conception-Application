@@ -21,6 +21,11 @@ import java.util.Date;
  * @see gestion.evenements.Evenement
  */
 public class Gestion {
+  
+  /**
+   * Variable pour attester le la bonne connexion à la base de données
+   */
+  private int connexionReussie = 1;
 
   /**
    * Instance de la classe Verif, pour la vérification des éléments des Membre et Evenement.
@@ -74,6 +79,11 @@ public class Gestion {
     }
     this.setCodesErreurs(err);
     this.bdd = new BaseDeDonnees();
+
+    if(this.bdd.connection == null) {
+      this.connexionReussie = 0;
+    }
+    
     this.setListeMembres(new ArrayList<Membre>());
     this.bdd.initMembre(this);
     this.setListeEvenements(new ArrayList<Evenement>());
@@ -91,6 +101,15 @@ public class Gestion {
     if (uneListe != null) {
       this.codesErreurs = uneListe;
     }
+  }
+  
+  /**
+   * Retourne la variable connexionReussie, 0 en cas d'échec, 1 sinon
+   *
+   * @return connexionReussie.
+   */
+  public int getConnexionReussie() {
+    return this.connexionReussie;
   }
 
   /**

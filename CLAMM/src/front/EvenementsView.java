@@ -183,13 +183,13 @@ public class EvenementsView extends GridPane {
       view.setFitHeight(50);
       view.setPreserveRatio(true);
       
-      img = new Image("img/ic_action_group.png");
-      view = new ImageView(img);
-      view.setFitHeight(50);
-      view.setPreserveRatio(true);
+      Image img2 = new Image("img/ic_action_group.png");
+      ImageView view2 = new ImageView(img2);
+      view2.setFitHeight(50);
+      view2.setPreserveRatio(true);
       
       Button btnParticipants = new Button();
-      btnParticipants.setGraphic(view);
+      btnParticipants.setGraphic(view2);
       
       btnParticipants.setOnMouseClicked(a -> {
         new ParticipationsView(m);

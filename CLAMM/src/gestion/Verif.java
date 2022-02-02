@@ -341,14 +341,14 @@ public class Verif {
 
       // Vérifie tous les cas interdits
       while (i < lieu.length()) {
-        System.out.println(lieu.charAt(i));
+        //System.out.println(lieu.charAt(i));
         Pattern p = Pattern.compile("[a-zA-Z]");
         Matcher m = p.matcher(String.valueOf(lieu.charAt(i)));
         
         if (lieu.charAt(i) != ' ' && !m.matches()) {
           res = numero == 0 ? CodeErreur.LIEU_NOM_INCORRECT : CodeErreur.VILLE_NOM_INCORRECT;
         }
-        System.out.println("res = " + res);
+        //System.out.println("res = " + res);
         i++;
       }
     } else {

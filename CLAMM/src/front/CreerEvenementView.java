@@ -61,6 +61,9 @@ public class CreerEvenementView {
     newWindow.setScene(secondScene);
 
     newWindow.show();
+    
+    newWindow.setMinHeight(newWindow.getHeight()/1.5);
+    newWindow.setMinWidth(newWindow.getWidth()/1.5);
 
     // création des colonnes
     ColumnConstraints col = new ColumnConstraints();

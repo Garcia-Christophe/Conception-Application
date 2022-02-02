@@ -63,6 +63,9 @@ public class CreerMembreView {
     newWindow.setScene(secondScene);
 
     newWindow.show();
+    
+    newWindow.setMinHeight(newWindow.getHeight()/1.5);
+    newWindow.setMinWidth(newWindow.getWidth()/1.5);
 
     // création des colonnes
     ColumnConstraints col = new ColumnConstraints();
@@ -111,6 +114,8 @@ public class CreerMembreView {
 
     if (m.length != 0) {
       textPseudo.setText(m[0].getPseudo());
+      textPseudo.setStyle("-fx-background-color : #C0C0C0");
+      textPseudo.setEditable(false);
       textNom.setText(m[0].getNom());
       textPrenom.setText(m[0].getPrenom());
 

@@ -3,6 +3,7 @@ package front;
 import gestion.CodeErreur;
 import gestion.evenements.Evenement;
 import gestion.membres.Membre;
+import gestion.participation.Participation;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -14,8 +15,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -48,21 +54,34 @@ public class ParticipationsView {
    *        membres, seul le premier est utilisé pour la modification.
    */
   public ParticipationsView(Evenement e) {
-    System.out.println(App.getGestion().getListeMembresParticipation(e.getId()).get(0)); 
 
     // setup de la nouvelle fenêtre
-    GridPane grid = new GridPane();
+    
+    ListView<String> list = new ListView<String>();
+   
 
     Scene secondScene =
-        new Scene(grid, App.getStage().getWidth() / 2, App.getStage().getHeight() / 2);
+        new Scene(list, App.getStage().getWidth() / 2, App.getStage().getHeight() / 2);
     // New window (Stage)
     Stage newWindow = new Stage();
 
-    newWindow.setTitle("Participations à l'évènement");
+    newWindow.setTitle("Participants à l'évènement '"+e.getNom()+"'");
 
     newWindow.setScene(secondScene);
+    
+    newWindow.setMinHeight(newWindow.getHeight()/1.5);
+    newWindow.setMinWidth(newWindow.getWidth()/1.5);
 
     newWindow.show();
+    if(App.getGestion().getListeMembresParticipation(e.getId()).size()>0) {
+      System.out.println("Y a des membres");
+      for (Participation p : App.getGestion().getListeMembresParticipation(e.getId())) {
+        
+        String s = p.getMembre().getPseudo()+" | "+p.getMembre().getPrenom()+" | "+p.getMembre().getPrenom();
+        
+        list.getItems().add(s);
+      }
+    }
 
   }
 
