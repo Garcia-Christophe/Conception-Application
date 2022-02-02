@@ -9,8 +9,7 @@ import java.util.regex.Pattern;
  * La classe Verif permet de vérifier la validité des éléments de {@link gestion.membres.Membre} et
  * de {@link getsion.evenements.Evenement}.
  * 
- * <p>
- * Chaque méthode permet de vérifier un ou plusieurs attributs, suivant les règles établies pour
+ * <p>Chaque méthode permet de vérifier un ou plusieurs attributs, suivant les règles établies pour
  * chacun. Les méthodes retournent {@code null} si le paramètre correspond aux régles, une erreur de
  * {@link CodeErreur} sinon.
  * 
@@ -85,8 +84,7 @@ public class Verif {
   /**
    * Vérifier la validité de l'identifiant de l'événement.
    * 
-   * <p>
-   * L'identifiant doit être supérieur à 0.
+   * <p>L'identifiant doit être supérieur à 0.
    * 
    * @param unId l'identifiant de l'évènement que l'on veut vérifier
    * @return {@code null} si l'id est conforme, sinon CodeErreur.ID_NEGATIF si l'id est inférieur ou
@@ -105,8 +103,7 @@ public class Verif {
   /**
    * Vérifier la validité du nom de l'événement.
    * 
-   * <p>
-   * Le nom ne doit pas être {@code null}, être vide, commencer ou terminer par un espace, et
+   * <p>Le nom ne doit pas être {@code null}, être vide, commencer ou terminer par un espace, et
    * dépasser {@code TAILLE_MAX_NOM_EVENEMENT}.
    * 
    * @param unNom le nom de l'événement que l'on veut vérifier
@@ -134,9 +131,8 @@ public class Verif {
   /**
    * Vérifier la validité du descriptif de l'événement.
    * 
-   * <p>
-   * Le descriptif ne doit pas être {@code null}, commencer ou terminer par un espace, et dépasser
-   * {@code TAILLE_MAX_DESCRIPTIF}.
+   * <p>Le descriptif ne doit pas être {@code null}, commencer ou terminer par un 
+   * espace, et dépasser {@code TAILLE_MAX_DESCRIPTIF}.
    * 
    * @param unDescriptif le descriptif de l'événement que l'on veut vérifier
    * @return {@code null} si le descriptif est conforme, sinon CodeErreur.DESCRIPTIF_NULL si le
@@ -162,8 +158,7 @@ public class Verif {
   /**
    * Vérifier la validité de la date de l'événement.
    * 
-   * <p>
-   * La date ne doit pas être {@code null} ou antérieure à la date actuelle.
+   * <p>La date ne doit pas être {@code null} ou antérieure à la date actuelle.
    * 
    * @param uneDate la date de l'événement que l'on veut vérifier
    * @return {@code null} si la date est conforme, sinon CodeErreur.DATE_NULL si la date est
@@ -185,8 +180,7 @@ public class Verif {
   /**
    * Vérifier la validité du lieu de l'événement.
    * 
-   * <p>
-   * Le lieu ne doit pas être {@code null}, être vide, commencer ou terminer par un espace, et
+   * <p>Le lieu ne doit pas être {@code null}, être vide, commencer ou terminer par un espace, et
    * dépasser {@code TAILLE_MAX_LIEU_EVENEMENT}.
    * 
    * @param unLieu le lieu de l'événement que l'on veut vérifier
@@ -214,8 +208,7 @@ public class Verif {
   /**
    * Vérifier la validité du nombre maximum de personnes autorisées de l'événement.
    * 
-   * <p>
-   * Le nombre doit être strictement supérieur à 1.
+   * <p>Le nombre doit être strictement supérieur à 1.
    * 
    * @param unNbMaxPersonnes le nombre maximum de personnes autorisées de l'événement que l'on veut
    *        vérifier
@@ -234,8 +227,7 @@ public class Verif {
   /**
    * Vérifier la validité du type de l'événement.
    * 
-   * <p>
-   * Le type ne doit pas être {@code null}.
+   * <p>Le type ne doit pas être {@code null}.
    * 
    * @param unType le type de l'événement que l'on veut vérifier
    * @return {@code null} si le type est conforme, sinon CodeErreur.TYPE_NULL si le type est
@@ -252,9 +244,8 @@ public class Verif {
   /**
    * Vérifier la validité du pseudo du membre.
    * 
-   * <p>
-   * Le pseudo ne doit pas être {@code null}, être vide, dépasser {@code TAILLE_MAX_PSEUDO_MEMBRE},
-   * et contenir : espace<>|:/\"*?.
+   * <p>Le pseudo ne doit pas être {@code null}, être vide, dépasser 
+   * {@code TAILLE_MAX_PSEUDO_MEMBRE},et contenir : espace<>|:/\"*?.
    * 
    * @param unPseudo le pseudo du membre que l'on veut vérifier
    * @return {@code null} si le pseudo est conforme, sinon CodeErreur.PSEUDO_NULL si le pseudo est
@@ -294,8 +285,7 @@ public class Verif {
   /**
    * Vérifier la validité du nom et du prénom du membre.
    * 
-   * <p>
-   * Le nom et le prénom ne doivent pas être {@code null}, être vides, dépasser
+   * <p>Le nom et le prénom ne doivent pas être {@code null}, être vides, dépasser
    * {@code TAILLE_MAX_NOM_MEMBRE} en cas du nom et {@code TAILLE_MAX_PRENOM_MEMBRE} en cas du
    * prénom, et doivent contenir que des lettres de l'alphabet.
    * 
@@ -328,8 +318,7 @@ public class Verif {
   /**
    * Vérifier la validité du lieu de naissance et de la ville du membre.
    * 
-   * <p>
-   * Le lieu de naissance et la ville ne doivent pas être {@code null}, être vides, dépasser
+   * <p>Le lieu de naissance et la ville ne doivent pas être {@code null}, être vides, dépasser
    * {@code TAILLE_MAX_LIEU_MEMBRE}, et doivent contenir que des lettres de l'alphabet ou des
    * espaces.
    * 
@@ -359,7 +348,7 @@ public class Verif {
         if (lieu.charAt(i) != ' ' && !m.matches()) {
           res = numero == 0 ? CodeErreur.LIEU_NOM_INCORRECT : CodeErreur.VILLE_NOM_INCORRECT;
         }
-        System.out.println("res = "+res);
+        System.out.println("res = " + res);
         i++;
       }
     } else {
@@ -372,8 +361,7 @@ public class Verif {
   /**
    * Vérifier la validité de la date de naissance du membre.
    * 
-   * <p>
-   * La date ne doit pas être {@code null}, antérieure à la date actuelle -
+   * <p>La date ne doit pas être {@code null}, antérieure à la date actuelle -
    * {@code AGE_MAXIMUM_MEMBRE}, et postérieure à la date actuelle.
    * 
    * @param uneDateNaissance la date du membre que l'on veut vérifier
@@ -401,9 +389,8 @@ public class Verif {
   /**
    * Vérifier la validité de l'adresse mail du membre.
    * 
-   * <p>
-   * La mail ne doit pas être {@code null}, être vide, il doit être valide et de taille inférieure à
-   * {@code TAILLE_MAX_MAIL_MEMBRE}.
+   * <p>La mail ne doit pas être {@code null}, être vide, il doit être valide et de taille 
+   * inférieure à {@code TAILLE_MAX_MAIL_MEMBRE}.
    * 
    * @param unMail l'adresse mail du membre que l'on veut vérifier
    * @return {@code null} si le mail est conforme, sinon CodeErreur.MAIL_NULL si le mail est
@@ -438,8 +425,7 @@ public class Verif {
   /**
    * Vérifier la validité du mot de passe du membre.
    * 
-   * <p>
-   * Le mot de passe ne doit pas être {@code null}, doit être compris entre
+   * <p>Le mot de passe ne doit pas être {@code null}, doit être compris entre
    * {@code TAILLE_MIN_MDP_MEMBRE} et {@code TAILLE_MAX_MDP_MEMBRE}, doit contenir au moins une
    * majuscule, une minusule, un chiffre et un caractère spécial.
    * 

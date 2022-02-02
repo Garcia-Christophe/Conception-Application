@@ -11,10 +11,9 @@ import java.util.Date;
 /**
  * La classe Gestion permet de gérer tous les membres et tous les évènements.
  * 
- * <p>
- * La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. Elle contient
- * la liste de tous les membres, la liste de tous les évènements, ainsi que la liste de tous les
- * {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
+ * <p>La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. 
+ * Elle contient la liste de tous les membres, la liste de tous les évènements, ainsi que 
+ * la liste de tous les {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
  * 
  * @author Manon, Christophe
  * @version 2.00
@@ -61,9 +60,8 @@ public class Gestion {
   /**
    * Constructeur de la classe {@code Gestion}.
    * 
-   * <p>
-   * Initialise les listes de membres, événements et participations à partir des données de la base
-   * de données.
+   * <p>Initialise les listes de membres, événements et participations à partir des 
+   * données de la base de données.
    * 
    * @throws SQLException si la création de la {@link BaseDeDonnees} a échoué
    */
@@ -127,8 +125,7 @@ public class Gestion {
   /**
    * Créer un {@link gestion.evenements.Evenement}.
    * 
-   * <p>
-   * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code erreur
+   * <p>Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code erreur
    * est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
    * @param unId Identifiant de l'événement
@@ -235,8 +232,7 @@ public class Gestion {
    * Ajoute un {@link gestion.evenements.Evenement} à la liste des événements et dans la base de
    * données si pas déjà présent.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement
@@ -323,8 +319,7 @@ public class Gestion {
    * Supprime un {@link gestion.evenements.Evenement} de la liste des événements et de la base de
    * données si présent.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement à supprimer
@@ -361,8 +356,7 @@ public class Gestion {
    * Modifie un événement, si toutes les modifications sont possibles, de la liste des événements et
    * de la base de données si présent.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement
@@ -451,8 +445,7 @@ public class Gestion {
   /**
    * Crée un {@link gestion.membres.Membre}.
    * 
-   * <p>
-   * Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
+   * <p>Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
    * erreur dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
    * @param unPseudo pseudo du membre à créer
@@ -560,15 +553,13 @@ public class Gestion {
    * Ajoute un {@link gestion.membres.Membre} seulement s'il n'existe pas déjà, à la liste des
    * membres et à la base de données s'il est pas présent.
    * 
-   * <p>
-   * Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la liste
-   * des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, alors le
-   * code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
+   * <p>Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la 
+   * liste des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, 
+   * alors le code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
    * {@link #creerMembre(String, String, String, String, Date, String, String, String)} est réalisé
    * pour créer le membre avant de l'ajouter dans la liste des membres.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du nouveau membre
@@ -624,15 +615,14 @@ public class Gestion {
    * Supprime un {@link gestion.membres.Membre} de la liste des membres et de la base de données si
    * présent.
    * 
-   * <p>
-   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
-   * {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la liste des membres et
-   * ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé dans la liste
-   * des membres, alors renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
+   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec 
+   * la méthode {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la 
+   * liste des membres et ne renvoie aucun code erreur, renvoie {@code null}. 
+   * Si aucun membre n'est trouvé dans la liste des membres, alors renvoie le code erreur 
+   * {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
-   * à un {@link gestion.membres.Membre}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à un {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du membre à supprimer de la liste
    * @return {@code null} si la suppression du membre est un succès, une liste de {@link CodeErreur}
@@ -664,17 +654,16 @@ public class Gestion {
    * Modifie les données d'un {@link gestion.membres.Membre}, si et seulement si toutes les
    * modifications sont des succès, de la liste des membres et de la base de données si présent.
    * 
-   * <p>
-   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
-   * {@link #getMembre(String)}. Si aucun membre n'est trouvé dans la liste des membres, alors
-   * renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est trouvé,
+   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des 
+   * membres avec la méthode {@link #getMembre(String)}. Si aucun membre n'est 
+   * trouvé dans la liste des membres, alors renvoie le code erreur 
+   * {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est trouvé,
    * alors tente de modifier ses attributs. Si tous les attributs du membre ont été modifiés avec
    * succès, ne renvoie aucun code erreur, renvoie {@code null}, sinon renvoie la liste des codes
    * erreurs correspondantes.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
-   * à un {@link gestion.membres.Membre}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à un {@link gestion.membres.Membre}.
    *
    * @param unPseudo nouveau pseudo du membre
    * @param unNom nouveau nom du membre
@@ -736,8 +725,7 @@ public class Gestion {
   /**
    * Permet de retrouver un {@link gestion.membres.Membre} grâce à son pseudo {@code unPseudo}.
    * 
-   * <p>
-   * Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
+   * <p>Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
    * chacun des membres de la liste des membres avec celui passé en paramètre. Le parcours de la
    * liste s'arrête lorsque le membre ayant le même pseudo à été trouvé et renvoie le
    * {@link gestion.membres.Membre}, ou que la liste a été entièrement parcourue et renvoie
