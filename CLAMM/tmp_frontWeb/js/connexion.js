@@ -1,3 +1,7 @@
+if(localStorage.getItem("user")){
+    window.location.href="main.html"
+}
+
 var btn = document.getElementById("btn_conn");
 btn.onclick=connexion;
 var pseudo=document.getElementById("pseudo");
