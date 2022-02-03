@@ -222,8 +222,8 @@ function inscription(id, nbMax){
             })
             .fail(function() {
                 if(!(right.contains(error))){
-                    error.style.color="red"
                     error.innerHTML="Erreur d'inscription : le nombre de personnes est trop petit (minimum 1) ou trop grand (maximum "+nbMax+") , et/ou le commentaire est trop long"
+                    error.classList.add("erreurForm");
                     right.insertBefore(error,divButtons);
                 }
             })
@@ -243,8 +243,8 @@ function modification(id, nbMax){
             })
             .fail(function() {
                 if(!(right.contains(error))){
-                    error.style.color="red"
                     error.innerHTML="Erreur de modification : le nombre de personnes est trop petit (minimum 1) ou trop grand (maximum "+nbMax+") , et/ou le commentaire est trop long"
+                    error.classList.add("erreurForm");
                     right.insertBefore(error,divButtons);
                 }
             })

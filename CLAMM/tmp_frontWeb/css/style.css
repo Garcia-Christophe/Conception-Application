@@ -104,6 +104,10 @@ h3{
     border-radius: 50px;   
 }
 
+#btn_conn{
+    cursor: pointer;
+}
+
 /* Main */
 header{
     display: flex;
@@ -327,4 +331,9 @@ input::-webkit-inner-spin-button {
     margin-left: 2vh;
     border-color: black;
     cursor: pointer;
+}
+
+.erreurForm{
+    color: red;
+    margin: 5vh;
 }

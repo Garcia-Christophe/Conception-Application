@@ -8,6 +8,18 @@ error.style.color="red";
 var div=document.getElementById("connexion");
 var user="";
 
+document.querySelector('#pseudo').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      connexion();
+    }
+});
+
+document.querySelector('#mdp').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      connexion();
+    }
+});
+
 function connexion(){
     
         $(document).ready(function($) {
