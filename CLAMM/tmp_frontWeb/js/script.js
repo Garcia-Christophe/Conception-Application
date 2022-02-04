@@ -1,4 +1,18 @@
+
+if(!(localStorage.getItem("user"))){
+    window.location.href="index.html"
+}
+
 var user=localStorage.getItem("user");  
+
+
+var btn_deconnexion = document.getElementById("deconnexion");
+btn_deconnexion.onclick=deconnexion;
+
+function deconnexion(){
+    localStorage.removeItem("user");  
+    window.location.href="index.html"
+}
 
 var myData;
 var events;
@@ -24,20 +38,25 @@ function init(){
         .done(function( result ) {
             data=result;
             divEvenement = document.getElementById("evenements");
-        checkboxInscrit = document.getElementById("checkboxInscrit");
+            checkboxInscrit = document.getElementById("checkboxInscrit");
+            divBienvenue = document.getElementById("bienvenue");
+            textBienvenue = document.createElement("h3");
 
-        fillEvents(false);
-        afficheEvent();
+            textBienvenue.innerHTML="Bienvenue "+user;
+            divBienvenue.appendChild(textBienvenue);
 
-        checkboxInscrit.addEventListener('change', function() {
-            if (this.checked) {
-                fillEvents(true);
-                afficheEvent();
-            } else {
-                fillEvents(false);
-                afficheEvent();
-            }
-        });
+            fillEvents(false);
+            afficheEvent();
+
+            checkboxInscrit.addEventListener('change', function() {
+                if (this.checked) {
+                    fillEvents(true);
+                    afficheEvent();
+                } else {
+                    fillEvents(false);
+                    afficheEvent();
+                }
+            });
         })
         .fail(function() {
             console.log("error");
