@@ -129,9 +129,6 @@ public class Gestion {
    * @return la liste des événements.
    */
   public ArrayList<Evenement> getListeEvenements() {
-    this.listeEvenements.clear();
-    this.bdd.initEvenement(this);
-
     return listeEvenements;
   }
 
@@ -362,9 +359,10 @@ public class Gestion {
       boolean suppression = this.bdd.supprimerEvenement(unId);
 
       if (suppression) {
-        this.listeEvenements.clear();
-        this.bdd.initEvenement(this);
-
+        this.listeEvenements.remove(evenementASupprimer); // supprime le membre de la liste
+        for (Participation p : this.getListeMembresParticipation(unId)) {
+          this.listeParticipations.remove(p);
+        }
         this.codesErreurs.set(8, CodeErreur.NO_ERROR);
       } else {
         this.codesErreurs.set(8, CodeErreur.SUPPRESSION_EVENEMENT_IMPOSSIBLE);
@@ -418,12 +416,14 @@ public class Gestion {
             boolean modification = this.bdd.modifierEvenement(unEvenement);
 
             if (modification) {
-              this.listeEvenements.clear();
-              this.bdd.initEvenement(this);
+              listeEvenements.set(i, unEvenement);
 
-              this.listeParticipations.clear();
-              this.bdd.initParticipation(this);
-
+              // Modification de l'evenement present dans la liste des participations
+              for (Participation p : this.listeParticipations) {
+                if (p.getEvenement().getId() == unId) {
+                  p.setEvenement(unEvenement);
+                }
+              }
               this.codesErreurs.set(8, CodeErreur.NO_ERROR);
             } else {
               this.codesErreurs.set(8, CodeErreur.MODIFICATION_EVENEMENT_IMPOSSIBLE);
@@ -446,9 +446,6 @@ public class Gestion {
    * @return la liste des membres
    */
   public ArrayList<Membre> getListeMembres() {
-    this.listeMembres.clear();
-    this.bdd.initMembre(this);
-
     return this.listeMembres;
   }
 
@@ -669,9 +666,7 @@ public class Gestion {
       boolean suppression = this.bdd.supprimerMembre(membreASupprimer.getPseudo());
 
       if (suppression) {
-        this.listeMembres.clear();
-        this.bdd.initMembre(this);
-
+        this.listeMembres.remove(membreASupprimer); // supprime le membre de la liste
         this.codesErreurs.set(8, CodeErreur.NO_ERROR);
       } else {
         this.codesErreurs.set(8, CodeErreur.SUPPRESSION_MEMBRE_IMPOSSIBLE);
@@ -733,12 +728,14 @@ public class Gestion {
             boolean modification = this.bdd.modifierMembre(unMembre);
 
             if (modification) {
-              this.listeMembres.clear();
-              this.bdd.initMembre(this);
+              listeMembres.set(i, unMembre);
 
-              this.listeParticipations.clear();
-              this.bdd.initParticipation(this);
-
+              // Modification du membre present dans la liste des participations
+              for (Participation p : this.listeParticipations) {
+                if (p.getMembre().getPseudo().equals(unPseudo)) {
+                  p.setMembre(unMembre);
+                }
+              }
               this.codesErreurs.set(8, CodeErreur.NO_ERROR);
             } else {
               this.codesErreurs.set(8, CodeErreur.MODIFICATION_MEMBRE_IMPOSSIBLE);
@@ -796,9 +793,6 @@ public class Gestion {
    * @return la liste des participations
    */
   public ArrayList<Participation> getListeParticipations() {
-    this.listeParticipations.clear();
-    this.bdd.initParticipation(this);
-
     return listeParticipations;
   }
 
