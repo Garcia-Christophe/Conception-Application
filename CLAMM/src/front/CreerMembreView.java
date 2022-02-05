@@ -262,6 +262,7 @@ public class CreerMembreView {
             String s = erreurs.get(7).toString();
             String newS = s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
             s = newS.replace("_", " ");
+            s=s+", Requis : au moins 6 caractères, 1 caractère spécial, 1 chiffre, 1 majuscule, 1 minuscule";
             Label l = new Label(s + " | ");
             l.setStyle("-fx-text-fill : red");
             hErreurs.getChildren().add(l);

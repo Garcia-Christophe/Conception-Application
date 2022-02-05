@@ -4,6 +4,7 @@ import java.util.Date;
 import gestion.Gestion;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -46,6 +47,8 @@ public class App extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     gestion =  new Gestion();
+    
+    stage.getIcons().add(new Image("img/logo.png")); 
     
     App.stage = stage;
 

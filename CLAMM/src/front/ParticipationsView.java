@@ -77,7 +77,7 @@ public class ParticipationsView {
       System.out.println("Y a des membres");
       for (Participation p : App.getGestion().getListeMembresParticipation(e.getId())) {
         
-        String s = p.getMembre().getPseudo()+" | "+p.getMembre().getPrenom()+" | "+p.getMembre().getPrenom();
+        String s = p.getMembre().getPseudo()+" | "+p.getMembre().getPrenom()+" | "+p.getMembre().getNom();
         
         list.getItems().add(s);
       }
