@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 /**
  * La classe Verif permet de vérifier la validité des éléments de {@link gestion.membres.Membre} et
- * de {@link getsion.evenements.Evenement}.
+ * de {@link gestion.evenements.Evenement}.
  * 
  * <p>Chaque méthode permet de vérifier un ou plusieurs attributs, suivant les règles établies pour
  * chacun. Les méthodes retournent {@code null} si le paramètre correspond aux régles, une erreur de
