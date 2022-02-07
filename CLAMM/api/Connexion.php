@@ -33,21 +33,20 @@
         if (isset($_POST["pseudoMembre"]) && isset($_POST["motDePasse"])) {
 
             // Definition d'un prefixe pour le salage
-            // $prefixe = $_POST["pseudoMembre"];
+            $prefixe = $_POST["pseudoMembre"];
 
             // Definition d'un suffixe pour le salage (pseudoMembre a l'envers)
-            // $suffixe = "";
-            // for ($i = strlen($_POST["pseudoMembre"]) - 1; $i >= 0; $i--) {
-            //     $suffixe = $suffixe . $_POST["pseudoMembre"][$i];
-            // }
+            $suffixe = "";
+            for ($i = strlen($_POST["pseudoMembre"]) - 1; $i >= 0; $i--) {
+                $suffixe = $suffixe . $_POST["pseudoMembre"][$i];
+            }
 
             // Hachage du mot de passe sale
-            // $mdp = hash("sha256", $prefixe . $_POST["motDePasse"] . $suffixe);
-            $mdp = $_POST["motDePasse"]; // sans securite (temporaire)
+            $mdp = hash("sha256", $prefixe . $_POST["motDePasse"] . $suffixe);
 
             // Recuperation du mot de passe de la bdd grace au pseudoMembre
             // (le mot de passe n'existe pas si la saisie ne correspond a aucun pseudoMembre)
-            //instance de connexion à la base
+            // instance de connexion à la base
             $bdd = new BDD_Connexion();
             $dbc = $bdd->getConnexion();
             $query = "SELECT motDePasse FROM MEMBRE WHERE pseudo = '" . $_POST["pseudoMembre"] . "'";
