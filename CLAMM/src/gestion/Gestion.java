@@ -305,6 +305,8 @@ public class Gestion {
           }
 
           if (ajout) {
+            this.miseAJourListeEvenements(unId, unNom, unDescriptif, uneImage, uneDate, unLieu,
+                unNbMaxPersonnes, unType);
             this.codesErreurs.set(8, CodeErreur.NO_ERROR);
           } else {
             this.codesErreurs.set(8, CodeErreur.AJOUT_EVENEMENT_IMPOSSIBLE);
@@ -676,6 +678,8 @@ public class Gestion {
           }
 
           if (ajout) {
+            this.miseAJourListeMembres(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
+                uneVille, unMail, unMotDePasse);
             this.codesErreurs.set(8, CodeErreur.NO_ERROR);
           } else {
             this.codesErreurs.set(8, CodeErreur.AJOUT_MEMBRE_IMPOSSIBLE);
