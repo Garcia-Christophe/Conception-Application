@@ -621,15 +621,13 @@ public class Gestion {
     }
 
     // Si une des définitions est un échec, retourne un membre null
-    if (this.codesErreurs.get(0) != CodeErreur.NO_ERROR
-        || this.codesErreurs.get(1) != CodeErreur.NO_ERROR
-        || this.codesErreurs.get(2) != CodeErreur.NO_ERROR
-        || this.codesErreurs.get(3) != CodeErreur.NO_ERROR
-        || this.codesErreurs.get(4) != CodeErreur.NO_ERROR
-        || this.codesErreurs.get(5) != CodeErreur.NO_ERROR
-        || this.codesErreurs.get(6) != CodeErreur.NO_ERROR
-        || (this.codesErreurs.get(7) != CodeErreur.NO_ERROR
-            && this.codesErreurs.get(7) != CodeErreur.MDP_NULL && unMotDePasse.length() > 0)) {
+    boolean erreur = false;
+    for (int i = 0; i < this.codesErreurs.size(); i++) {
+      if (this.codesErreurs.get(i) != CodeErreur.NO_ERROR) {
+        erreur = true;
+      }
+    }
+    if (erreur) {
       membre = null;
     }
     return membre;
@@ -736,15 +734,7 @@ public class Gestion {
       membre = this.creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
           uneVille, unMail, unMotDePasse);
       // Si la création du membre est un succès
-      if (this.codesErreurs.get(0) != CodeErreur.NO_ERROR
-          || this.codesErreurs.get(1) != CodeErreur.NO_ERROR
-          || this.codesErreurs.get(2) != CodeErreur.NO_ERROR
-          || this.codesErreurs.get(3) != CodeErreur.NO_ERROR
-          || this.codesErreurs.get(4) != CodeErreur.NO_ERROR
-          || this.codesErreurs.get(5) != CodeErreur.NO_ERROR
-          || this.codesErreurs.get(6) != CodeErreur.NO_ERROR
-          || (this.codesErreurs.get(7) != CodeErreur.NO_ERROR
-              && this.codesErreurs.get(7) != CodeErreur.MDP_NULL && unMotDePasse.length() > 0)) {
+      if (membre != null) {
         this.listeMembres.add(membre); // ajoute le membre à la liste des membres
         this.codesErreurs.set(8, CodeErreur.NO_ERROR);
       } else {
