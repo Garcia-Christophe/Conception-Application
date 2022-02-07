@@ -74,7 +74,6 @@ public class ParticipationsView {
 
     newWindow.show();
     if(App.getGestion().getListeMembresParticipation(e.getId()).size()>0) {
-      System.out.println("Y a des membres");
       for (Participation p : App.getGestion().getListeMembresParticipation(e.getId())) {
         
         String s = p.getMembre().getPseudo()+" | "+p.getMembre().getPrenom()+" | "+p.getMembre().getNom();

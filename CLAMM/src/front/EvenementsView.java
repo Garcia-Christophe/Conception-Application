@@ -87,6 +87,32 @@ public class EvenementsView extends GridPane {
       new CreerEvenementView(); //Appel à la nouvelle scène
     });
     
+    HBox btnCreerCSV = new HBox();
+    Label l = new Label("Générer fichiers CSV");
+    l.setStyle("-fx-font-size: 30px");
+    btnCreerCSV.getChildren().add(l);
+    btnCreerCSV.setAlignment(Pos.CENTER);
+    btnCreerCSV.getStyleClass().add("hover");
+    btnCreerCSV.setOnMouseClicked(e->{
+      App.getGestion().creerCSV();
+    });
+    
+    btnCreerCSV.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnCreerCSV.getStyleClass().add("btnAjoutMembreHovered");
+          }
+        });
+
+    btnCreerCSV.addEventHandler(MouseEvent.MOUSE_EXITED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnCreerCSV.getStyleClass().remove("btnAjoutMembreHovered");
+          }
+        });
+    
     btnAjoutEvenement.addEventHandler(MouseEvent.MOUSE_ENTERED,
         new EventHandler<MouseEvent>() {
           @Override
@@ -122,6 +148,7 @@ public class EvenementsView extends GridPane {
     add(paneMembre, 0, 0, 1, 1);
     add(paneEvenements, 1, 0, 1, 1);
     add(btnAjoutEvenement, 0, 1, 1, 1);
+    add(btnCreerCSV, 1, 1, 1, 1);
     add(leftScroll, 0, 2, 1, 1);
     add(rightPart, 1, 2, 1, 1);
   }

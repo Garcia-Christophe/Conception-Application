@@ -4,9 +4,12 @@ import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import gestion.membres.Membre;
 import gestion.participation.Participation;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import front.App;
 
 /**
  * La classe Gestion permet de gérer tous les membres et tous les évènements.
@@ -17,7 +20,7 @@ import java.util.Date;
  * {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
  * 
  * @author Manon, Christophe
- * @version 2.00
+ * @version 3.00
  * @see gestion.membres.Membre
  * @see gestion.evenements.Evenement
  */
@@ -129,7 +132,15 @@ public class Gestion {
    * @return la liste des événements.
    */
   public ArrayList<Evenement> getListeEvenements() {
+    this.bdd.updateEvenements(this);
     return listeEvenements;
+  }
+
+  /**
+   * Vide la liste des événements.
+   */
+  public void clearListeEvenements() {
+    this.listeEvenements.clear();
   }
 
   /**
@@ -290,11 +301,10 @@ public class Gestion {
           boolean ajout = true;
 
           if (this.bdd.evenementPresent(unEvenement.getId()) == false) {
-            ajout = this.bdd.ajouterEvenement(unEvenement);
+            ajout = this.bdd.ajouterEvenement(this, unEvenement);
           }
 
           if (ajout) {
-            listeEvenements.add(unEvenement);
             this.codesErreurs.set(8, CodeErreur.NO_ERROR);
           } else {
             this.codesErreurs.set(8, CodeErreur.AJOUT_EVENEMENT_IMPOSSIBLE);
@@ -302,6 +312,57 @@ public class Gestion {
         } catch (SQLException e) {
           e.printStackTrace();
         }
+
+        if (unId == -1) {
+          prochainIdEvenement++;
+        }
+      } else {
+        this.codesErreurs.set(0, CodeErreur.ID_DEJA_EXISTANT);
+      }
+    } else {
+      res = getCodesErreurs();
+    }
+
+    return res;
+  }
+
+  /**
+   * Met à jour la liste des événements à partir des événements de la base de donées.
+   * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@link gestion.evenements.Evenement}.
+   * 
+   * @param unId Identifiant de l'événement
+   * @param unNom Nom de l'événement
+   * @param unDescriptif Description de l'événement
+   * @param uneImage URL de l'image
+   * @param uneDate Date de l'élévement
+   * @param unLieu Lieu de l'événement
+   * @param unNbMaxPersonnes Nombre maximum de personnes autorisées à l'événement
+   * @param unType Type de l'évenement
+   * @return {@code null} si l'ajout du nouveau {@link gestion.evenements.Evenement} est un succès,
+   *         une liste de {@link CodeErreur} sinon
+   */
+  public ArrayList<CodeErreur> miseAJourListeEvenements(int unId, String unNom, String unDescriptif,
+      String uneImage, Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
+
+    int id;
+    if (unId == -1) {
+      id = prochainIdEvenement;
+    } else {
+      id = unId;
+    }
+    Evenement unEvenement = creerEvenement(id, unNom, unDescriptif, uneImage, uneDate, unLieu,
+        unNbMaxPersonnes, unType);
+
+    ArrayList<CodeErreur> res = null;
+
+    if (unEvenement != null) {
+      Evenement evenement = this.getEvenement(unEvenement.getId());
+      if (evenement == null) {
+        listeEvenements.add(unEvenement);
+        this.codesErreurs.set(8, CodeErreur.NO_ERROR);
 
         if (unId == -1) {
           prochainIdEvenement++;
@@ -356,13 +417,9 @@ public class Gestion {
 
     // Si l'evenement est dans la liste des événements
     if (evenementASupprimer != null) {
-      boolean suppression = this.bdd.supprimerEvenement(unId);
+      boolean suppression = this.bdd.supprimerEvenement(this, unId);
 
       if (suppression) {
-        this.listeEvenements.remove(evenementASupprimer); // supprime le membre de la liste
-        for (Participation p : this.getListeMembresParticipation(unId)) {
-          this.listeParticipations.remove(p);
-        }
         this.codesErreurs.set(8, CodeErreur.NO_ERROR);
       } else {
         this.codesErreurs.set(8, CodeErreur.SUPPRESSION_EVENEMENT_IMPOSSIBLE);
@@ -399,7 +456,6 @@ public class Gestion {
       String uneImage, Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
     ArrayList<CodeErreur> res = null;
 
-
     Evenement evenementAModifier = this.getEvenement(unId);
 
     // Si l'evenement est dans la liste des événements
@@ -413,17 +469,9 @@ public class Gestion {
           if (unEvenement == null) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
-            boolean modification = this.bdd.modifierEvenement(unEvenement);
+            boolean modification = this.bdd.modifierEvenement(this, unEvenement);
 
             if (modification) {
-              listeEvenements.set(i, unEvenement);
-
-              // Modification de l'evenement present dans la liste des participations
-              for (Participation p : this.listeParticipations) {
-                if (p.getEvenement().getId() == unId) {
-                  p.setEvenement(unEvenement);
-                }
-              }
               this.codesErreurs.set(8, CodeErreur.NO_ERROR);
             } else {
               this.codesErreurs.set(8, CodeErreur.MODIFICATION_EVENEMENT_IMPOSSIBLE);
@@ -446,7 +494,15 @@ public class Gestion {
    * @return la liste des membres
    */
   public ArrayList<Membre> getListeMembres() {
+    this.bdd.updateMembres(this);
     return this.listeMembres;
+  }
+
+  /**
+   * Vide la liste des membres.
+   */
+  public void clearListeMembres() {
+    this.listeMembres.clear();
   }
 
 
@@ -616,11 +672,10 @@ public class Gestion {
         try {
           boolean ajout = true;
           if (this.bdd.membrePresent(unPseudo) == false) {
-            ajout = this.bdd.ajouterMembre(membre);
+            ajout = this.bdd.ajouterMembre(this, membre);
           }
 
           if (ajout) {
-            this.listeMembres.add(membre); // ajoute le membre à la liste des membres
             this.codesErreurs.set(8, CodeErreur.NO_ERROR);
           } else {
             this.codesErreurs.set(8, CodeErreur.AJOUT_MEMBRE_IMPOSSIBLE);
@@ -628,6 +683,56 @@ public class Gestion {
         } catch (SQLException e) {
           e.printStackTrace();
         }
+      } else {
+        res = this.getCodesErreurs(); // renvoie la liste des codes erreurs
+      }
+    } else {
+      this.codesErreurs.set(0, CodeErreur.PSEUDO_DEJA_EXISTANT);
+      res = this.getCodesErreurs();
+    }
+
+    return res;
+  }
+
+  /**
+   * Met à jour la liste des membres à partir des membres de la base de donées.
+   * 
+   * <p>
+   * Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la liste
+   * des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, alors le
+   * code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
+   * {@link #creerMembre(String, String, String, String, Date, String, String, String)} est réalisé
+   * pour créer le membre avant de l'ajouter dans la liste des membres.
+   * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@link gestion.membres.Membre}.
+   * 
+   * @param unPseudo pseudo du nouveau membre
+   * @param unNom nom du nouveau membre
+   * @param unPrenom prénom du nouveau membre
+   * @param unLieuNaissance lieu de naissance du nouveau membre
+   * @param uneDateNaissance date de naissance du nouveau membre
+   * @param uneVille ville du nouveau membre
+   * @param unMail adresse mail du nouveau membre
+   * @param unMotDePasse mot de passe du nouveau membre
+   * @return {@code null} si l'ajout du nouveau membre est un succès, une liste de
+   *         {@link CodeErreur} sinon
+   */
+  public ArrayList<CodeErreur> miseAJourListeMembres(String unPseudo, String unNom, String unPrenom,
+      String unLieuNaissance, Date uneDateNaissance, String uneVille, String unMail,
+      String unMotDePasse) {
+    ArrayList<CodeErreur> res = null;
+    Membre membre = this.getMembre(unPseudo);
+
+    // Si aucun membre de la liste des membres ne possède le même pseudo
+    if (membre == null) {
+      membre = this.creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
+          uneVille, unMail, unMotDePasse);
+      // Si la création du membre est un succès
+      if (membre != null) {
+        this.listeMembres.add(membre); // ajoute le membre à la liste des membres
+        this.codesErreurs.set(8, CodeErreur.NO_ERROR);
       } else {
         res = this.getCodesErreurs(); // renvoie la liste des codes erreurs
       }
@@ -663,10 +768,9 @@ public class Gestion {
 
     // Si le membre est dans la liste des membres
     if (membreASupprimer != null) {
-      boolean suppression = this.bdd.supprimerMembre(membreASupprimer.getPseudo());
+      boolean suppression = this.bdd.supprimerMembre(this, membreASupprimer.getPseudo());
 
       if (suppression) {
-        this.listeMembres.remove(membreASupprimer); // supprime le membre de la liste
         this.codesErreurs.set(8, CodeErreur.NO_ERROR);
       } else {
         this.codesErreurs.set(8, CodeErreur.SUPPRESSION_MEMBRE_IMPOSSIBLE);
@@ -722,20 +826,22 @@ public class Gestion {
           Membre unMembre = creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance,
               uneDateNaissance, uneVille, unMail, unMotDePasse);
 
-          if (unMembre == null) {
+          if (this.codesErreurs.get(0) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(1) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(2) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(3) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(4) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(5) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(6) != CodeErreur.NO_ERROR
+              || (this.codesErreurs.get(7) != CodeErreur.NO_ERROR
+                  && this.codesErreurs.get(7) != CodeErreur.MDP_NULL
+                  && unMotDePasse.length() > 0)) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
-            boolean modification = this.bdd.modifierMembre(unMembre);
+            boolean modification = this.bdd.modifierMembre(this, unMembre,
+                unMotDePasse != null && unMotDePasse.length() > 0);
 
             if (modification) {
-              listeMembres.set(i, unMembre);
-
-              // Modification du membre present dans la liste des participations
-              for (Participation p : this.listeParticipations) {
-                if (p.getMembre().getPseudo().equals(unPseudo)) {
-                  p.setMembre(unMembre);
-                }
-              }
               this.codesErreurs.set(8, CodeErreur.NO_ERROR);
             } else {
               this.codesErreurs.set(8, CodeErreur.MODIFICATION_MEMBRE_IMPOSSIBLE);
@@ -793,6 +899,7 @@ public class Gestion {
    * @return la liste des participations
    */
   public ArrayList<Participation> getListeParticipations() {
+    this.bdd.initParticipation(this);
     return listeParticipations;
   }
 
@@ -806,12 +913,27 @@ public class Gestion {
   }
 
   /**
+   * Vide la liste des participations.
+   */
+  public void clearListeParticipations() {
+    this.listeParticipations.clear();
+  }
+
+  /**
+   * Ajoute une participation à la liste des participations.
+   */
+  public void ajouterParticipation(Participation uneParticipation) {
+    this.listeParticipations.add(uneParticipation);
+  }
+
+  /**
    * Retourne la liste des participations qui à un événement avec id égale l'id passée paramètre.
    * 
    * @param unId identifiant d'un événement
    * @return la liste des participations qui à un événement avec id égale l'id passée paramètre
    */
   public ArrayList<Participation> getListeMembresParticipation(int unId) {
+    this.bdd.initParticipation(this);
     ArrayList<Participation> res = new ArrayList<Participation>();
     for (Participation p : this.listeParticipations) {
       if (p.getEvenement().getId() == unId) {
@@ -821,5 +943,62 @@ public class Gestion {
     return res;
   }
 
+  /**
+   * Fonction qui permet la création de fichiers CSV. Un fichier contient la liste de tous les
+   * membres avec leurs informations. Un fichier par évènement est créé contenant ses informations
+   * et la liste de toutes les participations.
+   */
+  public void creerCSV() {
+    try (PrintWriter writer = new PrintWriter("membres.csv")) {
+      String header = "Pseudo;Nom;Prenom;Adresse Mail;Date de naissance;Ville";
+      writer.write(header);
+      writer.write("\n");
+
+      String membre = "";
+      for (Membre m : this.getListeMembres()) { // Ajout de tous les membres de l'arrayList des
+                                                // membres
+        membre = m.getPseudo() + ";" + m.getNom() + ";" + m.getPrenom() + ";" + m.getMail() + ";"
+            + m.getDateNaissance() + ";" + m.getVille();
+        writer.write(membre);
+        writer.write("\n");
+        membre = "";
+      }
+
+    } catch (FileNotFoundException e) {
+      System.out.println(e.getMessage());
+    }
+
+    for (Evenement e : this.getListeEvenements()) {
+      try (PrintWriter writer = new PrintWriter(e.getNom() + ".csv")) {
+        String header = "Nom;Date;Adresse;Type;Nombre de personnes,Description";
+        writer.write(header);
+        writer.write("\n");
+        String event = e.getNom() + ";" + e.getDate() + ";" + e.getLieu() + ";"
+            + e.getType().toString() + ";" + e.getNbMaxPersonnes() + ";" + e.getDescriptif();
+        writer.write(event);
+        writer.write("\n");
+        writer.write("\n");
+
+        String headerParticipation = "Pseudo;Nom;Prenom;Nombre de personnes;Informations";
+        writer.write(headerParticipation);
+        writer.write("\n");
+
+        String participation = "";
+        for (Participation p : this.getListeMembresParticipation(e.getId())) {
+          if (p.getMembre() != null) {
+            participation = p.getMembre().getPseudo() + ";" + p.getMembre().getNom() + ";"
+                + p.getMembre().getPrenom() + ";" + p.getNbInscrit() + ";" + p.getInformation();
+            writer.write(participation);
+            writer.write("\n");
+          }
+          participation = "";
+        }
+
+      } catch (FileNotFoundException r) {
+        System.out.println(r.getMessage());
+      }
+    }
+
+  }
 
 }
