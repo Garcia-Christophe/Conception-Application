@@ -30,8 +30,12 @@ function connexion(){
             if(pseudo.value!="" && mdp.value!=""){
                 $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/Connexion.php", { pseudoMembre: pseudo.value, motDePasse: mdp.value })
                 .done(function( data ) {
-                    user=data;
-                    localStorage.setItem("user", user); 
+                    const now = new Date()
+                    const item = {
+                        value: data,
+                        expiry: now.getTime() + 15*6000
+                    }
+                    localStorage.setItem("user", JSON.stringify(item))
                     window.location.href="main.html"
                 })
                 .fail(function() {

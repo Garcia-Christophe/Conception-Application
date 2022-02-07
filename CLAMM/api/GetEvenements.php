@@ -3,7 +3,7 @@
     /* 
     Auteur : Manon Goasguen
     
-    Lien : api/evenements
+    Lien : https://obiwan2.univ-brest.fr/licence/lic8/GetEvenements.php
 
     Method : POST
 

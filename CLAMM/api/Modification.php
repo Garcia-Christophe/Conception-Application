@@ -2,7 +2,7 @@
     /* 
     Auteur : Christophe Garcia
     
-    Lien : api/modification
+    Lien : https://obiwan2.univ-brest.fr/licence/lic8/Modification.php
 
     Method : POST
 
