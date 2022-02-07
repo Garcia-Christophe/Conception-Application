@@ -77,7 +77,7 @@ public class BaseDeDonnees {
         g.ajouterMembre(lesMembres.getString("pseudo"), lesMembres.getString("nom"),
             lesMembres.getString("prenom"), lesMembres.getString("lieuNaissance"),
             lesMembres.getDate("dateNaissance"), lesMembres.getString("ville"),
-            lesMembres.getString("mail"), lesMembres.getString("motDePasse"));
+            lesMembres.getString("mail"), "Dommage, mdp crypté !");
       }
       lesMembres.close();
     } catch (Exception e) {
@@ -98,7 +98,7 @@ public class BaseDeDonnees {
         g.miseAJourListeMembres(lesMembres.getString("pseudo"), lesMembres.getString("nom"),
             lesMembres.getString("prenom"), lesMembres.getString("lieuNaissance"),
             lesMembres.getDate("dateNaissance"), lesMembres.getString("ville"),
-            lesMembres.getString("mail"), lesMembres.getString("motDePasse"));
+            lesMembres.getString("mail"), "Dommage, mdp crypté !");
       }
       lesMembres.close();
     } catch (Exception e) {
