@@ -2,7 +2,7 @@
     /* 
     Auteur : Christophe Garcia
     
-    Lien : api/suppression
+    Lien : https://obiwan2.univ-brest.fr/licence/lic8/Suppression.php
 
     Method : POST
 

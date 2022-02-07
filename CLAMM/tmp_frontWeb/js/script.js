@@ -1,4 +1,3 @@
-
 //////////////////////////////////////////////////
 //Variables
 
@@ -59,10 +58,8 @@ document.addEventListener('DOMContentLoaded',function(){
 
 //Fonction de deconnexion de l'utilisateur
 function deconnexion(){
-    //localStorage.removeItem("user");  
-    user=""; //vide la variable contenant le pseudo
     delete localStorage.user; //supprime le pseudo du LocalStorage
-    window.location.href="index.html" //renvoi sur la page de connexion
+    location.replace("index.html"); //renvoi sur la page de connexion
 }
 
 //initialisation de la liste des événements
