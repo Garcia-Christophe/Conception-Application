@@ -2,7 +2,7 @@
     /* 
     Auteur : Christophe Garcia
     
-    Lien : api/inscription
+    Lien : https://obiwan2.univ-brest.fr/licence/lic8/Insciption.php
 
     Method : POST
 

@@ -3,8 +3,9 @@ if(!(localStorage.getItem("user"))){
     window.location.href="index.html"
 }
 
-var user=localStorage.getItem("user");  
+verif();
 
+var user;
 
 var btn_deconnexion = document.getElementById("deconnexion");
 btn_deconnexion.onclick=deconnexion;
@@ -27,8 +28,14 @@ var right;
 var divButtons;
 
 var error = document.createElement("p");
+divBienvenue = document.getElementById("bienvenue");
+    textBienvenue = document.createElement("h3");
 
+            textBienvenue.innerHTML="Bienvenue "+user;
+            divBienvenue.appendChild(textBienvenue);
 document.addEventListener('DOMContentLoaded',function(){
+    
+    
     init();
 });
 
@@ -39,11 +46,7 @@ function init(){
             data=result;
             divEvenement = document.getElementById("evenements");
             checkboxInscrit = document.getElementById("checkboxInscrit");
-            divBienvenue = document.getElementById("bienvenue");
-            textBienvenue = document.createElement("h3");
-
-            textBienvenue.innerHTML="Bienvenue "+user;
-            divBienvenue.appendChild(textBienvenue);
+            
 
             fillEvents(false);
             afficheEvent();
@@ -112,10 +115,12 @@ function afficheEvent(){
 }
 
 function fermeEvenement(id){
+    verif();
     document.getElementById(id.id).remove();
 }
 
 function rechercheEvenement(id){
+    verif();
     let i=0;
     while(events[i]["id"] != id){
         i++;
@@ -229,7 +234,7 @@ function rechercheEvenement(id){
 }
 
 function inscription(id, nbMax){
-    
+    verif();
     var nb= (nbPers.value=="") ? 0 : parseInt(nbPers.value);
     var comm= (commentaire.value==null) ? "" : commentaire.value;
     nbPers.value=nb;
@@ -250,6 +255,7 @@ function inscription(id, nbMax){
 }
 
 function modification(id, nbMax){
+    verif();
     var nb= (nbPers.value=="") ? 0 : parseInt(nbPers.value);
     var comm= (commentaire.value==null) ? "" : commentaire.value;
     nbPers.value=nb;
@@ -271,6 +277,7 @@ function modification(id, nbMax){
 }
 
 function desinscription(id){
+    verif();
     if (confirm('Etes-vous sûr de vouloir vous désinscrire ?')) {
         $(document).ready(function($) {
             $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/Suppression.php", { idEvenement : parseInt(id), pseudoMembre: user})
@@ -286,4 +293,32 @@ function desinscription(id){
             })
         });
     }
+
+
     }
+
+function verif(){
+    const itemStr = localStorage.getItem("user")
+
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+            
+    if (now.getTime() > item.expiry) {//expiré
+        deconnexion();
+    }
+
+    user=item.value;
+    $(document).ready(function($) {
+        $.post( "https://obiwan2.univ-brest.fr/licence/lic8/api/VerifConnexion.php", {pseudoMembre: user})
+        .done(function( result ) {
+            if(result==0){
+                deconnexion();
+            }
+        })
+        .fail(function() {
+            deconnexion();
+        })
+    });
+
+    
+}
