@@ -826,10 +826,20 @@ public class Gestion {
           Membre unMembre = creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance,
               uneDateNaissance, uneVille, unMail, unMotDePasse);
 
-          if (unMembre == null) {
+          if (this.codesErreurs.get(0) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(1) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(2) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(3) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(4) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(5) != CodeErreur.NO_ERROR
+              || this.codesErreurs.get(6) != CodeErreur.NO_ERROR
+              || (this.codesErreurs.get(7) != CodeErreur.NO_ERROR
+                  && this.codesErreurs.get(7) != CodeErreur.MDP_NULL
+                  && unMotDePasse.length() > 0)) {
             res = getCodesErreurs(); // modifications pas possibles
           } else {
-            boolean modification = this.bdd.modifierMembre(this, unMembre);
+            boolean modification = this.bdd.modifierMembre(this, unMembre,
+                unMotDePasse != null && unMotDePasse.length() > 0);
 
             if (modification) {
               this.codesErreurs.set(8, CodeErreur.NO_ERROR);
@@ -932,21 +942,23 @@ public class Gestion {
     }
     return res;
   }
-  
+
   /**
-   * Fonction qui permet la création de fichiers CSV.
-   * Un fichier contient la liste de tous les membres avec leurs informations.
-   * Un fichier par évènement est créé contenant ses informations et la liste de toutes les participations.
+   * Fonction qui permet la création de fichiers CSV. Un fichier contient la liste de tous les
+   * membres avec leurs informations. Un fichier par évènement est créé contenant ses informations
+   * et la liste de toutes les participations.
    */
-  public void creerCSV(){
+  public void creerCSV() {
     try (PrintWriter writer = new PrintWriter("membres.csv")) {
       String header = "Pseudo;Nom;Prenom;Adresse Mail;Date de naissance;Ville";
       writer.write(header);
       writer.write("\n");
-      
+
       String membre = "";
-      for (Membre m : this.getListeMembres()) { //Ajout de tous les membres de l'arrayList des membres
-        membre = m.getPseudo()+";"+m.getNom()+";"+m.getPrenom()+";"+m.getMail()+";"+m.getDateNaissance()+";"+m.getVille();
+      for (Membre m : this.getListeMembres()) { // Ajout de tous les membres de l'arrayList des
+                                                // membres
+        membre = m.getPseudo() + ";" + m.getNom() + ";" + m.getPrenom() + ";" + m.getMail() + ";"
+            + m.getDateNaissance() + ";" + m.getVille();
         writer.write(membre);
         writer.write("\n");
         membre = "";
@@ -955,25 +967,27 @@ public class Gestion {
     } catch (FileNotFoundException e) {
       System.out.println(e.getMessage());
     }
-    
-    for(Evenement e : this.getListeEvenements()) {
-      try (PrintWriter writer = new PrintWriter(e.getNom()+".csv")) {
+
+    for (Evenement e : this.getListeEvenements()) {
+      try (PrintWriter writer = new PrintWriter(e.getNom() + ".csv")) {
         String header = "Nom;Date;Adresse;Type;Nombre de personnes,Description";
         writer.write(header);
         writer.write("\n");
-        String event = e.getNom()+";"+e.getDate()+";"+e.getLieu()+";"+e.getType().toString()+";"+e.getNbMaxPersonnes()+";"+e.getDescriptif();
+        String event = e.getNom() + ";" + e.getDate() + ";" + e.getLieu() + ";"
+            + e.getType().toString() + ";" + e.getNbMaxPersonnes() + ";" + e.getDescriptif();
         writer.write(event);
         writer.write("\n");
         writer.write("\n");
-        
+
         String headerParticipation = "Pseudo;Nom;Prenom;Nombre de personnes;Informations";
         writer.write(headerParticipation);
         writer.write("\n");
-        
+
         String participation = "";
         for (Participation p : this.getListeMembresParticipation(e.getId())) {
-          if(p.getMembre() != null) {
-            participation = p.getMembre().getPseudo()+";"+p.getMembre().getNom()+";"+p.getMembre().getPrenom()+";"+p.getNbInscrit()+";"+p.getInformation();
+          if (p.getMembre() != null) {
+            participation = p.getMembre().getPseudo() + ";" + p.getMembre().getNom() + ";"
+                + p.getMembre().getPrenom() + ";" + p.getNbInscrit() + ";" + p.getInformation();
             writer.write(participation);
             writer.write("\n");
           }
@@ -984,7 +998,7 @@ public class Gestion {
         System.out.println(r.getMessage());
       }
     }
-    
+
   }
 
 }

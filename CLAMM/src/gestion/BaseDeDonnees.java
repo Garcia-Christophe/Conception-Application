@@ -342,18 +342,20 @@ public class BaseDeDonnees {
    * 
    * @param g instance de la classe GEstion (façade)
    * @param m membre contenant les données à modifier
+   * @param mdpPresent {@code true} si le mot de passe doit être modifié, {@code false} sinon
    * @return true si la modification à la base de données fonctionne sinon false.
    */
   @SuppressWarnings("deprecation")
-  public boolean modifierMembre(Gestion g, Membre m) {
+  public boolean modifierMembre(Gestion g, Membre m, boolean mdpPresent) {
     boolean res = true;
     String query;
     query = "UPDATE MEMBRE SET nom=" + '"' + m.getNom() + '"' + ",prenom=" + '"' + m.getPrenom()
         + '"' + ",lieuNaissance=" + '"' + m.getLieuNaissance() + '"' + ",dateNaissance=DATE_FORMAT("
         + '"' + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-" + m.getDateNaissance().getMonth()
         + "-" + m.getDateNaissance().getDate() + '"' + "," + '"' + "%Y-%m-%d" + '"' + "),ville="
-        + '"' + m.getVille() + '"' + ",mail=" + '"' + m.getMail() + '"' + ",motDePasse=" + '"'
-        + m.getMotDePasse() + '"' + " WHERE pseudo=" + '"' + m.getPseudo() + '"';
+        + '"' + m.getVille() + '"' + ",mail=" + '"' + m.getMail() + '"'
+        + (mdpPresent ? (",motDePasse=\"" + m.getMotDePasse() + '"') : "") + " WHERE pseudo=" + '"'
+        + m.getPseudo() + '"';
     try {
       sqlStatement.executeUpdate(query);
       this.updateMembres(g);
