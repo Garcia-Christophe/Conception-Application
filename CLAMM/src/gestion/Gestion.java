@@ -4,9 +4,12 @@ import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import gestion.membres.Membre;
 import gestion.participation.Participation;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import front.App;
 
 /**
  * La classe Gestion permet de gérer tous les membres et tous les évènements.
@@ -819,6 +822,60 @@ public class Gestion {
       }
     }
     return res;
+  }
+  
+  /**
+   * Fonction qui permet la création de fichiers CSV.
+   * Un fichier contient la liste de tous les membres avec leurs informations.
+   * Un fichier par évènement est créé contenant ses informations et la liste de toutes les participations.
+   */
+  public void creerCSV(){
+    try (PrintWriter writer = new PrintWriter("membres.csv")) {
+      String header = "Pseudo;Nom;Prenom;Adresse Mail;Date de naissance;Ville";
+      writer.write(header);
+      writer.write("\n");
+      
+      String membre = "";
+      for (Membre m : this.getListeMembres()) { //Ajout de tous les membres de l'arrayList des membres
+        membre = m.getPseudo()+";"+m.getNom()+";"+m.getPrenom()+";"+m.getMail()+";"+m.getDateNaissance()+";"+m.getVille();
+        writer.write(membre);
+        writer.write("\n");
+        membre = "";
+      }
+
+    } catch (FileNotFoundException e) {
+      System.out.println(e.getMessage());
+    }
+    
+    for(Evenement e : this.getListeEvenements()) {
+      try (PrintWriter writer = new PrintWriter(e.getNom()+".csv")) {
+        String header = "Nom;Date;Adresse;Type;Nombre de personnes,Description";
+        writer.write(header);
+        writer.write("\n");
+        String event = e.getNom()+";"+e.getDate()+";"+e.getLieu()+";"+e.getType().toString()+";"+e.getNbMaxPersonnes()+";"+e.getDescriptif();
+        writer.write(event);
+        writer.write("\n");
+        writer.write("\n");
+        
+        String headerParticipation = "Pseudo;Nom;Prenom;Nombre de personnes;Informations";
+        writer.write(headerParticipation);
+        writer.write("\n");
+        
+        String participation = "";
+        for (Participation p : this.getListeMembresParticipation(e.getId())) {
+          if(p.getMembre() != null) {
+            participation = p.getMembre().getPseudo()+";"+p.getMembre().getNom()+";"+p.getMembre().getPrenom()+";"+p.getNbInscrit()+";"+p.getInformation();
+            writer.write(participation);
+            writer.write("\n");
+          }
+          participation = "";
+        }
+
+      } catch (FileNotFoundException r) {
+        System.out.println(r.getMessage());
+      }
+    }
+    
   }
 
 

@@ -1,5 +1,9 @@
 package front;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import gestion.membres.Membre;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -52,13 +56,6 @@ public class MembresView extends GridPane {
     row70.setPercentHeight(70);
     getRowConstraints().addAll(row20, row10, row70);
     
-    /*
-    GridPane head = new GridPane();
-    ColumnConstraints col33 = new ColumnConstraints();
-    col.setPercentWidth(100/3);
-    getColumnConstraints().addAll(col33, col33, col33);
-    */
-    
     //header    
     HBox paneMembre = new HBox();
     paneMembre.setStyle("-fx-background-color: #85B9DE;");
@@ -95,6 +92,32 @@ public class MembresView extends GridPane {
       new CreerMembreView(); //Appel à la nouvelle scène
     });
     
+    HBox btnCreerCSV = new HBox();
+    Label l = new Label("Générer fichiers CSV");
+    l.setStyle("-fx-font-size: 30px");
+    btnCreerCSV.getChildren().add(l);
+    btnCreerCSV.setAlignment(Pos.CENTER);
+    btnCreerCSV.getStyleClass().add("hover");
+    btnCreerCSV.setOnMouseClicked(e->{
+      App.getGestion().creerCSV();
+    });
+    
+    btnCreerCSV.addEventHandler(MouseEvent.MOUSE_ENTERED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnCreerCSV.getStyleClass().add("btnAjoutMembreHovered");
+          }
+        });
+
+    btnCreerCSV.addEventHandler(MouseEvent.MOUSE_EXITED,
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent e) {
+            btnCreerCSV.getStyleClass().remove("btnAjoutMembreHovered");
+          }
+        });
+    
     btnAjoutMembre.addEventHandler(MouseEvent.MOUSE_ENTERED,
         new EventHandler<MouseEvent>() {
           @Override
@@ -129,6 +152,7 @@ public class MembresView extends GridPane {
     add(paneMembre,0,0,1,1);
     add(paneEvenements, 1, 0, 1, 1);
     add(btnAjoutMembre, 0, 1, 1, 1);
+    add(btnCreerCSV, 1, 1, 1, 1);
     add(leftScroll, 0, 2, 1, 1);
     add(rightPart, 1, 2, 1, 1);
   }
