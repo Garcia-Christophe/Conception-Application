@@ -9,8 +9,10 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -22,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -44,6 +47,7 @@ public class ParticipationsView {
    * membre pour pouvoir accéder au membre et faire les modifications.
    */
   String oldPseudo;
+  String result;
 
   /**
    * Constructeur de la page CreerMembresView, avec la création et le placement de tous les
@@ -58,10 +62,35 @@ public class ParticipationsView {
     // setup de la nouvelle fenêtre
     
     ListView<String> list = new ListView<String>();
+    GridPane grid = new GridPane();
+    
+    ColumnConstraints col = new ColumnConstraints();
+    col.setHgrow(Priority.ALWAYS);
+    grid.getColumnConstraints().add(col);
+
+    RowConstraints row10 = new RowConstraints();
+    row10.setPercentHeight(10);
+    RowConstraints row = new RowConstraints();
+    row.setVgrow(Priority.ALWAYS);
+    grid.getRowConstraints().addAll(row10, row);
+    
+    HBox btnAjoutParticipation = new HBox();
+    btnAjoutParticipation.getStyleClass().add("hover");
+    btnAjoutParticipation.setCursor(Cursor.HAND);
+    Label l = new Label("Ajouter une participation");
+    btnAjoutParticipation.setAlignment(Pos.CENTER);
+    btnAjoutParticipation.getChildren().add(l);
+    
+    btnAjoutParticipation.setOnMouseClicked(r->{
+      System.out.println("ajout");
+    });
+    
+    grid.add(btnAjoutParticipation, 0, 0);
+    grid.add(list, 0, 1);
    
 
     Scene secondScene =
-        new Scene(list, App.getStage().getWidth() / 2, App.getStage().getHeight() / 2);
+        new Scene(grid, App.getStage().getWidth() / 2, App.getStage().getHeight() / 2);
     // New window (Stage)
     Stage newWindow = new Stage();
 
@@ -75,10 +104,17 @@ public class ParticipationsView {
     newWindow.show();
     if(App.getGestion().getListeMembresParticipation(e.getId()).size()>0) {
       for (Participation p : App.getGestion().getListeMembresParticipation(e.getId())) {
-        
-        String s = p.getMembre().getPseudo()+" | "+p.getMembre().getPrenom()+" | "+p.getMembre().getNom();
-        
-        list.getItems().add(s);
+        if(p.getMembre() != null) {
+          String s = p.getMembre().getPseudo()+" | "+p.getMembre().getPrenom()+" | "+p.getMembre().getNom();
+          list.getItems().add(s);
+          list.setOnMouseClicked(r->{
+            if(list.getSelectionModel().getSelectedItem() != null) {
+              result = list.getSelectionModel().getSelectedItem();
+              result = result.substring(0, result.indexOf("|")-1);
+              System.out.println(result); 
+            }
+          });
+        }
       }
     }
 

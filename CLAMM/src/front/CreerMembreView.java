@@ -126,8 +126,8 @@ public class CreerMembreView {
       textDate.setValue(d);
       textAdresse.setText(m[0].getMail());
       textVille.setText(m[0].getVille());
-      textMdp.setText(m[0].getMotDePasse());
-      textConfirm.setText(m[0].getMotDePasse());
+      //textMdp.setText(m[0].getMotDePasse());
+      //textConfirm.setText(m[0].getMotDePasse());
       oldPseudo = textPseudo.getText();
     }
 
