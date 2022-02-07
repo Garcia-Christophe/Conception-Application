@@ -9,7 +9,19 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+/**
+ * La classe base de données permet de faire la liaison entre l'application Java et la base de
+ * données externe.
+ * 
+ * <p>
+ * La classe peut créer, ajouter, modifier et supprimer des membres et des évènements au niveau de
+ * la base de données.
+ * 
+ * @author Alexia, Christophe
+ * @version 2.00
+ */
 public class BaseDeDonnees {
 
   /**
@@ -30,7 +42,8 @@ public class BaseDeDonnees {
   /**
    * Constructeur de la BaseDeDonnées.
    * 
-   * <p>Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
+   * <p>
+   * Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
    * SQL.
    * 
    * @throws SQLException si la connexion échoue
@@ -64,7 +77,28 @@ public class BaseDeDonnees {
         g.ajouterMembre(lesMembres.getString("pseudo"), lesMembres.getString("nom"),
             lesMembres.getString("prenom"), lesMembres.getString("lieuNaissance"),
             lesMembres.getDate("dateNaissance"), lesMembres.getString("ville"),
-            lesMembres.getString("mail"), lesMembres.getString("motDePasse"));
+            lesMembres.getString("mail"), "Dommage, mdp1 crypté !");
+      }
+      lesMembres.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Met à jour la liste des membres à partir de la base de données.
+   * 
+   * @param g l'instance de Gestion de l'application (façade)
+   */
+  public void updateMembres(Gestion g) {
+    try {
+      ResultSet lesMembres = sqlStatement.executeQuery("SELECT * FROM MEMBRE");
+      g.clearListeMembres();
+      while (lesMembres.next()) {
+        g.miseAJourListeMembres(lesMembres.getString("pseudo"), lesMembres.getString("nom"),
+            lesMembres.getString("prenom"), lesMembres.getString("lieuNaissance"),
+            lesMembres.getDate("dateNaissance"), lesMembres.getString("ville"),
+            lesMembres.getString("mail"), "Dommage, mdp1 crypté !");
       }
       lesMembres.close();
     } catch (Exception e) {
@@ -99,6 +133,33 @@ public class BaseDeDonnees {
   }
 
   /**
+   * Met à jour la liste des événements à partir de la base de données.
+   * 
+   * @param g l'instance de Gestion de l'application (façade)
+   */
+  public void updateEvenements(Gestion g) {
+    try {
+      ResultSet lesEvenements = sqlStatement.executeQuery("SELECT * FROM EVENEMENT");
+      int max = -1;
+      g.clearListeEvenements();
+      while (lesEvenements.next()) {
+        TypeEvenement t = TypeEvenement.valueOf(lesEvenements.getString("type"));
+        if (lesEvenements.getInt("id") > max) {
+          max = lesEvenements.getInt("id");
+        }
+        g.miseAJourListeEvenements(lesEvenements.getInt("id"), lesEvenements.getString("nom"),
+            lesEvenements.getString("descriptif"), lesEvenements.getString("image"),
+            lesEvenements.getDate("date"), lesEvenements.getString("lieu"),
+            lesEvenements.getInt("nbMaxPersonnes"), t);
+      }
+      lesEvenements.close();
+      g.setProchainIdEvenement(max + 1);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
    * Initialise la liste des participations à partir de la base de données.
    * 
    * @param g l'instance de Gestion de l'application (façade)
@@ -106,16 +167,19 @@ public class BaseDeDonnees {
   public void initParticipation(Gestion g) {
     try {
       ResultSet lesParticipations = sqlStatement.executeQuery("SELECT * FROM PARTICIPATION");
+      g.clearListeParticipations();
       while (lesParticipations.next()) {
         Evenement env = null;
-        for (Evenement e : g.getListeEvenements()) {
+        ArrayList<Evenement> evenements = g.getListeEvenements();
+        for (Evenement e : evenements) {
           if (e.getId() == lesParticipations.getInt("idEvenement")) {
             env = e;
           }
         }
 
         Membre mem = null;
-        for (Membre m : g.getListeMembres()) {
+        ArrayList<Membre> membres = g.getListeMembres();
+        for (Membre m : membres) {
           if (m.getPseudo().equals(lesParticipations.getString("pseudoMembre"))) {
             mem = m;
           }
@@ -123,7 +187,7 @@ public class BaseDeDonnees {
 
         Participation p = new Participation(env, mem, lesParticipations.getInt("nbInscrit"),
             lesParticipations.getString("informations"));
-        g.getListeParticipations().add(p);
+        g.ajouterParticipation(p);
       }
       lesParticipations.close();
     } catch (Exception e) {
@@ -150,10 +214,11 @@ public class BaseDeDonnees {
   /**
    * Ajoute un membre à la base de données, en exécutant une requête SQL "INSERT".
    * 
+   * @param g instance de la gestion (façade)
    * @param m le membre à ajouter dans la base de données
    * @return true si l'ajout à la base de données fonctionne sinon false.
    */
-  public boolean ajouterMembre(Membre m) {
+  public boolean ajouterMembre(Gestion g, Membre m) {
     boolean res = true;
     @SuppressWarnings("deprecation")
     String query =
@@ -166,6 +231,8 @@ public class BaseDeDonnees {
             + m.getMail() + '"' + "," + '"' + m.getMotDePasse() + '"' + ")";
     try {
       sqlStatement.executeUpdate(query);
+      this.updateMembres(g);
+      this.initParticipation(g);
     } catch (SQLException e) {
       System.out.println("ajout impossible de " + m.getPseudo());
       e.printStackTrace();
@@ -189,14 +256,14 @@ public class BaseDeDonnees {
     return evenement.next();
   }
 
-
   /**
    * Ajoute un événement à la base de données, en exécutant une requête SQL "INSERT".
    * 
+   * @param g instance de la classe Gestion (façade)
    * @param e l'événement à ajouter dans la base de données
    * @return true si l'ajout à la base de données fonctionne sinon false.
    */
-  public boolean ajouterEvenement(Evenement e) {
+  public boolean ajouterEvenement(Gestion g, Evenement e) {
     boolean res = true;
     @SuppressWarnings("deprecation")
     String query =
@@ -210,6 +277,8 @@ public class BaseDeDonnees {
             + e.getType().toString() + '"' + ")";
     try {
       sqlStatement.executeUpdate(query);
+      this.updateEvenements(g);
+      this.initParticipation(g);
     } catch (SQLException er) {
       System.out.println("ajout impossible de " + e.getId());
       er.printStackTrace();
@@ -221,17 +290,19 @@ public class BaseDeDonnees {
   /**
    * Supprime un événement de la base de données, en exécutant une requête SQL "DELETE".
    * 
+   * @param g instance de la classe Gestion (façade)
    * @param unId identifiant de l'événement à supprimer
    * @return true si la suppression à la base de données fonctionne sinon false.
    */
-  public boolean supprimerEvenement(int unId) {
+  public boolean supprimerEvenement(Gestion g, int unId) {
     boolean res = true;
     String query = "DELETE FROM EVENEMENT WHERE id=" + unId;
     String query2 = "DELETE FROM PARTICIPATION WHERE idEvenement=" + unId;
     try {
       sqlStatement.executeUpdate(query2);
       sqlStatement.executeUpdate(query);
-
+      this.updateEvenements(g);
+      this.initParticipation(g);
     } catch (SQLException er) {
       System.out.println("supression impossible de " + unId);
       er.printStackTrace();
@@ -243,17 +314,19 @@ public class BaseDeDonnees {
   /**
    * Supprime un membre de la base de données, en exécutant une requête SQL "DELETE".
    * 
+   * @param g instance de la classe Gestion (façade)
    * @param unPseudo pseudo du membre à supprimer
    * @return true si la suppression à la base de données fonctionne sinon false.
    */
-  public boolean supprimerMembre(String unPseudo) {
+  public boolean supprimerMembre(Gestion g, String unPseudo) {
     boolean res = true;
     String query = "DELETE FROM MEMBRE WHERE pseudo=" + '"' + unPseudo + '"';
     String query2 = "DELETE FROM PARTICIPATION WHERE pseudoMembre=" + '"' + unPseudo + '"';
     try {
       sqlStatement.executeUpdate(query2);
       sqlStatement.executeUpdate(query);
-
+      this.updateMembres(g);
+      this.initParticipation(g);
     } catch (SQLException er) {
       System.out.println("supression impossible de " + unPseudo);
       er.printStackTrace();
@@ -267,21 +340,26 @@ public class BaseDeDonnees {
   /**
    * Modifie un membre de la base de données, en exécutant une requête SQL "UPDATE".
    * 
+   * @param g instance de la classe GEstion (façade)
    * @param m membre contenant les données à modifier
+   * @param mdpPresent {@code true} si le mot de passe doit être modifié, {@code false} sinon
    * @return true si la modification à la base de données fonctionne sinon false.
    */
   @SuppressWarnings("deprecation")
-  public boolean modifierMembre(Membre m) {
+  public boolean modifierMembre(Gestion g, Membre m, boolean mdpPresent) {
     boolean res = true;
     String query;
     query = "UPDATE MEMBRE SET nom=" + '"' + m.getNom() + '"' + ",prenom=" + '"' + m.getPrenom()
         + '"' + ",lieuNaissance=" + '"' + m.getLieuNaissance() + '"' + ",dateNaissance=DATE_FORMAT("
         + '"' + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-" + m.getDateNaissance().getMonth()
         + "-" + m.getDateNaissance().getDate() + '"' + "," + '"' + "%Y-%m-%d" + '"' + "),ville="
-        + '"' + m.getVille() + '"' + ",mail=" + '"' + m.getMail() + '"' + ",motDePasse=" + '"'
-        + m.getMotDePasse() + '"' + " WHERE pseudo=" + '"' + m.getPseudo() + '"';
+        + '"' + m.getVille() + '"' + ",mail=" + '"' + m.getMail() + '"'
+        + (mdpPresent ? (",motDePasse=\"" + m.getMotDePasse() + '"') : "") + " WHERE pseudo=" + '"'
+        + m.getPseudo() + '"';
     try {
       sqlStatement.executeUpdate(query);
+      this.updateMembres(g);
+      this.initParticipation(g);
     } catch (SQLException e) {
       System.out.println("Modification impossible de " + m.getPseudo());
       e.printStackTrace();
@@ -293,11 +371,12 @@ public class BaseDeDonnees {
   /**
    * Modifie un événement de la base de données, en exécutant une requête SQL "UPDATE".
    * 
+   * @param g instance de la classe Gestion (façade)
    * @param e événement contenant les données à modifier
    * @return true si la modification à la base de données fonctionne sinon false.
    */
   @SuppressWarnings("deprecation")
-  public boolean modifierEvenement(Evenement e) {
+  public boolean modifierEvenement(Gestion g, Evenement e) {
     boolean res = true;
     String query;
     query = "UPDATE EVENEMENT SET nom='" + e.getNom() + "', descriptif='" + e.getDescriptif()
@@ -307,6 +386,8 @@ public class BaseDeDonnees {
         + e.getNbMaxPersonnes() + ", type='" + e.getType() + "' WHERE id=" + e.getId();
     try {
       sqlStatement.executeUpdate(query);
+      this.updateEvenements(g);
+      this.initParticipation(g);
     } catch (SQLException e2) {
       System.out.println("Modification impossible de " + e.getId());
       e2.printStackTrace();
