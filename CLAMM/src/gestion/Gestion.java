@@ -621,13 +621,15 @@ public class Gestion {
     }
 
     // Si une des définitions est un échec, retourne un membre null
-    boolean erreur = false;
-    for (int i = 0; i < this.codesErreurs.size(); i++) {
-      if (this.codesErreurs.get(i) != CodeErreur.NO_ERROR) {
-        erreur = true;
-      }
-    }
-    if (erreur) {
+    if (this.codesErreurs.get(0) != CodeErreur.NO_ERROR
+        || this.codesErreurs.get(1) != CodeErreur.NO_ERROR
+        || this.codesErreurs.get(2) != CodeErreur.NO_ERROR
+        || this.codesErreurs.get(3) != CodeErreur.NO_ERROR
+        || this.codesErreurs.get(4) != CodeErreur.NO_ERROR
+        || this.codesErreurs.get(5) != CodeErreur.NO_ERROR
+        || this.codesErreurs.get(6) != CodeErreur.NO_ERROR
+        || (this.codesErreurs.get(7) != CodeErreur.NO_ERROR
+            && this.codesErreurs.get(7) != CodeErreur.MDP_NULL && unMotDePasse.length() > 0)) {
       membre = null;
     }
     return membre;
