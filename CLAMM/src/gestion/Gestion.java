@@ -305,8 +305,6 @@ public class Gestion {
           }
 
           if (ajout) {
-            this.miseAJourListeEvenements(unId, unNom, unDescriptif, uneImage, uneDate, unLieu,
-                unNbMaxPersonnes, unType);
             this.codesErreurs.set(8, CodeErreur.NO_ERROR);
           } else {
             this.codesErreurs.set(8, CodeErreur.AJOUT_EVENEMENT_IMPOSSIBLE);
@@ -664,7 +662,7 @@ public class Gestion {
       String unMotDePasse) {
     ArrayList<CodeErreur> res = null;
     Membre membre = this.getMembre(unPseudo);
-
+    
     // Si aucun membre de la liste des membres ne possède le même pseudo
     if (membre == null) {
       membre = this.creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
@@ -678,8 +676,6 @@ public class Gestion {
           }
 
           if (ajout) {
-            this.miseAJourListeMembres(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
-                uneVille, unMail, unMotDePasse);
             this.codesErreurs.set(8, CodeErreur.NO_ERROR);
           } else {
             this.codesErreurs.set(8, CodeErreur.AJOUT_MEMBRE_IMPOSSIBLE);

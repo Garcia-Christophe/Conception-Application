@@ -231,6 +231,8 @@ public class BaseDeDonnees {
     // Préfixe + mdp + suffixe
     String mdp = m.getPseudo() + m.getMotDePasse() + pseudoReverse;
     String mdpSecurise = this.sha256(mdp);
+    
+    System.out.println(mdpSecurise);
 
     @SuppressWarnings("deprecation")
     String query =
