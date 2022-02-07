@@ -4,6 +4,7 @@ import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import gestion.membres.Membre;
 import gestion.participation.Participation;
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -220,6 +221,17 @@ public class BaseDeDonnees {
    */
   public boolean ajouterMembre(Gestion g, Membre m) {
     boolean res = true;
+
+    // Suffixe
+    String pseudoReverse = "";
+    for (int i = m.getPseudo().length() - 1; i >= 0; i--) {
+      pseudoReverse += m.getPseudo().charAt(i);
+    }
+
+    // Préfixe + mdp + suffixe
+    String mdp = m.getPseudo() + m.getMotDePasse() + pseudoReverse;
+    String mdpSecurise = this.sha256(mdp);
+
     @SuppressWarnings("deprecation")
     String query =
         "INSERT INTO MEMBRE (pseudo,nom,prenom,lieuNaissance,dateNaissance,ville,mail,motDePasse)"
@@ -228,7 +240,7 @@ public class BaseDeDonnees {
             + '"' + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-"
             + (m.getDateNaissance().getMonth() + 1) + "-" + m.getDateNaissance().getDate() + '"'
             + "," + '"' + "%Y-%m-%d" + '"' + ")," + '"' + m.getVille() + '"' + "," + '"'
-            + m.getMail() + '"' + "," + '"' + m.getMotDePasse() + '"' + ")";
+            + m.getMail() + '"' + "," + '"' + mdpSecurise + '"' + ")";
     try {
       sqlStatement.executeUpdate(query);
       this.updateMembres(g);
@@ -239,6 +251,32 @@ public class BaseDeDonnees {
       res = false;
     }
     return res;
+  }
+
+  /**
+   * Sécurise le mot de passe avec l'algrythme SHA256.
+   * 
+   * @param base le mot de passe de base
+   * @return le mot de passe haché et salé (sécurisé)
+   */
+  public String sha256(String base) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(base.getBytes("UTF-8"));
+      StringBuffer hexString = new StringBuffer();
+
+      for (int i = 0; i < hash.length; i++) {
+        String hex = Integer.toHexString(0xff & hash[i]);
+        if (hex.length() == 1) {
+          hexString.append('0');
+        }
+        hexString.append(hex);
+      }
+
+      return hexString.toString();
+    } catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   /**
