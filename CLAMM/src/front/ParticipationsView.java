@@ -3,7 +3,7 @@ package front;
 import gestion.CodeErreur;
 import gestion.evenements.Evenement;
 import gestion.membres.Membre;
-import gestion.participation.Participation;
+import gestion.participations.Participation;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;

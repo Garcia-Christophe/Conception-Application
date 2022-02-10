@@ -1,4 +1,4 @@
-package gestion.participation;
+package gestion.participations;
 
 import gestion.evenements.Evenement;
 import gestion.membres.Membre;

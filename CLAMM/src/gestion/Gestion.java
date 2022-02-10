@@ -3,7 +3,7 @@ package gestion;
 import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import gestion.membres.Membre;
-import gestion.participation.Participation;
+import gestion.participations.Participation;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -90,11 +90,11 @@ public class Gestion {
     }
 
     this.setListeMembres(new ArrayList<Membre>());
-    this.bdd.initMembre(this);
     this.setListeEvenements(new ArrayList<Evenement>());
-    this.bdd.initEvenement(this);
     this.setListeParticipations(new ArrayList<Participation>());
-    this.bdd.initParticipation(this);
+    this.bdd.updateMembres(this);
+    this.bdd.updateEvenements(this);
+    this.bdd.updateParticipation(this);
   }
 
   /**
@@ -662,7 +662,7 @@ public class Gestion {
       String unMotDePasse) {
     ArrayList<CodeErreur> res = null;
     Membre membre = this.getMembre(unPseudo);
-    
+
     // Si aucun membre de la liste des membres ne possède le même pseudo
     if (membre == null) {
       membre = this.creerMembre(unPseudo, unNom, unPrenom, unLieuNaissance, uneDateNaissance,
@@ -899,7 +899,7 @@ public class Gestion {
    * @return la liste des participations
    */
   public ArrayList<Participation> getListeParticipations() {
-    this.bdd.initParticipation(this);
+    this.bdd.updateParticipation(this);
     return listeParticipations;
   }
 
@@ -921,9 +921,140 @@ public class Gestion {
 
   /**
    * Ajoute une participation à la liste des participations.
+   * 
+   * @throws SQLException
    */
-  public void ajouterParticipation(Participation uneParticipation) {
-    this.listeParticipations.add(uneParticipation);
+  public ArrayList<CodeErreur> ajouterParticipation(Evenement unEvenement, Membre unMembre,
+      int unNbInscrit, String uneInformation) throws SQLException {
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
+    if (unEvenement != null) {
+      if (unMembre != null) {
+        if (this.getEvenement(unEvenement.getId()) != null) {
+          if (this.getMembre(unMembre.getPseudo()) != null) {
+            for (Participation p : this.listeParticipations) {
+              if (unEvenement.getId() == p.getEvenement().getId()
+                  && unMembre.getPseudo().equals(p.getMembre().getPseudo())) {
+                this.codesErreurs.set(0, CodeErreur.PARTICIPATION_DEJA_EXISTANTE);
+              } 
+            }
+            if (this.nombresParticipantsRestants(unEvenement.getId()) < unNbInscrit) {
+              this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_GRAND);
+            } else if (unNbInscrit < 1) {
+              this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_PETIT);
+            }
+            // TODO ajout critère via vérif information taille
+
+
+            boolean erreur = false;
+            for (CodeErreur c : this.codesErreurs) {
+              if (c != CodeErreur.NO_ERROR) {
+                erreur = true;
+              }
+            }
+            if (!erreur) {
+              Participation uneParticipation =
+                  new Participation(unEvenement, unMembre, unNbInscrit, uneInformation);
+              boolean ajout = false;
+              if (this.bdd.participationPresente(unEvenement.getId(),
+                  unMembre.getPseudo()) == false) {
+                ajout = this.bdd.ajouterParticipation(this, uneParticipation);
+              }
+
+              if (!ajout) {
+                this.codesErreurs.set(8, CodeErreur.AJOUT_PARTICIPATION_IMPOSSIBLE);
+              }
+            }
+
+          } else {
+            this.codesErreurs.set(1, CodeErreur.MEMBRE_INEXISTANT);
+          }
+        } else {
+          this.codesErreurs.set(0, CodeErreur.EVENEMENT_INEXISTANT);
+        }
+      } else {
+        this.codesErreurs.set(1, CodeErreur.MEMBRE_NULL);
+      }
+    } else {
+      this.codesErreurs.set(0, CodeErreur.EVENEMENT_NULL);
+    }
+    return this.codesErreurs;
+  }
+
+  /**
+   * Met à jour la liste des participations à partir des participations de la base de donées.
+   * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * {@link gestion.participations.Participation}.
+   * 
+   * @param unEvenement evenement de la nouvelle participation
+   * @param unMembre membre de la participation
+   * @param nbInscrit nombre de personnes inscrites à l'événement de la nouvelle participation
+   * @param informations informations supplémentaires de la nouvelle participation
+   * @return {@code null} si l'ajout de la nouvelle participation est un succès, une liste de
+   *         {@link CodeErreur} sinon
+   */
+  public ArrayList<CodeErreur> miseAJourListeParticipations(Evenement unEvenement, Membre unMembre,
+      int nbInscrit, String informations) {
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
+    if (unEvenement != null) {
+      if (unMembre != null) {
+        if (this.getEvenement(unEvenement.getId()) != null) {
+          if (this.getMembre(unMembre.getPseudo()) != null) {
+            for (Participation p : this.listeParticipations) {
+              if (unEvenement.getId() == p.getEvenement().getId()
+                  && unMembre.getPseudo().equals(p.getMembre().getPseudo())) {
+                this.codesErreurs.set(0, CodeErreur.PARTICIPATION_DEJA_EXISTANTE);
+              }
+            }
+            if (this.nombresParticipantsRestants(unEvenement.getId()) < nbInscrit) {
+              this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_GRAND);
+            } else if (nbInscrit < 1) {
+              this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_PETIT);
+            }
+            // TODO ajout critère via vérif information taille
+
+           
+
+            boolean erreur = false;
+            for (CodeErreur c : this.codesErreurs) {
+              if (c != CodeErreur.NO_ERROR) {
+                erreur = true;
+              }
+            }
+            if (!erreur) {
+              Participation uneParticipation =
+                  new Participation(unEvenement, unMembre, nbInscrit, informations);
+              this.listeParticipations.add(uneParticipation);
+            }
+          } else {
+            this.codesErreurs.set(1, CodeErreur.MEMBRE_INEXISTANT);
+          }
+        } else {
+          this.codesErreurs.set(0, CodeErreur.EVENEMENT_INEXISTANT);
+        }
+      } else {
+        this.codesErreurs.set(1, CodeErreur.MEMBRE_NULL);
+      }
+    } else {
+      this.codesErreurs.set(0, CodeErreur.EVENEMENT_NULL);
+
+    }
+    return this.codesErreurs;
+  }
+
+  private int nombresParticipantsRestants(int id) {
+    int res = this.getEvenement(id).getNbMaxPersonnes();
+    for (Participation p : this.listeParticipations) {
+      if (p.getEvenement().getId() == id) {
+        res = res - p.getNbInscrit();
+      }
+    }
+    return res;
   }
 
   /**
@@ -933,7 +1064,7 @@ public class Gestion {
    * @return la liste des participations qui à un événement avec id égale l'id passée paramètre
    */
   public ArrayList<Participation> getListeMembresParticipation(int unId) {
-    this.bdd.initParticipation(this);
+    this.bdd.updateParticipation(this);
     ArrayList<Participation> res = new ArrayList<Participation>();
     for (Participation p : this.listeParticipations) {
       if (p.getEvenement().getId() == unId) {
@@ -999,6 +1130,19 @@ public class Gestion {
       }
     }
 
+  }
+
+  public static void main(String[] args) throws SQLException {
+    Gestion g = new Gestion();
+    System.out.println(g.getEvenement(7));
+    System.out.println(g.listeMembres);
+    System.out.println(g.listeParticipations);
+
+    System.out.println("\n");
+    System.out.println(g.ajouterParticipation(null, g.getMembre("p1"), 30, null));
+    System.out.println(g.ajouterParticipation(g.getEvenement(7), null, 30, "test"));
+    System.out.println(g.ajouterParticipation(g.getEvenement(7), g.getMembre("p1"), 1, null));
+    System.out.println(g.ajouterParticipation(g.getEvenement(8), g.getMembre("p2"), 3, "retest"));
   }
 
 }

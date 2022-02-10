@@ -3,7 +3,7 @@ package gestion;
 import gestion.evenements.Evenement;
 import gestion.evenements.TypeEvenement;
 import gestion.membres.Membre;
-import gestion.participation.Participation;
+import gestion.participations.Participation;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -67,26 +67,6 @@ public class BaseDeDonnees {
   }
 
   /**
-   * Initialise la liste des membres à partir de la base de données.
-   * 
-   * @param g l'instance de Gestion de l'application (façade)
-   */
-  public void initMembre(Gestion g) {
-    try {
-      ResultSet lesMembres = sqlStatement.executeQuery("SELECT * FROM MEMBRE");
-      while (lesMembres.next()) {
-        g.ajouterMembre(lesMembres.getString("pseudo"), lesMembres.getString("nom"),
-            lesMembres.getString("prenom"), lesMembres.getString("lieuNaissance"),
-            lesMembres.getDate("dateNaissance"), lesMembres.getString("ville"),
-            lesMembres.getString("mail"), "Dommage, mdp1 crypté !");
-      }
-      lesMembres.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
    * Met à jour la liste des membres à partir de la base de données.
    * 
    * @param g l'instance de Gestion de l'application (façade)
@@ -102,32 +82,6 @@ public class BaseDeDonnees {
             lesMembres.getString("mail"), "Dommage, mdp1 crypté !");
       }
       lesMembres.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * Initialise la liste des événements à partir de la base de données.
-   * 
-   * @param g l'instance de Gestion de l'application (façade)
-   */
-  public void initEvenement(Gestion g) {
-    try {
-      ResultSet lesEvenements = sqlStatement.executeQuery("SELECT * FROM EVENEMENT");
-      int max = -1;
-      while (lesEvenements.next()) {
-        TypeEvenement t = TypeEvenement.valueOf(lesEvenements.getString("type"));
-        if (lesEvenements.getInt("id") > max) {
-          max = lesEvenements.getInt("id");
-        }
-        g.ajouterEvenement(lesEvenements.getInt("id"), lesEvenements.getString("nom"),
-            lesEvenements.getString("descriptif"), lesEvenements.getString("image"),
-            lesEvenements.getDate("date"), lesEvenements.getString("lieu"),
-            lesEvenements.getInt("nbMaxPersonnes"), t);
-      }
-      lesEvenements.close();
-      g.setProchainIdEvenement(max + 1);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -160,12 +114,7 @@ public class BaseDeDonnees {
     }
   }
 
-  /**
-   * Initialise la liste des participations à partir de la base de données.
-   * 
-   * @param g l'instance de Gestion de l'application (façade)
-   */
-  public void initParticipation(Gestion g) {
+  public void updateParticipation(Gestion g) {
     try {
       ResultSet lesParticipations = sqlStatement.executeQuery("SELECT * FROM PARTICIPATION");
       g.clearListeParticipations();
@@ -185,16 +134,15 @@ public class BaseDeDonnees {
             mem = m;
           }
         }
-
-        Participation p = new Participation(env, mem, lesParticipations.getInt("nbInscrit"),
+        g.miseAJourListeParticipations(env, mem, lesParticipations.getInt("nbInscrit"),
             lesParticipations.getString("informations"));
-        g.ajouterParticipation(p);
       }
       lesParticipations.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
+
 
   /**
    * Renvoie vria ou faux suivant si un membre avec le pseudo fourni en paramètre existe dans la
@@ -231,8 +179,6 @@ public class BaseDeDonnees {
     // Préfixe + mdp + suffixe
     String mdp = m.getPseudo() + m.getMotDePasse() + pseudoReverse;
     String mdpSecurise = this.sha256(mdp);
-    
-    System.out.println(mdpSecurise);
 
     @SuppressWarnings("deprecation")
     String query =
@@ -246,7 +192,7 @@ public class BaseDeDonnees {
     try {
       sqlStatement.executeUpdate(query);
       this.updateMembres(g);
-      this.initParticipation(g);
+      this.updateParticipation(g);
     } catch (SQLException e) {
       System.out.println("ajout impossible de " + m.getPseudo());
       e.printStackTrace();
@@ -318,9 +264,51 @@ public class BaseDeDonnees {
     try {
       sqlStatement.executeUpdate(query);
       this.updateEvenements(g);
-      this.initParticipation(g);
+      this.updateParticipation(g);
     } catch (SQLException er) {
       System.out.println("ajout impossible de " + e.getId());
+      er.printStackTrace();
+      res = false;
+    }
+    return res;
+  }
+
+  /**
+   * Renvoie vrai ou faux suivant si une participation avec l'identifiant de l'évènement et le
+   * pseudo du membre fourni en paramètre existe dans la liste.
+   * 
+   * @param id l'identifiant de l'événement de la participation à trouver
+   * @param pseudo le pseudo du membre de la participation à trouver
+   * @return {@code true} si une particpation de la liste a pour identifiant {@code id} et pour
+   *         pseudo {@code pseudo}, {@code false} sinon
+   * @throws SQLException si la requête SQL provoque une erreur
+   */
+  public boolean participationPresente(int id, String pseudo) throws SQLException {
+    ResultSet participation =
+        sqlStatement.executeQuery("SELECT * FROM PARTICIPATION WHERE idEvenement=" + '"' + id + '"'
+            + " and pseudoMembre=" + '"' + pseudo + '"');
+    return participation.next();
+  }
+
+  /**
+   * Ajoute une participation à la base de données, en exécutant une requête SQL "INSERT".
+   * 
+   * @param g instance de la classe Gestion (façade)
+   * @param p la participation à ajouter dans la base de données
+   * @return true si l'ajout à la base de données fonctionne sinon false.
+   */
+  public boolean ajouterParticipation(Gestion g, Participation p) {
+    boolean res = true;
+    String query =
+        "INSERT INTO PARTICIPATION (idEvenement,pseudoMembre,nbInscrit,informations) VALUES (" + '"'
+            + p.getEvenement().getId() + '"' + "," + '"' + p.getMembre().getPseudo() + '"' + ","
+            + '"' + p.getNbInscrit() + '"' + "," + '"' + p.getInformation() + '"' + ")";
+    try {
+      sqlStatement.executeUpdate(query);
+      this.updateParticipation(g);
+    } catch (SQLException er) {
+      System.out.println(
+          "ajout impossible de " + p.getEvenement().getId() + " " + p.getMembre().getPseudo());
       er.printStackTrace();
       res = false;
     }
@@ -342,7 +330,7 @@ public class BaseDeDonnees {
       sqlStatement.executeUpdate(query2);
       sqlStatement.executeUpdate(query);
       this.updateEvenements(g);
-      this.initParticipation(g);
+      this.updateParticipation(g);
     } catch (SQLException er) {
       System.out.println("supression impossible de " + unId);
       er.printStackTrace();
@@ -366,7 +354,7 @@ public class BaseDeDonnees {
       sqlStatement.executeUpdate(query2);
       sqlStatement.executeUpdate(query);
       this.updateMembres(g);
-      this.initParticipation(g);
+      this.updateParticipation(g);
     } catch (SQLException er) {
       System.out.println("supression impossible de " + unPseudo);
       er.printStackTrace();
@@ -388,18 +376,29 @@ public class BaseDeDonnees {
   @SuppressWarnings("deprecation")
   public boolean modifierMembre(Gestion g, Membre m, boolean mdpPresent) {
     boolean res = true;
+    
+ // Suffixe
+    String pseudoReverse = "";
+    for (int i = m.getPseudo().length() - 1; i >= 0; i--) {
+      pseudoReverse += m.getPseudo().charAt(i);
+    }
+
+    // Préfixe + mdp + suffixe
+    String mdp = m.getPseudo() + m.getMotDePasse() + pseudoReverse;
+    String mdpSecurise = this.sha256(mdp);
+    
     String query;
     query = "UPDATE MEMBRE SET nom=" + '"' + m.getNom() + '"' + ",prenom=" + '"' + m.getPrenom()
         + '"' + ",lieuNaissance=" + '"' + m.getLieuNaissance() + '"' + ",dateNaissance=DATE_FORMAT("
         + '"' + (m.getDateNaissance().getYear() + ANNEE_SUP) + "-" + m.getDateNaissance().getMonth()
         + "-" + m.getDateNaissance().getDate() + '"' + "," + '"' + "%Y-%m-%d" + '"' + "),ville="
         + '"' + m.getVille() + '"' + ",mail=" + '"' + m.getMail() + '"'
-        + (mdpPresent ? (",motDePasse=\"" + m.getMotDePasse() + '"') : "") + " WHERE pseudo=" + '"'
+        + (mdpPresent ? (",motDePasse=\"" + mdpSecurise + '"') : "") + " WHERE pseudo=" + '"'
         + m.getPseudo() + '"';
     try {
       sqlStatement.executeUpdate(query);
       this.updateMembres(g);
-      this.initParticipation(g);
+      this.updateParticipation(g);
     } catch (SQLException e) {
       System.out.println("Modification impossible de " + m.getPseudo());
       e.printStackTrace();
@@ -427,7 +426,7 @@ public class BaseDeDonnees {
     try {
       sqlStatement.executeUpdate(query);
       this.updateEvenements(g);
-      this.initParticipation(g);
+      this.updateParticipation(g);
     } catch (SQLException e2) {
       System.out.println("Modification impossible de " + e.getId());
       e2.printStackTrace();
