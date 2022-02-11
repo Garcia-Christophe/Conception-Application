@@ -1075,6 +1075,26 @@ public class Gestion {
   }
 
   /**
+   * Retourne la participation qui à un événement avec id égale l'id passée paramètre et un membre
+   * avec pseudo égale au pseudo passée en paramètre.
+   * 
+   * @param unId identifiant d'un événement
+   * @param unPseudo pseudo d'un membre
+   * @return une participation qui à un événement avec id égale l'id passée paramètre et un membre
+   *         avec pseudo égale au pseudo passée en paramètre.
+   */
+  public Participation getListeMembresParticipation(int unId, String unPseudo) {
+    this.bdd.updateParticipation(this);
+    Participation res = null;
+    for (Participation p : this.listeParticipations) {
+      if (p.getEvenement().getId() == unId && unPseudo.equals(p.getMembre().getPseudo())) {
+        res = p;
+      }
+    }
+    return res;
+  }
+
+  /**
    * Modifie les données d'un {@link gestion.participation.Participation}, si et seulement si toutes
    * les modifications sont des succès, de la liste des participation et de la base de données si
    * présent.
