@@ -169,7 +169,7 @@ public class MembresView extends GridPane {
   public HBox ajMembre(Membre m) {
     HBox elem = new HBox();
     elem.getChildren().addAll(new Label(m.getPseudo()), new Label(m.getPrenom()), new Label(m.getNom())); //Le pseudo, nom et prénom comme texte
-    elem.setSpacing(100);    
+    elem.setSpacing(50);  
     //Les event pour ajouter ou retirer la classe elemHovered pour l'animation au survol d'un membre dans la liste
     elem.addEventHandler(MouseEvent.MOUSE_ENTERED,
         new EventHandler<MouseEvent>() {
