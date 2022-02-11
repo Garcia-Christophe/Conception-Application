@@ -376,8 +376,8 @@ public class BaseDeDonnees {
   @SuppressWarnings("deprecation")
   public boolean modifierMembre(Gestion g, Membre m, boolean mdpPresent) {
     boolean res = true;
-    
- // Suffixe
+
+    // Suffixe
     String pseudoReverse = "";
     for (int i = m.getPseudo().length() - 1; i >= 0; i--) {
       pseudoReverse += m.getPseudo().charAt(i);
@@ -386,7 +386,7 @@ public class BaseDeDonnees {
     // Préfixe + mdp + suffixe
     String mdp = m.getPseudo() + m.getMotDePasse() + pseudoReverse;
     String mdpSecurise = this.sha256(mdp);
-    
+
     String query;
     query = "UPDATE MEMBRE SET nom=" + '"' + m.getNom() + '"' + ",prenom=" + '"' + m.getPrenom()
         + '"' + ",lieuNaissance=" + '"' + m.getLieuNaissance() + '"' + ",dateNaissance=DATE_FORMAT("
@@ -435,4 +435,53 @@ public class BaseDeDonnees {
     return res;
   }
 
+  /**
+   * Modifie une participation dans la base de données, en exécutant une requête SQL "UPDATE".
+   * 
+   * @param g instance de la classe Gestion (façade)
+   * @param p participation contenant les données à modifier
+   * @return true si la modification à la base de données fonctionne sinon false.
+   */
+  @SuppressWarnings("deprecation")
+  public boolean modifierParticipation(Gestion g, Participation p) {
+    boolean res = true;
+    String query;
+    query = "UPDATE PARTICIPATION SET idEvenement='" + p.getEvenement().getId()
+        + "', pseudoMembre='" + p.getMembre().getPseudo() + "', nbInscrit='" + p.getNbInscrit()
+        + "', informations='" + p.getInformation() + "' WHERE idEvenement="
+        + p.getEvenement().getId() + " and pseudoMembre=" + '"' + p.getMembre().getPseudo() + '"';
+    try {
+      sqlStatement.executeUpdate(query);
+      this.updateParticipation(g);
+    } catch (SQLException e2) {
+      System.out.println("Modification impossible");
+      e2.printStackTrace();
+      res = false;
+    }
+    return res;
+  }
+
+
+  /**
+   * Supprime une participation de la base de données, en exécutant une requête SQL "DELETE".
+   * 
+   * @param g instance de la classe Gestion (façade)
+   * @param p la participation à supprimer de la base de données
+   * @return true si la suppression à la base de données fonctionne sinon false.
+   */
+  public boolean supprimerParticipation(Gestion g, Participation p) {
+    boolean res = true;
+    String query = "DELETE FROM PARTICIPATION WHERE pseudoMembre=" + '"' + p.getMembre().getPseudo()
+        + '"' + " and idEvenement= " + p.getEvenement().getId();
+    try {
+      sqlStatement.executeUpdate(query);
+      this.updateParticipation(g);
+    } catch (SQLException er) {
+      System.out.println("supression impossible de la participation (pseudoMembre:"
+          + p.getMembre().getPseudo() + ", idEvenement:" + p.getEvenement().getId());
+      er.printStackTrace();
+      res = false;
+    }
+    return res;
+  }
 }

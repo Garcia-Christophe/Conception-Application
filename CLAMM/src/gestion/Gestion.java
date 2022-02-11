@@ -937,7 +937,7 @@ public class Gestion {
               if (unEvenement.getId() == p.getEvenement().getId()
                   && unMembre.getPseudo().equals(p.getMembre().getPseudo())) {
                 this.codesErreurs.set(0, CodeErreur.PARTICIPATION_DEJA_EXISTANTE);
-              } 
+              }
             }
             if (this.nombresParticipantsRestants(unEvenement.getId()) < unNbInscrit) {
               this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_GRAND);
@@ -1018,7 +1018,7 @@ public class Gestion {
             }
             // TODO ajout critère via vérif information taille
 
-           
+
 
             boolean erreur = false;
             for (CodeErreur c : this.codesErreurs) {
@@ -1072,6 +1072,143 @@ public class Gestion {
       }
     }
     return res;
+  }
+
+  /**
+   * Modifie les données d'un {@link gestion.participation.Participation}, si et seulement si toutes
+   * les modifications sont des succès, de la liste des participation et de la base de données si
+   * présent.
+   * 
+   * <p>
+   * Cherche la participation ayant pour pseudo {@code pseudo} et id {@code id} dans la liste des
+   * membres avec la méthode {@link #getMembre(String)}. Si aucune participation n'est trouvé dans
+   * la liste des membres, alors renvoie le code erreur
+   * {@code gestion.CodeErreur.PARTICIPATION_INEXISTANTE}. Si la participation est trouvée, alors
+   * tente de modifier ses attributs. Si tous les attributs de la participation ont été modifiés
+   * avec succès, renvoie {@code NO_ERROR}, sinon renvoie la liste des codes erreurs
+   * correspondantes.
+   * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur}
+   *
+   * @param id id de l'évènement de la participation
+   * @param pseudo du membre de la participation
+   * @param nbInscrit nombre de personnes inscrites à l'événement de la participation
+   * @param informations informations supplémentaires de la participation
+   * @throws SQLException
+   */
+  public ArrayList<CodeErreur> modifierParticipation(Evenement unEvenement, Membre unMembre,
+      int nbInscrit, String informations) throws SQLException {
+
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
+    if (unEvenement != null) {
+      if (unMembre != null) {
+        if (this.getEvenement(unEvenement.getId()) != null) {
+          if (this.getMembre(unMembre.getPseudo()) != null) {
+            boolean res = false;
+            Participation pa = null;
+            for (Participation p : this.listeParticipations) {
+              if (unEvenement.getId() == p.getEvenement().getId()
+                  && unMembre.getPseudo().equals(p.getMembre().getPseudo())) {
+                res = true;
+                pa = p;
+              }
+            }
+            if (res) {
+
+              if (this.nombresParticipantsRestants(unEvenement.getId())
+                  + pa.getNbInscrit() < nbInscrit) {
+                this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_GRAND);
+              } else if (nbInscrit < 1) {
+                this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_PETIT);
+              }
+              // TODO ajout critère via vérif information taille
+
+
+              boolean erreur = false;
+              for (CodeErreur c : this.codesErreurs) {
+                if (c != CodeErreur.NO_ERROR) {
+                  erreur = true;
+                }
+              }
+              if (!erreur) {
+                Participation uneParticipation =
+                    new Participation(unEvenement, unMembre, nbInscrit, informations);
+                boolean modif = false;
+                if (this.bdd.participationPresente(unEvenement.getId(), unMembre.getPseudo())) {
+                  modif = this.bdd.modifierParticipation(this, uneParticipation);
+                }
+
+                if (!modif) {
+                  this.codesErreurs.set(8, CodeErreur.MODIFICATION_PARTICIPATION_IMPOSSIBLE);
+                }
+              }
+            } else {
+              this.codesErreurs.set(0, CodeErreur.PARTICIPATION_INEXISTANTE);
+            }
+
+          } else {
+            this.codesErreurs.set(1, CodeErreur.MEMBRE_INEXISTANT);
+          }
+        } else {
+          this.codesErreurs.set(0, CodeErreur.EVENEMENT_INEXISTANT);
+        }
+      } else {
+        this.codesErreurs.set(1, CodeErreur.MEMBRE_NULL);
+      }
+    } else {
+      this.codesErreurs.set(0, CodeErreur.EVENEMENT_NULL);
+    }
+    return this.codesErreurs;
+
+  }
+
+
+  /**
+   * Supprime une {@link gestion.participations.Participation} de la liste des participations et de
+   * la base de données si présente.
+   * 
+   * <p>
+   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
+   * à un {@link gestion.membres.Membre}.
+   * 
+   * @param unMembre membre de la participation à supprimer
+   * @param unEvenement evenement de la participation à supprimer
+   * @return {@code null} si la suppression de la participation est un succès, une liste de
+   *         {@link CodeErreur} sinon
+   */
+  public ArrayList<CodeErreur> supprimerParticipation(Membre unMembre, Evenement unEvenement) {
+    // Mise à défaut de la liste des codes erreurs
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
+
+    // Récupération de la participation à supprimer
+    Participation participationASupprimer = null;
+    for (Participation p : this.listeParticipations) {
+      if (p.getMembre().getPseudo().equals(unMembre.getPseudo())
+          && p.getEvenement().getId() == unEvenement.getId()) {
+        participationASupprimer = p;
+      }
+    }
+
+    if (participationASupprimer != null) {
+      // Tentative de suppression de la participation de la base de données
+      boolean suppression = this.bdd.supprimerParticipation(this, participationASupprimer);
+
+      // Si la suppression de la base de données est une réussite
+      if (suppression) {
+        this.codesErreurs.set(8, CodeErreur.NO_ERROR);
+      } else {
+        this.codesErreurs.set(8, CodeErreur.SUPPRESSION_PARTICIPATION_IMPOSSIBLE);
+      }
+    } else {
+      this.codesErreurs.set(0, CodeErreur.PARTICIPATION_INEXISTANTE);
+    }
+
+    return this.codesErreurs;
   }
 
   /**
@@ -1130,19 +1267,6 @@ public class Gestion {
       }
     }
 
-  }
-
-  public static void main(String[] args) throws SQLException {
-    Gestion g = new Gestion();
-    System.out.println(g.getEvenement(7));
-    System.out.println(g.listeMembres);
-    System.out.println(g.listeParticipations);
-
-    System.out.println("\n");
-    System.out.println(g.ajouterParticipation(null, g.getMembre("p1"), 30, null));
-    System.out.println(g.ajouterParticipation(g.getEvenement(7), null, 30, "test"));
-    System.out.println(g.ajouterParticipation(g.getEvenement(7), g.getMembre("p1"), 1, null));
-    System.out.println(g.ajouterParticipation(g.getEvenement(8), g.getMembre("p2"), 3, "retest"));
   }
 
 }
