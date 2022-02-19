@@ -16,9 +16,8 @@ import java.util.ArrayList;
  * La classe base de données permet de faire la liaison entre l'application Java et la base de
  * données externe.
  * 
- * <p>
- * La classe peut créer, ajouter, modifier et supprimer des membres et des évènements au niveau de
- * la base de données.
+ * <p>La classe peut créer, ajouter, modifier et supprimer des membres, des évènements et des 
+ * participations au niveau de la base de données.
  * 
  * @author Alexia, Christophe
  * @version 2.00
@@ -41,10 +40,9 @@ public class BaseDeDonnees {
   private static final int ANNEE_SUP = 1900;
 
   /**
-   * Constructeur de la BaseDeDonnées.
+   * Constructeur de la BaseDeDonnees.
    * 
-   * <p>
-   * Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
+   * <p>Permet de créer la connexion vers la base de données ainsi que préparer les futures requêtes
    * SQL.
    * 
    * @throws SQLException si la connexion échoue
@@ -114,6 +112,11 @@ public class BaseDeDonnees {
     }
   }
 
+  /**
+   * Met à jour la liste des participations à partir de la base de données.
+   * 
+   * @param g l'instance de Gestion de l'application (façade)
+   */
   public void updateParticipation(Gestion g) {
     try {
       ResultSet lesParticipations = sqlStatement.executeQuery("SELECT * FROM PARTICIPATION");
@@ -145,7 +148,7 @@ public class BaseDeDonnees {
 
 
   /**
-   * Renvoie vria ou faux suivant si un membre avec le pseudo fourni en paramètre existe dans la
+   * Renvoie vrai ou faux suivant si un membre avec le pseudo fourni en paramètre existe dans la
    * liste.
    * 
    * @param unPseudo le pseudo du membre à trouver
@@ -228,7 +231,7 @@ public class BaseDeDonnees {
   }
 
   /**
-   * Renvoie vria ou faux suivant si un événement avec l'identifiant fourni en paramètre existe dans
+   * Renvoie vrai ou faux suivant si un événement avec l'identifiant fourni en paramètre existe dans
    * la liste.
    * 
    * @param id l'identifiant de l'événement à trouver
@@ -275,7 +278,7 @@ public class BaseDeDonnees {
 
   /**
    * Renvoie vrai ou faux suivant si une participation avec l'identifiant de l'évènement et le
-   * pseudo du membre fourni en paramètre existe dans la liste.
+   * pseudo du membre fournis en paramètre existe dans la liste.
    * 
    * @param id l'identifiant de l'événement de la participation à trouver
    * @param pseudo le pseudo du membre de la participation à trouver
@@ -442,7 +445,6 @@ public class BaseDeDonnees {
    * @param p participation contenant les données à modifier
    * @return true si la modification à la base de données fonctionne sinon false.
    */
-  @SuppressWarnings("deprecation")
   public boolean modifierParticipation(Gestion g, Participation p) {
     boolean res = true;
     String query;

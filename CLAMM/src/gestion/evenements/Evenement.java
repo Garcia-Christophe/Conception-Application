@@ -67,7 +67,7 @@ public class Evenement {
   }
 
   /**
-   * Change l'id d'un évènement.
+   * Change l'id de l'évènement.
    * 
    * @param unId l'identifiant de l'évènement que l'on veut lui attribuer
    */
@@ -85,7 +85,7 @@ public class Evenement {
   }
 
   /**
-   * Change le nom d'un évènement.
+   * Change le nom de l'évènement.
    * 
    * @param unNom le nom de l'évènement que l'on veut lui attribuer
    */
@@ -103,7 +103,7 @@ public class Evenement {
   }
 
   /**
-   * Change le descriptif d'un évènement.
+   * Change le descriptif de l'évènement.
    * 
    * @param unDescriptif le descriptif de l'évènement que l'on veut lui attribuer
    */
@@ -121,7 +121,7 @@ public class Evenement {
   }
 
   /**
-   * Change l'image d'un évènement.
+   * Change l'image de l'évènement.
    * 
    * @param uneImage l'image de l'évènement que l'on veut lui attribuer
    */
@@ -139,7 +139,7 @@ public class Evenement {
   }
 
   /**
-   * Change la date d'un évènement.
+   * Change la date de l'évènement.
    * 
    * @param uneDate la date de l'évènement que l'on veut lui attribuer
    */
@@ -157,7 +157,7 @@ public class Evenement {
   }
 
   /**
-   * Change le lieu d'un évènement.
+   * Change le lieu de l'évènement.
    * 
    * @param unLieu le lieu de l'évenement que l'on veut lui attribuer
    */
@@ -175,7 +175,7 @@ public class Evenement {
   }
 
   /**
-   * Change le nombre maximum de personnes autorisées d'un évènement..
+   * Change le nombre maximum de personnes autorisées de l'évènement.
    * 
    * @param unNbMaxPersonnes le nombre maximum de personnes autorisées de l'évènement que l'on veut
    *        lui attribuer
@@ -194,7 +194,7 @@ public class Evenement {
   }
 
   /**
-   * Change le type d'un évènement.
+   * Change le type de l'évènement.
    * 
    * @param unType le type de l'évènement que l'on veut lui attribuer
    */

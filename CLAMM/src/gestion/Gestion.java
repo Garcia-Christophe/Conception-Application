@@ -9,14 +9,14 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import front.App;
 
 /**
- * La classe Gestion permet de gérer tous les membres et tous les évènements.
+ * La classe Gestion permet de gérer tous les membres, tous les évènements et toutes les 
+ * participations.
  * 
- * <p>
- * La classe peut créer, ajouter, modifier et supprimer des membres et des évènements. Elle contient
- * la liste de tous les membres, la liste de tous les évènements, ainsi que la liste de tous les
+ * <p>La classe peut créer, ajouter, modifier et supprimer des membres, des évènements et 
+ * des participations. Elle contient la liste de tous les membres, la liste de tous les 
+ * évènements, la liste de toutes les participations ainsi que la liste de tous les
  * {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
  * 
  * @author Manon, Christophe
@@ -27,7 +27,7 @@ import front.App;
 public class Gestion {
 
   /**
-   * Variable pour attester le la bonne connexion à la base de données
+   * Variable pour attester le la bonne connexion à la base de données.
    */
   private int connexionReussie = 1;
 
@@ -57,7 +57,7 @@ public class Gestion {
   private ArrayList<Membre> listeMembres;
 
   /**
-   * Liste des Participation.
+   * Liste des participations.
    */
   private ArrayList<Participation> listeParticipations;
 
@@ -69,9 +69,8 @@ public class Gestion {
   /**
    * Constructeur de la classe {@code Gestion}.
    * 
-   * <p>
-   * Initialise les listes de membres, événements et participations à partir des données de la base
-   * de données.
+   * <p>Initialise les listes de membres, événements et participations à partir des données de la 
+   * base de données.
    * 
    * @throws SQLException si la création de la {@link BaseDeDonnees} a échoué
    */
@@ -100,7 +99,7 @@ public class Gestion {
   /**
    * Instancie la liste des codes d'erreurs avec une liste passée en paramètre.
    * 
-   * @param uneListe La liste des codes erreurs.
+   * @param uneListe La liste des codes erreurs
    */
   private void setCodesErreurs(ArrayList<CodeErreur> uneListe) {
     if (uneListe != null) {
@@ -111,7 +110,7 @@ public class Gestion {
   /**
    * Retourne la variable connexionReussie, 0 en cas d'échec, 1 sinon.
    *
-   * @return connexionReussie.
+   * @return l'état de la connexion
    */
   public int getConnexionReussie() {
     return this.connexionReussie;
@@ -120,7 +119,7 @@ public class Gestion {
   /**
    * Retourne la liste des codes d'erreurs.
    * 
-   * @return la liste des codes erreurs.
+   * @return la liste des codes erreurs
    */
   public ArrayList<CodeErreur> getCodesErreurs() {
     return this.codesErreurs;
@@ -129,7 +128,7 @@ public class Gestion {
   /**
    * Retourne la liste des événements.
    *
-   * @return la liste des événements.
+   * @return la liste des événements
    */
   public ArrayList<Evenement> getListeEvenements() {
     this.bdd.updateEvenements(this);
@@ -157,9 +156,8 @@ public class Gestion {
   /**
    * Créer un {@link gestion.evenements.Evenement}.
    * 
-   * <p>
-   * Si une ou plus définition(s) des attributs du nouveau evenement est un échec, le code erreur
-   * est ajouté dans la liste des codes erreurs, et retourne un membre {@code null}.
+   * <p>Si une ou plus définition(s) des attributs du nouveau evenement est un échec, les codes 
+   * erreurs est ajouté dans la liste des codes erreurs, et retourne un événement {@code null}.
    * 
    * @param unId Identifiant de l'événement
    * @param unNom Nom de l'événement
@@ -168,7 +166,7 @@ public class Gestion {
    * @param uneDate Date de l'élévement
    * @param unlieu Lieu de l'événement
    * @param unNbMaxPersonnes Nombre maximum de personnes autorisées à l'événement
-   * @param unType Type de l'évenement
+   * @param unType Type de l'événement
    * @return une nouvelle instance de la classe {@link gestion.evenements.Evenement} si la création
    *         est un succès, {@code null} sinon
    */
@@ -176,8 +174,6 @@ public class Gestion {
       Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
 
     Evenement unEvenement = new Evenement();
-
-
     CodeErreur codeErreur = null;
 
     // Identifiant de l'événement
@@ -265,8 +261,7 @@ public class Gestion {
    * Ajoute un {@link gestion.evenements.Evenement} à la liste des événements et dans la base de
    * données si pas déjà présent.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement
@@ -327,10 +322,9 @@ public class Gestion {
   }
 
   /**
-   * Met à jour la liste des événements à partir des événements de la base de donées.
+   * Met à jour la liste des événements à partir des événements de la base de données.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement
@@ -403,8 +397,7 @@ public class Gestion {
    * Supprime un {@link gestion.evenements.Evenement} de la liste des événements et de la base de
    * données si présent.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement à supprimer
@@ -415,7 +408,7 @@ public class Gestion {
     ArrayList<CodeErreur> res = null;
     Evenement evenementASupprimer = this.getEvenement(unId);
 
-    // Si l'evenement est dans la liste des événements
+    // Si l'événement est dans la liste des événements
     if (evenementASupprimer != null) {
       boolean suppression = this.bdd.supprimerEvenement(this, unId);
 
@@ -437,8 +430,7 @@ public class Gestion {
    * Modifie un événement, si toutes les modifications sont possibles, de la liste des événements et
    * de la base de données si présent.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.evenements.Evenement}.
    * 
    * @param unId Identifiant de l'événement
@@ -506,6 +498,11 @@ public class Gestion {
   }
 
 
+  /**
+   * Met à jour le prochain identifiant des événements.
+   * 
+   * @param prochainIdEvenement le prochain identifiant d'un événement
+   */
   public void setProchainIdEvenement(int prochainIdEvenement) {
     this.prochainIdEvenement = prochainIdEvenement;
   }
@@ -514,20 +511,17 @@ public class Gestion {
    * Instancie la liste des membres avec une liste passée en paramètre.
    * 
    * @param uneListe la liste des membres
-   * @return {@code 0}
    */
-  public int setListeMembres(ArrayList<Membre> uneListe) {
+  public void setListeMembres(ArrayList<Membre> uneListe) {
     if (uneListe != null) {
       this.listeMembres = uneListe;
     }
-    return 0;
   }
 
   /**
    * Crée un {@link gestion.membres.Membre}.
    * 
-   * <p>
-   * Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
+   * <p>Si une ou plus définition(s) des attributs du nouveau membre est un échec, ajoute le code
    * erreur dans la liste des codes erreurs, et retourne un membre {@code null}.
    * 
    * @param unPseudo pseudo du membre à créer
@@ -635,15 +629,13 @@ public class Gestion {
    * Ajoute un {@link gestion.membres.Membre} seulement s'il n'existe pas déjà, à la liste des
    * membres et à la base de données s'il est pas présent.
    * 
-   * <p>
-   * Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la liste
-   * des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, alors le
-   * code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
+   * <p>Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la 
+   * liste des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, 
+   * alors le code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
    * {@link #creerMembre(String, String, String, String, Date, String, String, String)} est réalisé
    * pour créer le membre avant de l'ajouter dans la liste des membres.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du nouveau membre
@@ -695,17 +687,15 @@ public class Gestion {
   }
 
   /**
-   * Met à jour la liste des membres à partir des membres de la base de donées.
+   * Met à jour la liste des membres à partir des membres de la base de données.
    * 
-   * <p>
-   * Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la liste
-   * des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, alors le
-   * code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
+   * <p>Avec la méthode {@link #getMembre(String)}, on récupère le membre déjà existant dans la 
+   * liste des membres à partir du pseudo {@code unPseudo}. Si la valeur n'est pas {@code null}, 
+   * alors le code erreur {@code CodeErreur.PSEUDO_DEJA_EXISTANT} est renvoyé. Sinon, un appel à
    * {@link #creerMembre(String, String, String, String, Date, String, String, String)} est réalisé
    * pour créer le membre avant de l'ajouter dans la liste des membres.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
    * {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du nouveau membre
@@ -748,15 +738,14 @@ public class Gestion {
    * Supprime un {@link gestion.membres.Membre} de la liste des membres et de la base de données si
    * présent.
    * 
-   * <p>
-   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
-   * {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la liste des membres et
-   * ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé dans la liste
-   * des membres, alors renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
+   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la 
+   * méthode {@link #getMembre(String)}. Si le membre est trouvé, alors le retire de la liste des 
+   * membres et ne renvoie aucun code erreur, renvoie {@code null}. Si aucun membre n'est trouvé 
+   * dans la liste des membres, alors renvoie une liste de codes erreurs avec le code erreur 
+   * {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
-   * à un {@link gestion.membres.Membre}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à un {@link gestion.membres.Membre}.
    * 
    * @param unPseudo pseudo du membre à supprimer de la liste
    * @return {@code null} si la suppression du membre est un succès, une liste de {@link CodeErreur}
@@ -787,17 +776,15 @@ public class Gestion {
    * Modifie les données d'un {@link gestion.membres.Membre}, si et seulement si toutes les
    * modifications sont des succès, de la liste des membres et de la base de données si présent.
    * 
-   * <p>
-   * Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la méthode
-   * {@link #getMembre(String)}. Si aucun membre n'est trouvé dans la liste des membres, alors
-   * renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est trouvé,
-   * alors tente de modifier ses attributs. Si tous les attributs du membre ont été modifiés avec
-   * succès, ne renvoie aucun code erreur, renvoie {@code null}, sinon renvoie la liste des codes
-   * erreurs correspondantes.
+   * <p>Cherche le membre ayant pour pseudo {@code unPseudo} dans la liste des membres avec la 
+   * méthode {@link #getMembre(String)}. Si aucun membre n'est trouvé dans la liste des membres, 
+   * alors renvoie le code erreur {@code gestion.CodeErreur.MEMBRE_INTROUVABLE}. Si le membre est 
+   * trouvé, alors tente de modifier ses attributs. Si tous les attributs du membre ont été 
+   * modifiés avec succès, ne renvoie aucun code erreur, renvoie {@code null}, sinon renvoie la 
+   * liste des codes erreurs correspondantes.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
-   * à un {@link gestion.membres.Membre}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à un {@link gestion.membres.Membre}.
    *
    * @param unPseudo nouveau pseudo du membre
    * @param unNom nouveau nom du membre
@@ -861,8 +848,7 @@ public class Gestion {
   /**
    * Permet de retrouver un {@link gestion.membres.Membre} grâce à son pseudo {@code unPseudo}.
    * 
-   * <p>
-   * Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
+   * <p>Si le pseudo {@code unPseudo} n'est pas {@code null}, alors compare un par un le pseudo de
    * chacun des membres de la liste des membres avec celui passé en paramètre. Le parcours de la
    * liste s'arrête lorsque le membre ayant le même pseudo à été trouvé et renvoie le
    * {@link gestion.membres.Membre}, ou que la liste a été entièrement parcourue et renvoie
@@ -886,7 +872,7 @@ public class Gestion {
           membreTrouve = true; // membre trouvé, stoppe le parcours de la liste des membres
         }
 
-        i++; // passe au membre suivant
+        i++;
       }
     }
 
@@ -922,7 +908,13 @@ public class Gestion {
   /**
    * Ajoute une participation à la liste des participations.
    * 
-   * @throws SQLException
+   * @param unEvenement l'événement de la participation
+   * @param unMembre le membre de la participation
+   * @param unNbInscrit le nombre de personnes inscrites au nom du membre à l'événement
+   * @param uneInformation une information complémentaire sur la participation
+   * @return {@code null} si la modification du membre est un succès, une liste de
+   *         {@link CodeErreur} sinon
+   * @throws SQLException si la méthode participationPresente de {@code bdd} provoque une erreur
    */
   public ArrayList<CodeErreur> ajouterParticipation(Evenement unEvenement, Membre unMembre,
       int unNbInscrit, String uneInformation) throws SQLException {
@@ -983,11 +975,10 @@ public class Gestion {
   }
 
   /**
-   * Met à jour la liste des participations à partir des participations de la base de donées.
+   * Met à jour la liste des participations à partir des participations de la base de données.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à un
-   * {@link gestion.participations.Participation}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link CodeErreur} correspondants à 
+   * une {@link gestion.participations.Participation}.
    * 
    * @param unEvenement evenement de la nouvelle participation
    * @param unMembre membre de la participation
@@ -1047,6 +1038,12 @@ public class Gestion {
     return this.codesErreurs;
   }
 
+  /**
+   * Calcule le nombre de places disponibles d'un événement.
+   * 
+   * @param id identifiant de l'événement
+   * @return le nombre de places disponibles de l'événement
+   */
   private int nombresParticipantsRestants(int id) {
     int res = this.getEvenement(id).getNbMaxPersonnes();
     for (Participation p : this.listeParticipations) {
@@ -1058,10 +1055,11 @@ public class Gestion {
   }
 
   /**
-   * Retourne la liste des participations qui à un événement avec id égale l'id passée paramètre.
+   * Retourne la liste des participations qui a un événement avec identifiant égal à l'identifiant 
+   * passé paramètre.
    * 
-   * @param unId identifiant d'un événement
-   * @return la liste des participations qui à un événement avec id égale l'id passée paramètre
+   * @param unId identifiant de l'événement
+   * @return la liste des participations de l'événement
    */
   public ArrayList<Participation> getListeMembresParticipation(int unId) {
     this.bdd.updateParticipation(this);
@@ -1095,27 +1093,28 @@ public class Gestion {
   }
 
   /**
-   * Modifie les données d'un {@link gestion.participation.Participation}, si et seulement si toutes
-   * les modifications sont des succès, de la liste des participation et de la base de données si
-   * présent.
+   * Modifie les données d'une {@link gestion.participations.Participation}, si et seulement si 
+   * toutes les modifications sont des succès, de la liste des participation et de la base de 
+   * données si présente.
    * 
-   * <p>
-   * Cherche la participation ayant pour pseudo {@code pseudo} et id {@code id} dans la liste des
-   * membres avec la méthode {@link #getMembre(String)}. Si aucune participation n'est trouvé dans
-   * la liste des membres, alors renvoie le code erreur
-   * {@code gestion.CodeErreur.PARTICIPATION_INEXISTANTE}. Si la participation est trouvée, alors
-   * tente de modifier ses attributs. Si tous les attributs de la participation ont été modifiés
-   * avec succès, renvoie {@code NO_ERROR}, sinon renvoie la liste des codes erreurs
-   * correspondantes.
+   * <p>Cherche la participation ayant pour membre {@code unMembre} et événemenet 
+   * {@code unEvenement} dans la liste des participations. Si aucune participation n'est trouvée 
+   * dans la liste des participations, alors renvoie la liste des codes erreurs avec le code 
+   * erreur {@code gestion.CodeErreur.PARTICIPATION_INEXISTANTE}. Si la participation est trouvée, 
+   * alors tente de modifier ses attributs. Si tous les attributs de la participation ont été 
+   * modifiés avec succès, renvoie une liste avec le code erreur {@code NO_ERROR}, sinon renvoie 
+   * la liste des codes erreurs correspondants.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur}
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à une {@link gestion.participations.Participation}.
    *
-   * @param id id de l'évènement de la participation
-   * @param pseudo du membre de la participation
+   * @param unEvenement l'évènement de la participation
+   * @param unMembre le membre de la participation
    * @param nbInscrit nombre de personnes inscrites à l'événement de la participation
    * @param informations informations supplémentaires de la participation
-   * @throws SQLException
+   * @return {@code null} si la suppression de la participation est un succès, une liste de
+   *         {@link CodeErreur} sinon
+   * @throws SQLException si la méthode participationPresente de {@code bdd} provoque une erreur
    */
   public ArrayList<CodeErreur> modifierParticipation(Evenement unEvenement, Membre unMembre,
       int nbInscrit, String informations) throws SQLException {
@@ -1190,9 +1189,8 @@ public class Gestion {
    * Supprime une {@link gestion.participations.Participation} de la liste des participations et de
    * la base de données si présente.
    * 
-   * <p>
-   * La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} correspondants
-   * à un {@link gestion.membres.Membre}.
+   * <p>La liste des codes erreurs sont ceux de l'énumération {@link gestion.CodeErreur} 
+   * correspondants à une {@link gestion.participations.Participation}.
    * 
    * @param unMembre membre de la participation à supprimer
    * @param unEvenement evenement de la participation à supprimer
@@ -1243,8 +1241,9 @@ public class Gestion {
       writer.write("\n");
 
       String membre = "";
-      for (Membre m : this.getListeMembres()) { // Ajout de tous les membres de l'arrayList des
-                                                // membres
+      
+      // Ajout de tous les membres de la liste des membres
+      for (Membre m : this.getListeMembres()) {
         membre = m.getPseudo() + ";" + m.getNom() + ";" + m.getPrenom() + ";" + m.getMail() + ";"
             + m.getDateNaissance() + ";" + m.getVille();
         writer.write(membre);

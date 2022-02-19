@@ -3,8 +3,8 @@ package gestion.membres;
 import java.util.Date;
 
 /**
- * La classe Membre repr�sente un membre d�association, caract�ris� par son nom, son pr�nom, un
- * mail, un pseudo, un mot de passe, sa ville de r�sidence, sa date et son lieu de naissance. Le
+ * La classe Membre représente un membre d'association, caractérisé par son nom, son prénom, un
+ * mail, un pseudo, un mot de passe, sa ville de résidence, sa date et son lieu de naissance. Le
  * pseudo est unique.
  * 
  * @author Mathis
@@ -23,7 +23,7 @@ public class Membre {
   private String nom;
 
   /**
-   * Pr�nom du membre.
+   * Prénom du membre.
    */
   private String prenom;
 
@@ -38,7 +38,7 @@ public class Membre {
   private Date dateNaissance;
 
   /**
-   * Lieu de r�sidence du membre.
+   * Lieu de résidence du membre.
    */
   private String ville;
 
@@ -94,18 +94,18 @@ public class Membre {
   }
 
   /**
-   * Retourne le pr�nom du membre.
+   * Retourne le prénom du membre.
    * 
-   * @return le pr�nom du membre
+   * @return le prénom du membre
    */
   public String getPrenom() {
     return prenom;
   }
 
   /**
-   * Change le pr�nom du membre.
+   * Change le prénom du membre.
    *
-   * @param unPrenom le prenom du membre
+   * @param unPrenom le prénom du membre
    */
   public void setPrenom(String unPrenom) {
     this.prenom = unPrenom;
@@ -157,7 +157,7 @@ public class Membre {
   }
 
   /**
-   * Change la ville de r�sidence d'un membre.
+   * Change la ville de résidence d'un membre.
    * 
    * @param uneVille la ville du membre
    */
@@ -175,7 +175,7 @@ public class Membre {
   }
 
   /**
-   * Change le mail du membre.
+   * Change l'adresse mail du membre.
    *
    * @param unMail l'adresse mail du membre
    */
@@ -184,7 +184,7 @@ public class Membre {
   }
 
   /**
-   * Retourne le mot du membre.
+   * Retourne le mot de passe du membre.
    * 
    * @return le mot de passe du membre
    */
@@ -193,7 +193,7 @@ public class Membre {
   }
 
   /**
-   * Change le motDePasse du membre.
+   * Change le mot de passe du membre.
    *
    * @param unMotDePasse le mot de passe du membre
    */

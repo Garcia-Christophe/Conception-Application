@@ -23,7 +23,7 @@ public class Participation {
   private Membre membre;
 
   /**
-   * Nombre de personnes vennant avec le membre inscrit à this.evenement
+   * Nombre de personnes venant avec le membre inscrit à this.evenement
    */
   private int nbInscrit;
 
@@ -84,19 +84,29 @@ public class Participation {
     this.membre = unMembre;
   }
 
+  /**
+   * Retourne le nombre de personnes inscrites à l'événement au nom du membre.
+   * 
+   * @return le nombre de personnes inscrites à l'événement au nom du membre
+   */
   public int getNbInscrit() {
     return nbInscrit;
   }
 
   /**
-   * Change le nombre de participant d'une participation par unNbInscrit.
+   * Change le nombre de participants d'une participation par unNbInscrit.
    * 
-   * @param unNbInscrit le nombre de participant de la participation que l'on veut lui attribuer
+   * @param unNbInscrit le nombre de participants de la participation que l'on veut lui attribuer
    */
   public void setNbInscrit(int unNbInscrit) {
     this.nbInscrit = unNbInscrit;
   }
 
+  /**
+   * Retourne les informations complémentaires de la participation.
+   * 
+   * @return les informations complémentaires de la participation
+   */
   public String getInformation() {
     return information;
   }

@@ -1,7 +1,7 @@
 package gestion.evenements;
 
 /**
- * Enumération des types d'évenement.
+ * Enumération des types d'événement.
  * 
  * <ul>
  * <li>- REPAS : type d'événement Repas</li>

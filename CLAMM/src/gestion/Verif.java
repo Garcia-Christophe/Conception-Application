@@ -6,12 +6,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * La classe Verif permet de vérifier la validité des éléments de {@link gestion.membres.Membre} et
- * de {@link gestion.evenements.Evenement}.
+ * La classe Verif permet de vérifier la validité des éléments de {@link gestion.membres.Membre} 
+ * et de {@link gestion.evenements.Evenement}.
  * 
  * <p>Chaque méthode permet de vérifier un ou plusieurs attributs, suivant les règles établies pour
- * chacun. Les méthodes retournent {@code null} si le paramètre correspond aux régles, une erreur de
- * {@link CodeErreur} sinon.
+ * chacun. Les méthodes retournent {@code null} si le paramètre correspond aux règles, une erreur 
+ * de {@link CodeErreur} sinon.
  * 
  * @author Christophe
  * @version 2.00
@@ -22,17 +22,17 @@ import java.util.regex.Pattern;
 public class Verif {
 
   /**
-   * Taille maximum du nom d'un événement.
+   * Taille maximale du nom d'un événement.
    */
   private static final int TAILLE_MAX_NOM_EVENEMENT = 50;
 
   /**
-   * Taille maximum du descriptif d'un événement.
+   * Taille maximale du descriptif d'un événement.
    */
   private static final int TAILLE_MAX_DESCRIPTIF_EVENEMENT = 500;
 
   /**
-   * Taille maximum du lieu d'un événement.
+   * Taille maximale du lieu d'un événement.
    */
   private static final int TAILLE_MAX_LIEU_EVENEMENT = 100;
 
@@ -110,7 +110,7 @@ public class Verif {
    * @return {@code null} si le nom est conforme, sinon CodeErreur.NOM_NULL si le nom est
    *         {@code null}, CodeErreur.NOM_VIDE si la taille du nom est égale à 0,
    *         CodeErreur.NOM_ESPACE_EN_TROP si un espace est présent au début ou à la fin,
-   *         CodeErreur.NOM_TROP_LONG si le nom dépasse la taille maximum
+   *         CodeErreur.NOM_TROP_LONG si le nom dépasse la taille maximale
    */
   public CodeErreur verifNomEvenement(String unNom) {
     CodeErreur res = null;
@@ -138,7 +138,7 @@ public class Verif {
    * @return {@code null} si le descriptif est conforme, sinon CodeErreur.DESCRIPTIF_NULL si le
    *         descriptif est {@code null}, CodeErreur.DESCRIPTIF_ESPACE_EN_TROP si un espace est
    *         présent au début ou à la fin, CodeErreur.DESCRIPTIF_TROP_LONG si le descriptif dépasse
-   *         la taille maximum
+   *         la taille maximale
    */
   public CodeErreur verifDescriptifEvenement(String unDescriptif) {
     CodeErreur res = null;
@@ -187,7 +187,7 @@ public class Verif {
    * @return {@code null} si le lieu est conforme, sinon CodeErreur.LIEU_NULL si le lieu est
    *         {@code null}, CodeErreur.LIEU_VIDE si la taille est égale à 0,
    *         CodeErreur.LIEU_ESPACE_EN_TROP si un espace est présent au début ou à la fin,
-   *         CodeErreur.LIEU_TROP_LONG si le lieu dépasse la taille maximum
+   *         CodeErreur.LIEU_TROP_LONG si le lieu dépasse la taille maximale
    */
   public CodeErreur verifLieuEvenement(String unLieu) {
     CodeErreur res = null;
@@ -245,18 +245,18 @@ public class Verif {
    * Vérifier la validité du pseudo du membre.
    * 
    * <p>Le pseudo ne doit pas être {@code null}, être vide, dépasser 
-   * {@code TAILLE_MAX_PSEUDO_MEMBRE},et contenir : espace<>|:/\"*?.
+   * {@code TAILLE_MAX_PSEUDO_MEMBRE}, et contenir : espace{@literal <}{@literal >}|:/\"*?.
    * 
    * @param unPseudo le pseudo du membre que l'on veut vérifier
    * @return {@code null} si le pseudo est conforme, sinon CodeErreur.PSEUDO_NULL si le pseudo est
    *         {@code null}, CodeErreur.PSEUDO_VIDE si le pseudo est vide, CodeErreur.PSEUDO_TROP_LONG
-   *         si le pseudo dépasse la taille maximum, CodeErreur.PSEUDO_INVALIDE si le pseudo
-   *         contient : espace<>|:/\"*?
+   *         si le pseudo dépasse la taille maximale, CodeErreur.PSEUDO_INVALIDE si le pseudo
+   *         contient : espace{@literal <}{@literal >}|:/\"*?
    */
   public CodeErreur verifPseudoMembre(String unPseudo) {
     CodeErreur res = null;
 
-    // Si le paramètre n'est pas null et le pseudo n'est pas vide
+    // Si le paramètre n'est pas null et le pseudo n'est pas vide ou trop long
     if (unPseudo == null) {
       res = CodeErreur.PSEUDO_NULL;
     } else if (unPseudo.length() == 0) {
@@ -294,9 +294,9 @@ public class Verif {
    * @return {@code null} si la désignation est conforme, sinon CodeErreur.NOM_NULL ou
    *         CodeErreur.PRENOM_NULL si la désignation est {@code null}, CodeErreur.NOM_VIDE ou
    *         CodeErreur.PRENOM_VIDE si la désignation est vide, CodeErreur.NOM_TROP_LONG ou
-   *         CodeErreur.PRENOM_TROP_GRAND si la désignation dépasse la taille maximum,
-   *         CodeErreur.NOM_HORS_ALPHABET ou CodeErruer.PRENOM_HORS_ALPHABET si la désignation
-   *         contient un caractère hors alphabet.
+   *         CodeErreur.PRENOM_TROP_GRAND si la désignation dépasse la taille maximale,
+   *         CodeErreur.NOM_HORS_ALPHABET ou CodeErreur.PRENOM_HORS_ALPHABET si la désignation
+   *         contient un caractère hors alphabet
    */
   public CodeErreur verifIdentiteMembre(String designation, int numero) {
     CodeErreur res = null;
@@ -326,14 +326,14 @@ public class Verif {
    * @param numero 0 si le lieu correspond au lieu de naissance, 1 si le lieu correspond à la ville
    * @return {@code null} si le lieu est conforme, sinon CodeErreur.LIEU_NULL ou
    *         CodeErreur.VILLE_NULL si le lieu est {@code null}, CodeErreur.LIEU_TAILLE_INCORRECTE ou
-   *         CodeErreur.VILLE_TAILLE_INCORRECTE si le lieu est vide ou dépasse la taille maximum,
+   *         CodeErreur.VILLE_TAILLE_INCORRECTE si le lieu est vide ou dépasse la taille maximale,
    *         CodeErreur.LIEU_NOM_INCORRECT ou CodeErreur.VILLE_NOM_INCORRECT si le lieu contient un
-   *         caractère hors alphabet et espaces.
+   *         caractère hors alphabet et espaces
    */
   public CodeErreur verifLieuxMembre(String lieu, int numero) {
     CodeErreur res = null;
 
-    // Si le paramètre n'est pas null et la ville n'est pas vide
+    // Si le paramètre n'est pas null et le lieu n'est pas vide ou trop long
     if (lieu == null) {
       res = numero == 0 ? CodeErreur.LIEU_NULL : CodeErreur.VILLE_NULL;
     } else if (lieu.length() <= Verif.TAILLE_MAX_LIEU_MEMBRE && lieu.length() > 0) {
@@ -341,14 +341,13 @@ public class Verif {
 
       // Vérifie tous les cas interdits
       while (i < lieu.length()) {
-        //System.out.println(lieu.charAt(i));
         Pattern p = Pattern.compile("[a-zA-Z]");
         Matcher m = p.matcher(String.valueOf(lieu.charAt(i)));
         
         if (lieu.charAt(i) != ' ' && !m.matches()) {
           res = numero == 0 ? CodeErreur.LIEU_NOM_INCORRECT : CodeErreur.VILLE_NOM_INCORRECT;
         }
-        //System.out.println("res = " + res);
+        
         i++;
       }
     } else {
@@ -368,7 +367,7 @@ public class Verif {
    * @return {@code null} si la date est conforme, sinon CodeErreur.DATE_NULL si la date est
    *         {@code null}, CodeErreur.DATE_IMPOSSIBLE si la date est future,
    *         CodeErreur.DATE_AGE_IMPOSSIBLE si la date actuelle - la date de naissance est
-   *         supérieure à {@code AGE_MAXIMUM_MEMBRE}.
+   *         supérieure à {@code AGE_MAXIMUM_MEMBRE}
    */
   @SuppressWarnings("deprecation")
   public CodeErreur verifDateMembre(Date uneDateNaissance) {
@@ -395,7 +394,7 @@ public class Verif {
    * @param unMail l'adresse mail du membre que l'on veut vérifier
    * @return {@code null} si le mail est conforme, sinon CodeErreur.MAIL_NULL si le mail est
    *         {@code null}, CodeErreur.MAIL_VIDE si le mail est vide, CodeErreur.MAIL_INVALIDE si le
-   *         mail est une adresse invalide, CodeErreur.MAIL_TROP_LONG si le mail dépasse le maximum.
+   *         mail est une adresse invalide, CodeErreur.MAIL_TROP_LONG si le mail dépasse le maximum
    */
   public CodeErreur verifMailMembre(String unMail) {
     CodeErreur res = null;
@@ -439,7 +438,7 @@ public class Verif {
   public CodeErreur verifMdpMembre(String unMotDePasse) {
     CodeErreur res = null;
 
-    // Si le paramètre n'est pas null et le mot de passe n'est pas vide
+    // Si le paramètre n'est pas null et le mot de passe est de bonne taille
     if (unMotDePasse == null) {
       res = CodeErreur.MDP_NULL;
     } else if (unMotDePasse.length() < Verif.TAILLE_MIN_MDP_MEMBRE
