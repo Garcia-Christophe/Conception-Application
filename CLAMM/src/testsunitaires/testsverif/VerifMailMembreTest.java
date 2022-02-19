@@ -93,7 +93,7 @@ public class VerifMailMembreTest {
   @Test
   @DisplayName("Test unMail égal à 'tof#@exemple.me.org'")
   void testMailIncorrect6() {
-    assertEquals(CodeErreur.MAIL_INVALIDE, uneVerif.verifMailMembre("of#@exemple.me.org"));
+    assertEquals(CodeErreur.MAIL_INVALIDE, uneVerif.verifMailMembre("tof#@exemple.me.org"));
   }
 
 }

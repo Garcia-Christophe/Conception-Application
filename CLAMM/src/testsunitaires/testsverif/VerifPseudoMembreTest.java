@@ -50,11 +50,11 @@ public class VerifPseudoMembreTest {
   }
 
   @Test
-  @DisplayName("Test unPseudo égal à  \"un espace\"")
+  @DisplayName("Test unPseudo égal à \"un espace\"")
   void testAvecEspace() {
     assertEquals(CodeErreur.PSEUDO_INVALIDE, uneVerif.verifPseudoMembre("un espace"));
   }
-  
+
   @Test
   @DisplayName("Test unPseudo égal à 'pseudo-9c'")
   void testCorrect9car() {
@@ -62,7 +62,7 @@ public class VerifPseudoMembreTest {
   }
 
   @Test
-  @DisplayName("Test unPseudo égal à 'pseudo_10c'")
+  @DisplayName("Test unPseudo égal à 'pseudo-10c'")
   void testCorrect10car() {
     assertEquals(null, uneVerif.verifPseudoMembre("pseudo-10c"));
   }
@@ -76,7 +76,7 @@ public class VerifPseudoMembreTest {
   @Test
   @DisplayName("Test unPseudo égal à '<'")
   void testCaractereSpecial1() {
-    assertEquals(CodeErreur.PSEUDO_INVALIDE, uneVerif.verifPseudoMembre(">"));
+    assertEquals(CodeErreur.PSEUDO_INVALIDE, uneVerif.verifPseudoMembre("<"));
   }
 
   @Test

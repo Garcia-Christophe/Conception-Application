@@ -79,31 +79,31 @@ public class VerifLieuxMembreTest {
   // Ville
 
   @Test
-  @DisplayName("Test ville égal à 'Ville' et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'Ville' et numéro à 1 (ville)")
   void testVilleCorrect() {
     assertEquals(null, uneVerif.verifLieuxMembre("Ville", 1));
   }
 
   @Test
-  @DisplayName("Test ville égal à 'VilleNeuf' (9 caractères) et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'VilleNeuf' (9 caractères) et numéro à 1 (ville)")
   void testVilleCorrect9car() {
     assertEquals(null, uneVerif.verifLieuxMembre("VilleNeuf", 1));
   }
 
   @Test
-  @DisplayName("Test ville égal à 'VilleDixCa' (10 caractères) et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'VilleDixCa' (10 caractères) et numéro à 1 (ville)")
   void testVilleCorrect10car() {
     assertEquals(null, uneVerif.verifLieuxMembre("VilleDixCa", 1));
   }
 
   @Test
-  @DisplayName("Test ville égal à 'VilleOnzeCa' (11 caractères trop long) et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'VilleOnzeCa' (11 caractères trop long) et numéro à 1 (ville)")
   void testVilleIncorrect11car() {
     assertEquals(CodeErreur.VILLE_TAILLE_INCORRECTE, uneVerif.verifLieuxMembre("VilleOnzeCa", 1));
   }
 
   @Test
-  @DisplayName("Test ville égal à 'Accént' et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'Accént' et numéro à 1 (ville)")
   void testVilleAccent() {
     assertEquals(CodeErreur.VILLE_NOM_INCORRECT, uneVerif.verifLieuxMembre("Accént", 1));
   }
@@ -115,25 +115,25 @@ public class VerifLieuxMembreTest {
   }
 
   @Test
-  @DisplayName("Test ville égal à 'un espace' et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'un espace' et numéro à 1 (ville)")
   void testVilleEspace() {
     assertEquals(null, uneVerif.verifLieuxMembre("un espace", 1));
   }
 
   @Test
-  @DisplayName("Test ville égal à 'chiffre1' et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'chiffre1' et numéro à 1 (ville)")
   void testVilleChiffre() {
     assertEquals(CodeErreur.VILLE_NOM_INCORRECT, uneVerif.verifLieuxMembre("chiffre1", 1));
   }
 
   @Test
-  @DisplayName("Test ville égal à '' et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à '' et numéro à 1 (ville)")
   void testVilleVide() {
     assertEquals(CodeErreur.VILLE_TAILLE_INCORRECTE, uneVerif.verifLieuxMembre("", 1));
   }
 
   @Test
-  @DisplayName("Test ville égal à 'une,ville' et numéro à 1 (ville)")
+  @DisplayName("Test ville égale à 'une,ville' et numéro à 1 (ville)")
   void testVilleCaractereSpecial() {
     assertEquals(CodeErreur.VILLE_NOM_INCORRECT, uneVerif.verifLieuxMembre("une,ville", 1));
   }
