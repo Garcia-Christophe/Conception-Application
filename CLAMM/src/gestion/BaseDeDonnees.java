@@ -205,12 +205,12 @@ public class BaseDeDonnees {
   }
 
   /**
-   * Sécurise le mot de passe avec l'algrythme SHA256.
+   * Sécurise le mot de passe avec l'algorithme SHA256.
    * 
    * @param base le mot de passe de base
    * @return le mot de passe haché et salé (sécurisé)
    */
-  public String sha256(String base) {
+  private String sha256(String base) {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       byte[] hash = digest.digest(base.getBytes("UTF-8"));
