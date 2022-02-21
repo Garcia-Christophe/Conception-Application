@@ -936,9 +936,7 @@ public class Gestion {
             } else if (unNbInscrit < 1) {
               this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_PETIT);
             }
-            // TODO ajout critère via vérif information taille
-
-
+            
             boolean erreur = false;
             for (CodeErreur c : this.codesErreurs) {
               if (c != CodeErreur.NO_ERROR) {
@@ -1007,10 +1005,7 @@ public class Gestion {
             } else if (nbInscrit < 1) {
               this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_PETIT);
             }
-            // TODO ajout critère via vérif information taille
-
-
-
+            
             boolean erreur = false;
             for (CodeErreur c : this.codesErreurs) {
               if (c != CodeErreur.NO_ERROR) {
@@ -1143,9 +1138,7 @@ public class Gestion {
               } else if (nbInscrit < 1) {
                 this.codesErreurs.set(2, CodeErreur.NBINSCRIT_TROP_PETIT);
               }
-              // TODO ajout critère via vérif information taille
-
-
+              
               boolean erreur = false;
               for (CodeErreur c : this.codesErreurs) {
                 if (c != CodeErreur.NO_ERROR) {
