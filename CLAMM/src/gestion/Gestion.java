@@ -1234,7 +1234,7 @@ public class Gestion {
    * membres avec leurs informations. Un fichier par évènement est créé contenant ses informations
    * et la liste de toutes les participations.
    */
-  public void creerCSV() {
+  public void creerCsv() {
     try (PrintWriter writer = new PrintWriter("membres.csv")) {
       String header = "Pseudo;Nom;Prenom;Adresse Mail;Date de naissance;Ville";
       writer.write(header);

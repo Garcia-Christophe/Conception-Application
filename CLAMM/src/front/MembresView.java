@@ -99,7 +99,7 @@ public class MembresView extends GridPane {
     btnCreerCSV.setAlignment(Pos.CENTER);
     btnCreerCSV.getStyleClass().add("hover");
     btnCreerCSV.setOnMouseClicked(e->{
-      App.getGestion().creerCSV();
+      App.getGestion().creerCsv();
     });
     
     btnCreerCSV.addEventHandler(MouseEvent.MOUSE_ENTERED,

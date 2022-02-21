@@ -5,7 +5,6 @@ import gestion.evenements.Evenement;
 import gestion.membres.Membre;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -24,7 +23,6 @@ import javafx.stage.Stage;
 
 public class AjoutParticipationView {
 
-  @SuppressWarnings("unchecked")
   public AjoutParticipationView(Evenement e, Membre... m) {
     // setup de la nouvelle fenêtre
     GridPane grid = new GridPane();
@@ -94,6 +92,12 @@ public class AjoutParticipationView {
     vDesc.setAlignment(Pos.CENTER_LEFT);
     vDesc.setPadding(new Insets(5));
     
+    if(m.length != 0) {
+      String nbParticipants = String.valueOf(App.getGestion().getListeMembresParticipation(e.getId(), m[0].getPseudo()).getNbInscrit());
+      textNombre.setText(nbParticipants);
+      textDescription.setText(App.getGestion().getListeMembresParticipation(e.getId(), m[0].getPseudo()).getInformation());
+    }
+    
     HBox hButtons = new HBox();
     hButtons.setAlignment(Pos.CENTER);
     Button bAnnuler = new Button("Annuler");
@@ -114,19 +118,27 @@ public class AjoutParticipationView {
     bAjouter.setPrefWidth(Integer.MAX_VALUE);
     if(m.length != 0) {
       bAjouter.setOnAction(r ->{
-        System.out.println("Modification...");
-        new ParticipationsView(e);
-        newWindow.close();
+        try {
+          if(textNombre.getText() != "") {
+            App.getGestion().modifierParticipation(e, m[0], Integer.parseInt(textNombre.getText()), textDescription.getText());
+            new ParticipationsView(e);
+            newWindow.close();
+          }
+        } catch (SQLException e1) {
+          e1.printStackTrace();
+        }
       });
     }else {
       bAjouter.setOnAction(r ->{
         try {
-          App.getGestion().ajouterParticipation(e, App.getGestion().getMembre(comboBox.getValue()), Integer.parseInt(textNombre.getText()), textDescription.getText());
+          if(textNombre.getText() != "") {
+            App.getGestion().ajouterParticipation(e, App.getGestion().getMembre(comboBox.getValue()), Integer.parseInt(textNombre.getText()), textDescription.getText());
+            new ParticipationsView(e);
+            newWindow.close();
+          }        
         } catch (Exception e1) {
           e1.printStackTrace();
         }
-        new ParticipationsView(e);
-        newWindow.close();
       });
     }
     
