@@ -652,6 +652,9 @@ public class Gestion {
   public ArrayList<CodeErreur> ajouterMembre(String unPseudo, String unNom, String unPrenom,
       String unLieuNaissance, Date uneDateNaissance, String uneVille, String unMail,
       String unMotDePasse) {
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
     ArrayList<CodeErreur> res = null;
     Membre membre = this.getMembre(unPseudo);
 
@@ -712,6 +715,9 @@ public class Gestion {
   public ArrayList<CodeErreur> miseAJourListeMembres(String unPseudo, String unNom, String unPrenom,
       String unLieuNaissance, Date uneDateNaissance, String uneVille, String unMail,
       String unMotDePasse) {
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
     ArrayList<CodeErreur> res = null;
     Membre membre = this.getMembre(unPseudo);
 
@@ -752,6 +758,9 @@ public class Gestion {
    *         sinon
    */
   public ArrayList<CodeErreur> supprimerMembre(String unPseudo) {
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
     ArrayList<CodeErreur> res = null;
     Membre membreASupprimer = this.getMembre(unPseudo);
 
@@ -800,6 +809,9 @@ public class Gestion {
   public ArrayList<CodeErreur> modifierMembre(String unPseudo, String unNom, String unPrenom,
       String unLieuNaissance, Date uneDateNaissance, String uneVille, String unMail,
       String unMotDePasse) {
+    for (int i = 0; i <= 8; i++) {
+      this.codesErreurs.set(i, CodeErreur.NO_ERROR);
+    }
 
     ArrayList<CodeErreur> res = null;
 
