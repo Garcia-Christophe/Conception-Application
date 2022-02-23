@@ -23,6 +23,7 @@ import java.util.Date;
  * @version 3.00
  * @see gestion.membres.Membre
  * @see gestion.evenements.Evenement
+ * @see gestion.participations.Participation
  */
 public class Gestion {
 
@@ -1070,6 +1071,26 @@ public class Gestion {
     }
     return res;
   }
+  
+  /**
+   * Retourne la participation qui à un événement avec id égale l'id passée paramètre et un membre
+   * avec pseudo égale au pseudo passée en paramètre.
+   * 
+   * @param unId identifiant d'un événement
+   * @param unPseudo pseudo d'un membre
+   * @return une participation qui à un événement avec id égale l'id passée paramètre et un membre
+   *         avec pseudo égale au pseudo passée en paramètre.
+   */
+  public Participation getListeMembresParticipation(int unId, String unPseudo) {
+    this.bdd.updateParticipation(this);
+    Participation res = null;
+    for (Participation p : this.listeParticipations) {
+      if (p.getEvenement().getId() == unId && unPseudo.equals(p.getMembre().getPseudo())) {
+        res = p;
+      }
+    }
+    return res;
+  }
 
   /**
    * Retourne la liste des participations qui a un événement avec identifiant égal à l'identifiant 
@@ -1088,22 +1109,19 @@ public class Gestion {
     }
     return res;
   }
-
+  
   /**
-   * Retourne la participation qui à un événement avec id égale l'id passée paramètre et un membre
-   * avec pseudo égale au pseudo passée en paramètre.
+   * Retourne la liste des participations qui a un événement avec identifiant égal à l'identifiant 
+   * passé paramètre, utilisée pour la génération des fichiers CSV.
    * 
-   * @param unId identifiant d'un événement
-   * @param unPseudo pseudo d'un membre
-   * @return une participation qui à un événement avec id égale l'id passée paramètre et un membre
-   *         avec pseudo égale au pseudo passée en paramètre.
+   * @param unId identifiant de l'événement
+   * @return la liste des participations de l'événement
    */
-  public Participation getListeMembresParticipation(int unId, String unPseudo) {
-    this.bdd.updateParticipation(this);
-    Participation res = null;
+  public ArrayList<Participation> getListeParticipationsCsv(int unId) {
+    ArrayList<Participation> res = new ArrayList<Participation>();
     for (Participation p : this.listeParticipations) {
-      if (p.getEvenement().getId() == unId && unPseudo.equals(p.getMembre().getPseudo())) {
-        res = p;
+      if (p.getEvenement().getId() == unId) {
+        res.add(p);
       }
     }
     return res;
@@ -1270,7 +1288,8 @@ public class Gestion {
     } catch (FileNotFoundException e) {
       System.out.println(e.getMessage());
     }
-
+    
+    this.bdd.updateParticipation(this);
     ArrayList<Evenement> evenements = this.getListeEvenements();
     for (Evenement e : evenements) {
       try (PrintWriter writer = new PrintWriter(e.getNom() + ".csv")) {
@@ -1288,7 +1307,7 @@ public class Gestion {
         writer.write("\n");
 
         String participation = "";
-        ArrayList<Participation> participations = this.getListeMembresParticipation(e.getId());
+        ArrayList<Participation> participations = this.getListeParticipationsCsv(e.getId());
         for (Participation p : participations) {
           if (p.getMembre() != null) {
             participation = p.getMembre().getPseudo() + ";" + p.getMembre().getNom() + ";"
@@ -1303,7 +1322,6 @@ public class Gestion {
         System.out.println(r.getMessage());
       }
     }
-
   }
 
 }
