@@ -1249,7 +1249,8 @@ public class Gestion {
       String membre = "";
       
       // Ajout de tous les membres de la liste des membres
-      for (Membre m : this.getListeMembres()) {
+      ArrayList<Membre> membres = this.getListeMembres();
+      for (Membre m : membres) {
         membre = m.getPseudo() + ";" + m.getNom() + ";" + m.getPrenom() + ";" + m.getMail() + ";"
             + m.getDateNaissance() + ";" + m.getVille();
         writer.write(membre);
@@ -1261,7 +1262,8 @@ public class Gestion {
       System.out.println(e.getMessage());
     }
 
-    for (Evenement e : this.getListeEvenements()) {
+    ArrayList<Evenement> evenements = this.getListeEvenements();
+    for (Evenement e : evenements) {
       try (PrintWriter writer = new PrintWriter(e.getNom() + ".csv")) {
         String header = "Nom;Date;Adresse;Type;Nombre de personnes,Description";
         writer.write(header);
@@ -1277,7 +1279,8 @@ public class Gestion {
         writer.write("\n");
 
         String participation = "";
-        for (Participation p : this.getListeMembresParticipation(e.getId())) {
+        ArrayList<Participation> participations = this.getListeMembresParticipation(e.getId());
+        for (Participation p : participations) {
           if (p.getMembre() != null) {
             participation = p.getMembre().getPseudo() + ";" + p.getMembre().getNom() + ";"
                 + p.getMembre().getPrenom() + ";" + p.getNbInscrit() + ";" + p.getInformation();
