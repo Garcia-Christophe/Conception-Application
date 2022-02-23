@@ -53,7 +53,7 @@ function connexion(){
                     const now = new Date() //date courante
                     const item = {
                         value: data, 
-                        expiry: now.getTime() + 15*6000 //date d'expiration : date courante plus 15min
+                        expiry: now.getTime() + 15*60000 //date d'expiration : date courante plus 15min
                     }
                     localStorage.setItem("user", JSON.stringify(item)) //stockage du pseudo dans le LocalStorage
                     window.location.href="main.html" //envoi sur la page de la liste des événements
