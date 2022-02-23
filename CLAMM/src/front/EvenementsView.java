@@ -1,6 +1,7 @@
 package front;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import gestion.evenements.Evenement;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -228,16 +229,28 @@ public class EvenementsView extends GridPane {
         new CreerEvenementView(m);
       });
       
+      Date dateCourante = new Date();
+      
       HBox hBoutons = new HBox();
       hBoutons.setAlignment(Pos.CENTER);
-      hBoutons.getChildren().addAll(btnSuppr, btnModifier);
+      if(m.getDate().before(dateCourante)) {
+        hBoutons.getChildren().addAll(btnSuppr);
+      }else {
+        hBoutons.getChildren().addAll(btnSuppr, btnModifier);
+      }
+        
 
       SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
       String date = simpleDateFormat.format(m.getDate()); 
       
       String nbPers = m.getNbMaxPersonnes()+ " personnes au maximum";
       
-      fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getType().toString()), new Label(date), new Label(m.getLieu()), new Label(nbPers), new Label(m.getDescriptif()), btnParticipants, hBoutons);
+      if(m.getDate().before(dateCourante)) {
+        fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getType().toString()), new Label(date), new Label(m.getLieu()), new Label(nbPers), new Label(m.getDescriptif()), hBoutons);
+      }else {
+        fiche.getChildren().addAll(new Label(m.getNom()), new Label(m.getType().toString()), new Label(date), new Label(m.getLieu()), new Label(nbPers), new Label(m.getDescriptif()), btnParticipants, hBoutons);
+      }
+        
       fiche.getStyleClass().add("font20");
       fiche.setAlignment(Pos.CENTER);
     });
