@@ -19,7 +19,7 @@ import java.util.Date;
  * évènements, la liste de toutes les participations ainsi que la liste de tous les
  * {@link CodeErreur} survenus lors d'un appel d'une des méthodes.
  * 
- * @author Manon, Christophe
+ * @author Manon, Christophe, Alexia
  * @version 3.00
  * @see gestion.membres.Membre
  * @see gestion.evenements.Evenement
@@ -167,11 +167,12 @@ public class Gestion {
    * @param unlieu Lieu de l'événement
    * @param unNbMaxPersonnes Nombre maximum de personnes autorisées à l'événement
    * @param unType Type de l'événement
+   * @param verifDate Autorisation de la vérification de date non passée
    * @return une nouvelle instance de la classe {@link gestion.evenements.Evenement} si la création
    *         est un succès, {@code null} sinon
    */
   private Evenement creerEvenement(int unId, String unNom, String unDescriptif, String uneImage,
-      Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType) {
+      Date uneDate, String unLieu, int unNbMaxPersonnes, TypeEvenement unType, boolean verifDate) {
 
     Evenement unEvenement = new Evenement();
     CodeErreur codeErreur = null;
@@ -209,7 +210,7 @@ public class Gestion {
 
     // Date de l'événement
     codeErreur = this.uneVerif.verifDateEvenement(uneDate);
-    if (codeErreur != null) {
+    if (codeErreur != null || !verifDate) {
       this.codesErreurs.set(4, codeErreur);
     } else {
       this.codesErreurs.set(4, CodeErreur.NO_ERROR);
@@ -285,7 +286,7 @@ public class Gestion {
       id = unId;
     }
     Evenement unEvenement = creerEvenement(id, unNom, unDescriptif, uneImage, uneDate, unLieu,
-        unNbMaxPersonnes, unType);
+        unNbMaxPersonnes, unType, true);
 
     ArrayList<CodeErreur> res = null;
 
@@ -348,7 +349,7 @@ public class Gestion {
       id = unId;
     }
     Evenement unEvenement = creerEvenement(id, unNom, unDescriptif, uneImage, uneDate, unLieu,
-        unNbMaxPersonnes, unType);
+        unNbMaxPersonnes, unType, false);
 
     ArrayList<CodeErreur> res = null;
 
@@ -456,7 +457,7 @@ public class Gestion {
       for (int i = 0; i < listeEvenements.size(); i++) {
         if (listeEvenements.get(i).getId() == unId) {
           Evenement unEvenement = creerEvenement(unId, unNom, unDescriptif, uneImage, uneDate,
-              unLieu, unNbMaxPersonnes, unType);
+              unLieu, unNbMaxPersonnes, unType, true);
 
           if (unEvenement == null) {
             res = getCodesErreurs(); // modifications pas possibles
