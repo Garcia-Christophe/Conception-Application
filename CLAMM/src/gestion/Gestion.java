@@ -210,7 +210,7 @@ public class Gestion {
 
     // Date de l'événement
     codeErreur = this.uneVerif.verifDateEvenement(uneDate);
-    if (codeErreur != null || !verifDate) {
+    if (codeErreur != null && verifDate) {
       this.codesErreurs.set(4, codeErreur);
     } else {
       this.codesErreurs.set(4, CodeErreur.NO_ERROR);
