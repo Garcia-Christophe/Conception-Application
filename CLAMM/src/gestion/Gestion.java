@@ -95,6 +95,15 @@ public class Gestion {
     this.bdd.updateEvenements(this);
     this.bdd.updateParticipation(this);
   }
+  
+  /**
+   * Retourne la variable prochainIdEvenement
+   * 
+   * @return le prochain id
+   */
+  public int getProchainIdEvenement() {
+    return this.prochainIdEvenement;
+  }
 
   /**
    * Instancie la liste des codes d'erreurs avec une liste passée en paramètre.
