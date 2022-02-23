@@ -44,7 +44,7 @@ public class Verif {
   /**
    * Taille maximale du lieu de naissance et de la ville du membre.
    */
-  private static final int TAILLE_MAX_LIEU_MEMBRE = 10;
+  private static final int TAILLE_MAX_LIEU_MEMBRE = 30;
 
   /**
    * Taille maximale du nom d'un membre.
